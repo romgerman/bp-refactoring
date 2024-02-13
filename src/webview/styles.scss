@@ -1,0 +1,32 @@
+:root {
+  --vf-node-bg: var(--vscode-sidebar-background);
+  --vf-node-color: var(--vscode-editorwidget-border);
+  --vf-node-text: var(--vscode-foreground);
+}
+
+html,
+body {
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  margin: 0;
+}
+
+#app {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+body.vscode-light {
+  //color: black;
+}
+
+body.vscode-dark {
+  //color: white;
+}
+
+body.vscode-high-contrast {
+  //color: red;
+}
