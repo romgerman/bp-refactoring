@@ -65,6 +65,7 @@
     "@vue-flow/minimap": "^1.4.0",
     "@vueuse/core": "^10.9.0",
     "eventemitter3": "^5.0.1",
+    "pinia": "^2.1.7",
     "reflect-metadata": "^0.2.2",
     "typescript": "^5.4.5",
     "vue": "^3.4.21",

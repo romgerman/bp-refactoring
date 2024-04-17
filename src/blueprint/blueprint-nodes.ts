@@ -1,6 +1,7 @@
 import ts from "typescript";
 
 export abstract class BlueprintNode<T, TPrev = any> {
+  webViewNodeId: string | undefined;
   prev: BlueprintNode<TPrev> | null = null;
   next: BlueprintNode<any> | null = null;
 
