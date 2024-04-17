@@ -1,9 +1,8 @@
 <script setup lang="ts">
-import { Elements, useVueFlow } from "@vue-flow/core";
 import NodeWrapper from "./nodes/NodeWrapper.vue";
 import useDragAndDrop from "./useDnD";
 import { useNodeStore } from "./store";
-import { computed, watch } from "vue";
+import { NodeTypes } from "@/shared/node-types";
 
 const { onDragStart } = useDragAndDrop();
 const nodeStore = useNodeStore();
@@ -13,16 +12,16 @@ const nodeStore = useNodeStore();
   <div class="nodes p-2">
     <NodeWrapper
       :draggable="!nodeStore.hasProjectNode"
-      @dragstart="onDragStart($event, 'project')"
+      @dragstart="onDragStart($event, NodeTypes.Project)"
       :style="{ opacity: nodeStore.hasProjectNode ? 0.5 : 1 }"
     >
-      <template #header> Project </template>
+      <template #header>Project</template>
     </NodeWrapper>
-    <NodeWrapper :draggable="true" @dragstart="onDragStart($event, 'class-list')">
-      <template #header> Class List </template>
+    <NodeWrapper :draggable="true" @dragstart="onDragStart($event, NodeTypes.ClassList)">
+      <template #header>Class List</template>
     </NodeWrapper>
-    <NodeWrapper :draggable="true" @dragstart="onDragStart($event, 'has-decorator')">
-      <template #header> Has Decorator </template>
+    <NodeWrapper :draggable="true" @dragstart="onDragStart($event, NodeTypes.HasDecorator)">
+      <template #header>Has Decorator</template>
     </NodeWrapper>
   </div>
 </template>

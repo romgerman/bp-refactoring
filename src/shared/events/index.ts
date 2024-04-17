@@ -8,5 +8,4 @@ export interface UpdateNodeGraph extends EventCommand<'lifecycle:update-node-gra
 export interface TsConfigChanged extends EventCommand<'project:tsconfig-selected', string> {}
 export interface GetClassList extends EventCommand<'project:get-classlist'> {}
 
-export interface ScanTsConfigsResult extends EventCommand<'scan:tsconfig', { value: string; label: string; }[]> {}
 export interface TsCompilerStatusChanged extends EventCommand<'lifecycle:compiler:status', boolean> {}

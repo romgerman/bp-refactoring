@@ -1,28 +1,17 @@
 <script setup lang="ts">
-import { onMounted, provide, ref } from "vue";
-import type { Elements } from "@vue-flow/core";
 import { VueFlow, useVueFlow } from "@vue-flow/core";
-import { Background } from "@vue-flow/background";
 import { MiniMap } from "@vue-flow/minimap";
-
-import ProjectNode from "./nodes/ProjectNode.vue";
-import FileListNode from "./nodes/ClassListNode.vue";
-import HasDecoratorNode from "./nodes/filters/HasDecoratorNode.vue";
-import { sendEventCommand } from "./utils";
-import { UpdateNodeGraph } from "@/shared/events";
-import DropzoneBackground from "./DropzoneBackground.vue";
 import useDragAndDrop from './useDnD'
 import { useNodeStore } from "./store";
 import { useEventListener } from "@vueuse/core";
 
+import ProjectNode from "./nodes/ProjectNode.vue";
+import FileListNode from "./nodes/ClassListNode.vue";
+import HasDecoratorNode from "./nodes/filters/HasDecoratorNode.vue";
+import DropzoneBackground from "./DropzoneBackground.vue";
+
 const { onConnect, addEdges, removeNodes, getSelectedNodes } = useVueFlow();
 const { onDragOver, onDrop, onDragLeave, isDragOver } = useDragAndDrop()
-
-// const nodes = ref<Elements>([
-//   { id: "1", type: "project", connectable: true, position: { x: 10, y: 5 } },
-//   { id: "2", type: "class-list", connectable: true, position: { x: 700, y: 10 } },
-//   { id: "3", type: "has-decorator", connectable: true, position: { x: 100, y: 100 } }
-// ]);
 
 const nodeStore = useNodeStore();
 

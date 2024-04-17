@@ -8,8 +8,8 @@
         </div>
       </div>
     </template>
-    <Handle type="target" :position="Position.Left" :is-valid-connection="isValidConnectionTarget" />
-    <Handle type="source" :position="Position.Right" :is-valid-connection="isValidConnectionSource" />
+    <Handle type="target" :position="Position.Left" />
+    <Handle type="source" :position="Position.Right" :is-valid-connection="isValidConnectionTarget" />
   </NodeWrapper>
 </template>
 
@@ -25,12 +25,8 @@ import NodeWrapper from "./NodeWrapper.vue";
 const props = defineProps<NodeProps>();
 const classList = ref<string[]>([]);
 
-const isValidConnectionTarget: ValidConnectionFunc = (conn, { sourceNode }) => {
-  return sourceNode.type === "project";
-};
-
-const isValidConnectionSource: ValidConnectionFunc = (conn, { targetNode }) => {
-  return true;
+const isValidConnectionTarget: ValidConnectionFunc = (conn, { sourceNode, targetNode }) => {
+  return sourceNode.id !== targetNode.id;
 };
 
 function refresh(): void {

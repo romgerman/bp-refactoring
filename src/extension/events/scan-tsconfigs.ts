@@ -1,5 +1,5 @@
 import * as vscode from "vscode";
-import { ScanTsConfigs, ScanTsConfigsResult } from "../../shared/events";
+import { ScanTsConfigs } from "../../shared/events";
 import { IExtensionEventHandler } from "../extension-event-bus";
 import { sendEventCommand } from "../../utils";
 
@@ -11,8 +11,8 @@ export class ScanTsConfigsEventHandler implements IExtensionEventHandler<ScanTsC
 
     if (allConfigFiles.length !== 0) {
       const folder = vscode.workspace.getWorkspaceFolder(allConfigFiles[0]);
-      sendEventCommand<ScanTsConfigsResult>(panel.webview, {
-        command: "scan:tsconfig",
+      sendEventCommand<ScanTsConfigs>(panel.webview, {
+        command: "lifecycle:scan-tsconfigs",
         data: allConfigFiles.map((x) => ({ value: x.toString(), label: x.path.replace(folder?.uri.path!, "") })),
       });
     }

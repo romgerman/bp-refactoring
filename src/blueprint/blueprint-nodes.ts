@@ -1,5 +1,6 @@
 import * as ts from "typescript";
 import { TypescriptCompiler } from "../compiler/typescript";
+import { NodeTypes } from "../shared/node-types";
 
 export abstract class BlueprintNode {
   abstract readonly type: string;
@@ -16,7 +17,7 @@ export abstract class BlueprintNode {
 }
 
 export class ProjectNode extends BlueprintNode {
-  readonly type: string = "project";
+  readonly type: string = NodeTypes.Project;
 
   constructor(private readonly compiler: TypescriptCompiler) {
     super();
@@ -28,7 +29,7 @@ export class ProjectNode extends BlueprintNode {
 }
 
 export class ClassListNode extends BlueprintNode {
-  readonly type: string = "class-list";
+  readonly type: string = NodeTypes.ClassList;
 
   evaluate() {
     const tsFileList: ts.SourceFile[] = this.getInput(0);
@@ -52,7 +53,7 @@ export class ClassListNode extends BlueprintNode {
 }
 
 export class FilterByDecorator extends BlueprintNode {
-  readonly type: string = "has-decorator";
+  readonly type: string = NodeTypes.HasDecorator;
 
   constructor(private readonly decorators: string[]) {
     super();

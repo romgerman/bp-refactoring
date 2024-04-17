@@ -1,6 +1,6 @@
 <template>
   <NodeWrapper>
-    <template #header>Has Decorators</template>
+    <template #header>Has Decorator</template>
     <template #body>
       <div class="nowheel" style="max-height: 200px; overflow: auto;">
         <div v-for="cls in classList">
@@ -8,8 +8,8 @@
         </div>
       </div>
     </template>
-    <Handle type="target" :position="Position.Left" :is-valid-connection="isValidConnectionTarget" />
-    <Handle type="source" :position="Position.Right" :is-valid-connection="isValidConnectionSource" />
+    <Handle type="target" :position="Position.Left" />
+    <Handle type="source" :position="Position.Right" :is-valid-connection="isValidConnectionTarget" />
   </NodeWrapper>
 </template>
 
@@ -23,12 +23,8 @@ import NodeWrapper from "../NodeWrapper.vue";
 const props = defineProps<NodeProps>();
 const classList = ref<string[]>([]);
 
-const isValidConnectionTarget: ValidConnectionFunc = (conn, { sourceNode }) => {
-  return sourceNode.type === "class-list";
-};
-
-const isValidConnectionSource: ValidConnectionFunc = (conn, { targetNode }) => {
-  return false;
+const isValidConnectionTarget: ValidConnectionFunc = (conn, { sourceNode, targetNode }) => {
+  return sourceNode.id !== targetNode.id;
 };
 
 useConnected((node) => {
