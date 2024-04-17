@@ -1,6 +1,5 @@
 <template>
-  <h1>Hello World!</h1>
-  <vscode-button>Run</vscode-button>
+  <h1 class="text-4xl text-blue-700">Blueprint!</h1>
   <div class="graph-container">
     <Graph></Graph>
   </div>

@@ -58,7 +58,11 @@ const webviewConfig: webpack.Configuration = {
   },
   devtool: 'inline-source-map',
   resolve: {
-    extensions: ['.mts', '.ts', '.js']
+    extensions: ['.mts', '.ts', '.js'],
+    alias: {
+      "@/webview": path.resolve(__dirname, "./src/webview"),
+      "@/shared": path.resolve(__dirname, "./src/shared")
+    }
   },
   module: {
     rules: [
@@ -87,7 +91,7 @@ const webviewConfig: webpack.Configuration = {
           loader: MiniCssExtractPlugin.loader, options: {
             esModule: false,
           },
-        }, 'css-loader', 'sass-loader']
+        }, 'css-loader', 'postcss-loader', 'sass-loader']
       }
     ]
   },
