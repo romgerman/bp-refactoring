@@ -23,10 +23,9 @@
 import type { NodeProps } from "@vue-flow/core";
 import { Position, Handle, useNode } from "@vue-flow/core";
 import { ref, watch } from "vue";
-import { ScanTsConfigs, TsConfigChanged } from "@/shared/events/to-extension";
-import { TsCompilerStatusChanged } from "@/shared/events/to-webview";
 import { sendEventCommand, sendEventCommandAndWaitResult, useEventCommandResult } from "@/webview/utils";
 import NodeWrapper from "./NodeWrapper.vue";
+import { ScanTsConfigs, TsCompilerStatusChanged, TsConfigChanged } from "@/shared/events";
 
 const tsConfigList = ref<{ value: string; label: string }[]>([]);
 const chosenConfig = ref<string | null>(null);
@@ -38,7 +37,7 @@ const { node } = useNode();
 watch(chosenConfig, (conf) => {
   node.data = conf;
   sendEventCommand<TsConfigChanged>({
-    command: "scan:tsconfig:selected",
+    command: "project:tsconfig-selected",
     data: conf!,
   });
 });
@@ -46,7 +45,7 @@ watch(chosenConfig, (conf) => {
 function scanForProjects(): void {
   sendEventCommandAndWaitResult<ScanTsConfigs>(
     {
-      command: "scan:tsconfig",
+      command: "lifecycle:scan-tsconfigs",
     },
     (data) => {
       tsConfigList.value = data;
@@ -56,7 +55,7 @@ function scanForProjects(): void {
 
 scanForProjects();
 
-useEventCommandResult<TsCompilerStatusChanged>("ts:compiler:status", (data) => {
+useEventCommandResult<TsCompilerStatusChanged>("lifecycle:compiler:status", (data) => {
   tsCompilerStatus.value = data!;
 });
 </script>

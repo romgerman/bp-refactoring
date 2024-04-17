@@ -34,7 +34,7 @@ const isValidConnectionSource: ValidConnectionFunc = (conn, { targetNode }) => {
 useConnected((node) => {
   if (node) {
     // sendEventCommandAndWaitResult<GetClassList>({
-    //   command: "project:classlist",
+    //   command: "project:get-classlist",
     // }, (data: string[]) => {
     //   classList.value = data;
     // });

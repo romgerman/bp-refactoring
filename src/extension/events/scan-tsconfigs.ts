@@ -4,7 +4,7 @@ import { IExtensionEventHandler } from "../extension-event-bus";
 import { sendEventCommand } from "../../utils";
 
 export class ScanTsConfigsEventHandler implements IExtensionEventHandler<ScanTsConfigs> {
-  readonly command: "scan:tsconfig" = "scan:tsconfig";
+  readonly command: "lifecycle:scan-tsconfigs" = "lifecycle:scan-tsconfigs";
 
   async handle(data: string | undefined, panel: vscode.WebviewPanel): Promise<void> {
     const allConfigFiles = await vscode.workspace.findFiles("**/tsconfig*.json", "**/node_modules/**", 100);

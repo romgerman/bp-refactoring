@@ -5,13 +5,13 @@ import { TypescriptCompiler } from "../../../compiler/typescript";
 import { sendEventCommand } from "../../../utils";
 
 export class ProjectClasslistEventHandler implements IExtensionEventHandler<GetClassList> {
-  readonly command: "project:classlist" = "project:classlist";
+  readonly command: "project:get-classlist" = "project:get-classlist";
 
   constructor(private readonly compiler: TypescriptCompiler) {}
 
   handle(data: string | undefined, panel: vscode.WebviewPanel): void {
     sendEventCommand<GetClassList>(panel.webview, {
-      command: 'project:classlist',
+      command: 'project:get-classlist',
       data: this.compiler.getAllClasses()
     });
   }

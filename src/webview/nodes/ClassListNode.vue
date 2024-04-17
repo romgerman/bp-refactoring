@@ -35,7 +35,7 @@ const isValidConnectionSource: ValidConnectionFunc = (conn, { targetNode }) => {
 
 function refresh(): void {
   sendEventCommandAndWaitResult<GetClassList>({
-    command: "project:classlist",
+    command: "project:get-classlist",
   }, (data: string[]) => {
     classList.value = data;
   });

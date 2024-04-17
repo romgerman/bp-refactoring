@@ -14,7 +14,7 @@ export function activate(context: vscode.ExtensionContext) {
   const compiler = new TypescriptCompiler();
   compiler.events.on("ready", (status: boolean) => {
     sendEventCommand<TsCompilerStatusChanged>(BlueprintWebPanel.currentPanel?.webview!, {
-      command: "ts:compiler:status",
+      command: "lifecycle:compiler:status",
       data: status,
     });
     sendEventCommand<UpdateAllNodes>(BlueprintWebPanel.currentPanel?.webview!, {

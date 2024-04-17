@@ -1,40 +1,43 @@
-import ts from "typescript";
+import * as ts from "typescript";
+import { TypescriptCompiler } from "../compiler/typescript";
 
-export abstract class BlueprintNode<T, TPrev = any> {
-  webViewNodeId: string | undefined;
-  prev: BlueprintNode<TPrev> | null = null;
-  next: BlueprintNode<any> | null = null;
+export abstract class BlueprintNode {
+  abstract readonly type: string;
+  inputs: BlueprintNode[] = [];
 
-  protected cachedResult: T | null = null;
+  abstract evaluate(): any;
 
-  constructor(prevNode: BlueprintNode<any> | null) {
-    this.prev = prevNode;
-    if (prevNode) {
-      prevNode.next = this;
+  getInput(index: number): any {
+    if (index < 0 || index >= this.inputs.length) {
+      throw new Error("Invalid input index");
     }
-  }
-
-  get result(): T | null {
-    return this.cachedResult;
-  }
-
-  abstract evaluate(): T;
-}
-
-export class ProjectNode extends BlueprintNode<readonly ts.SourceFile[]> {
-  constructor(program: ts.Program) {
-    super(null);
-    this.cachedResult = program.getSourceFiles();
-  }
-
-  override evaluate(): readonly ts.SourceFile[] {
-    return this.cachedResult!;
+    return this.inputs[index];
   }
 }
 
-export class ClassListNode extends BlueprintNode<ts.ClassDeclaration[], readonly ts.SourceFile[]> {
-  override evaluate(): ts.ClassDeclaration[] {
-    this.cachedResult = this.prev!.evaluate()
+export class ProjectNode extends BlueprintNode {
+  readonly type: string = "project";
+
+  constructor(private readonly compiler: TypescriptCompiler) {
+    super();
+  }
+
+  evaluate() {
+    return this.compiler.builderProgram?.getProgram().getSourceFiles();
+  }
+}
+
+export class ClassListNode extends BlueprintNode {
+  readonly type: string = "class-list";
+
+  evaluate() {
+    const tsFileList: ts.SourceFile[] = this.getInput(0);
+
+    if (!tsFileList && ts.isSourceFile(tsFileList[0])) {
+      throw new Error("Invalid input on index 0. Expected type ts.SourceFile[].");
+    }
+
+    return tsFileList
       .flatMap((file) =>
         ts.forEachChild(file, (node) => {
           if (node.kind === ts.SyntaxKind.ClassDeclaration) {
@@ -45,17 +48,24 @@ export class ClassListNode extends BlueprintNode<ts.ClassDeclaration[], readonly
         })
       )
       .filter((x) => !!x) as ts.ClassDeclaration[];
-    return this.cachedResult;
   }
 }
 
-export class FilterByDecorator extends BlueprintNode<ts.ClassDeclaration[], ts.ClassDeclaration[]> {
-  constructor(prevNode: BlueprintNode<any>, private readonly decorators: string[]) {
-    super(prevNode);
+export class FilterByDecorator extends BlueprintNode {
+  readonly type: string = "has-decorator";
+
+  constructor(private readonly decorators: string[]) {
+    super();
   }
 
   override evaluate(): ts.ClassDeclaration[] {
-    return this.prev!.evaluate().filter((classDecl) => {
+    const tsClassNodes: ts.ClassDeclaration[] = this.getInput(0);
+
+    if (!tsClassNodes && ts.isClassDeclaration(tsClassNodes[0])) {
+      throw new Error("Invalid input on index 0. Expected type ts.ClassDeclaration[].");
+    }
+
+    return tsClassNodes.filter((classDecl) => {
       if (classDecl.modifiers) {
         const decorators = classDecl.modifiers.filter((mod) => mod.kind === ts.SyntaxKind.Decorator) as ts.Decorator[];
         return decorators.find((dec) =>
