@@ -33,7 +33,6 @@ const tsCompilerStatus = ref<boolean>(false);
 
 const props = defineProps<NodeProps>();
 const { node, id: nodeId } = useNode();
-const { onNodesInitialized } = useVueFlow();
 
 // Subscribe to status of current project TS compiler
 useEventCommandResult<TsCompilerStatusChanged>("lifecycle:compiler:status", (data) => {
@@ -57,11 +56,6 @@ function getNodeData(): void {
     data: { id: node.id },
   });
 }
-
-// After node has been added to graph request node data
-onNodesInitialized(() => {
-  getNodeData();
-});
 
 watch(chosenConfig, (selectedConfig) => {
   node.data = selectedConfig;

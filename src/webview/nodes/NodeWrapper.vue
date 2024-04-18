@@ -11,3 +11,20 @@
     <slot></slot>
   </div>
 </template>
+
+<script setup lang="ts">
+import { useNode, useVueFlow } from '@vue-flow/core';
+import { sendEventCommand } from '../utils';
+import { GraphNodeGetViewData } from '@/shared/events';
+
+const { onNodesInitialized } = useVueFlow();
+const { id: nodeId } = useNode();
+
+// After node has been added to graph request node data
+onNodesInitialized(() => {
+  sendEventCommand<GraphNodeGetViewData>({
+    command: "graph:node-get-view-data",
+    data: { id: nodeId },
+  });
+});
+</script>
