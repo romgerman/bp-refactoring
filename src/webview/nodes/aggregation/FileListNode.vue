@@ -1,3 +1,20 @@
+<template>
+  <NodeWrapper>
+    <template #header>File List</template>
+    <template #body>
+      <div class="nowheel" style="max-height: 200px; overflow: auto;">
+        <div v-for="cls in fileList">
+          {{ cls }}
+        </div>
+      </div>
+    </template>
+    <div class="target-handles">
+      <Handle id="array" type="target" :position="Position.Left" data-name="Array" />
+    </div>
+    <Handle id="array" type="source" :position="Position.Right" :is-valid-connection="isValidConnectionTarget" />
+  </NodeWrapper>
+</template>
+
 <script setup lang="ts">
 import { ref } from "vue";
 import { GraphNodeSendViewData } from "@/shared/events/index";
@@ -21,17 +38,8 @@ useEventCommandResult<GraphNodeSendViewData, { id: string; data: string[] }>("gr
 });
 </script>
 
-<template>
-  <NodeWrapper>
-    <template #header>File List</template>
-    <template #body>
-      <div class="nowheel" style="max-height: 200px; overflow: auto;">
-        <div v-for="cls in fileList">
-          {{ cls }}
-        </div>
-      </div>
-    </template>
-    <Handle type="target" :position="Position.Left" />
-    <Handle type="source" :position="Position.Right" :is-valid-connection="isValidConnectionTarget" />
-  </NodeWrapper>
-</template>
+<style lang="scss">
+.vue-flow__node-file-list {
+  color: #fff;
+}
+</style>

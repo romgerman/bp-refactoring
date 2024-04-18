@@ -18,6 +18,8 @@ const nodeStore = useNodeStore();
       <template #header>Project</template>
     </NodeWrapper>
 
+    <h3>Aggregation</h3>
+
     <NodeWrapper :draggable="true" @dragstart="onDragStart($event, NodeTypes.ClassList)">
       <template #header>Class List</template>
     </NodeWrapper>
@@ -25,7 +27,12 @@ const nodeStore = useNodeStore();
       <template #header>File List</template>
     </NodeWrapper>
 
-    <NodeWrapper :draggable="false" @dragstart="onDragStart($event, NodeTypes.HasDecorator)">
+    <h3>Filtering</h3>
+
+    <NodeWrapper :draggable="true" @dragstart="onDragStart($event, NodeTypes.FilterBy)">
+      <template #header>Filter By</template>
+    </NodeWrapper>
+    <NodeWrapper :draggable="true" @dragstart="onDragStart($event, NodeTypes.HasDecorator)">
       <template #header>Has Decorator</template>
     </NodeWrapper>
   </div>

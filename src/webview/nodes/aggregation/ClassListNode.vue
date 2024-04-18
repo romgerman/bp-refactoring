@@ -8,18 +8,20 @@
         </div>
       </div>
     </template>
-    <Handle type="target" :position="Position.Left" />
-    <Handle type="source" :position="Position.Right" :is-valid-connection="isValidConnectionTarget" />
+    <div class="target-handles">
+      <Handle id="array" type="target" :position="Position.Left" data-name="Array" />
+    </div>
+    <Handle id="array" type="source" :position="Position.Right" :is-valid-connection="isValidConnectionTarget" />
   </NodeWrapper>
 </template>
 
 <script setup lang="ts">
-import type { NodeProps, ValidConnectionFunc } from "@vue-flow/core";
-import { Position, Handle, useNode } from "@vue-flow/core";
-import { useConnected, useEventCommandResult } from "@/webview/utils";
-import { GraphNodeSendViewData, UpdateAllNodes } from "@/shared/events/index";
-import { sendEventCommandAndWaitResult } from "@/webview/utils";
 import { ref } from "vue";
+import { GraphNodeSendViewData } from "@/shared/events/index";
+import { useEventCommandResult } from "@/webview/utils";
+import type { NodeProps, ValidConnectionFunc } from "@vue-flow/core";
+import { Handle, Position, useNode } from "@vue-flow/core";
+
 import NodeWrapper from "../NodeWrapper.vue";
 
 const props = defineProps<NodeProps>();

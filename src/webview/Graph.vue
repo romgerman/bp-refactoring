@@ -12,6 +12,7 @@ import ClassListNode from "./nodes/aggregation/ClassListNode.vue";
 import FileListNode from "./nodes/aggregation/FileListNode.vue";
 import HasDecoratorNode from "./nodes/filters/HasDecoratorNode.vue";
 import DropzoneBackground from "./DropzoneBackground.vue";
+import FilterByNode from "./nodes/filters/FilterByNode.vue";
 
 const { onConnect, onNodesChange, onEdgesChange, addEdges, removeNodes, getSelectedNodes } = useVueFlow();
 const { onDragOver, onDrop, onDragLeave, isDragOver } = useDragAndDrop();
@@ -19,6 +20,7 @@ const { onDragOver, onDrop, onDragLeave, isDragOver } = useDragAndDrop();
 const nodeStore = useNodeStore();
 
 onConnect((conn) => {
+  console.log(conn)
   addEdges(conn);
 });
 
@@ -74,6 +76,9 @@ useEventListener("keyup", (e) => {
         <FileListNode v-bind="nodeProps" />
       </template>
 
+      <template #node-filter-by="nodeProps">
+        <FilterByNode v-bind="nodeProps" />
+      </template>
       <template #node-has-decorator="nodeProps">
         <HasDecoratorNode v-bind="nodeProps" />
       </template>
