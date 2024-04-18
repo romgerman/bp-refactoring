@@ -2,46 +2,66 @@
   <NodeWrapper>
     <template #header>Has Decorator</template>
     <template #body>
-      <div class="nowheel" style="max-height: 200px; overflow: auto;">
-        <div v-for="cls in classList">
-          {{ cls }}
+      <div>
+        <vscode-text-field class="nodrag nowheel" v-model="model.customName">Custom Decorator Name</vscode-text-field>
+      </div>
+      <div class="nowheel" style="max-height: 200px; overflow: auto">
+        <div class="dropdown-container">
+          <label for="my-dropdown">Or choose from used decorators:</label>
+          <select size="5" class="nodrag nowheel select" style="width: 100%; cursor: default" v-model="model.selection">
+            <option v-for="cls in decoratorList" :value="cls">
+              {{ cls }}
+            </option>
+          </select>
         </div>
       </div>
     </template>
-    <Handle type="target" :position="Position.Left" />
-    <Handle type="source" :position="Position.Right" :is-valid-connection="isValidConnectionTarget" />
+    <div class="target-handles">
+      <Handle id="array" type="target" :position="Position.Left" data-name="Array?" />
+    </div>
+    <Handle id="predicate" type="source" :position="Position.Right" :is-valid-connection="isValidConnectionTarget" />
   </NodeWrapper>
 </template>
 
 <script setup lang="ts">
 import type { NodeProps, ValidConnectionFunc } from "@vue-flow/core";
 import { Position, Handle, useNode } from "@vue-flow/core";
-import { ref } from "vue";
+import { ref, watch } from "vue";
 import NodeWrapper from "../NodeWrapper.vue";
-import { useEventCommandResult } from "@/webview/utils";
-import { GraphNodeSendViewData } from "@/shared/events";
+import { sendEventCommand, useEventCommandResult } from "@/webview/utils";
+import { GraphNodeSendViewData, GraphNodeUpdateState } from "@/shared/events";
 
 const props = defineProps<NodeProps>();
-const classList = ref<string[]>([]);
-const { id: nodeId } = useNode()
+const decoratorList = ref<string[]>([]);
+const model = ref({
+  customName: '',
+  selection: ''
+});
+const { id: nodeId } = useNode();
 
 const isValidConnectionTarget: ValidConnectionFunc = (conn, { sourceNode, targetNode }) => {
   return sourceNode.id !== targetNode.id;
 };
 
-useEventCommandResult<GraphNodeSendViewData, { id: string; data: string[] }>(
-  "graph:node-send-view-data",
-  (data) => {
-    if (nodeId === data.id) {
-      classList.value = data.data;
-    }
+useEventCommandResult<GraphNodeSendViewData, { id: string; data: string[] }>("graph:node-send-view-data", (data) => {
+  if (nodeId === data.id) {
+    decoratorList.value = data.data;
   }
-);
+});
 
+watch(model, (value) => {
+  sendEventCommand<GraphNodeUpdateState>({
+    command: "graph:node-update-state",
+    data: {
+      id: nodeId,
+      state: value,
+    },
+  });
+});
 </script>
 
 <style lang="scss">
-.vue-flow__node-has-decorator {
+.vue-flow__node-has-decorator-predicate {
   color: #fff;
 }
 </style>

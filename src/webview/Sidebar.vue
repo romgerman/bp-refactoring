@@ -32,8 +32,20 @@ const nodeStore = useNodeStore();
     <NodeWrapper :draggable="true" @dragstart="onDragStart($event, NodeTypes.FilterBy)">
       <template #header>Filter By</template>
     </NodeWrapper>
-    <NodeWrapper :draggable="true" @dragstart="onDragStart($event, NodeTypes.HasDecorator)">
+    <NodeWrapper :draggable="true" @dragstart="onDragStart($event, NodeTypes.DecoratorPredicate)">
       <template #header>Has Decorator</template>
+    </NodeWrapper>
+
+    <h3>Actions</h3>
+
+    <NodeWrapper :draggable="true" @dragstart="onDragStart($event, NodeTypes.RenameClassAction)">
+      <template #header>Rename Class</template>
+    </NodeWrapper>
+    <NodeWrapper :draggable="true" @dragstart="onDragStart($event, NodeTypes.DebugAction)">
+      <template #header>Debug</template>
+    </NodeWrapper>
+    <NodeWrapper :draggable="true" @dragstart="onDragStart($event, NodeTypes.ApplyAction)">
+      <template #header>Apply Changes</template>
     </NodeWrapper>
   </div>
 </template>

@@ -11,13 +11,13 @@ export class GraphNodeGetViewDataEventHandler implements IExtensionEventHandler<
 
   async handle(data: GraphNodeGetViewData["data"], panel: vscode.WebviewPanel): Promise<void> {
     try {
-      const result = await this.store.getViewData(data?.id!);
-      for (let d of result) {
-        sendEventCommand<GraphNodeSendViewData>(panel.webview!, {
-          command: "graph:node-send-view-data",
-          data: { id: d.id, data: d.data },
-        });
-      }
+      // const result = await this.store.getViewData(data?.id!);
+      // for (let d of result) {
+      //   sendEventCommand<GraphNodeSendViewData>(panel.webview!, {
+      //     command: "graph:node-send-view-data",
+      //     data: { id: d.id, data: d.data },
+      //   });
+      // }
     } catch (e) {
       console.warn(e);
     }

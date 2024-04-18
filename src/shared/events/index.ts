@@ -1,9 +1,7 @@
 import type { FlowExportObject } from "@vue-flow/core";
 import { EventCommand } from "./event-command";
 
-export interface ScanTsConfigs extends EventCommand<"lifecycle:scan-tsconfigs"> {}
-export interface UpdateAllNodes extends EventCommand<"lifecycle:update-all-nodes"> {}
-export interface UpdateNodeGraph extends EventCommand<"lifecycle:update-node-graph", FlowExportObject> {}
+export interface ApplyChanges extends EventCommand<"lifecycle:apply"> {}
 
 export interface TsCompilerStatusChanged extends EventCommand<"lifecycle:compiler:status", boolean> {}
 

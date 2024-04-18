@@ -29,7 +29,7 @@ export class TypescriptCompiler extends vscode.Disposable {
     return this._builderProgram;
   }
 
-  public readonly events = new EventEmitter<'ready'>();
+  public readonly events = new EventEmitter<"ready">();
 
   private _watchProgramConfig: ts.WatchOfConfigFile<ts.BuilderProgram> | null = null;
   private _builderProgram: ts.BuilderProgram | null = null;
@@ -54,7 +54,7 @@ export class TypescriptCompiler extends vscode.Disposable {
     host.afterProgramCreate = (program) => {
       this._builderProgram = program;
       this._ready = true;
-      this.events.emit('ready', true);
+      this.events.emit("ready", true);
     };
 
     ts.createWatchProgram(host);
@@ -65,38 +65,24 @@ export class TypescriptCompiler extends vscode.Disposable {
     this._builderProgram = null;
     this._watchProgramConfig = null;
     this._ready = false;
-    this.events.emit('ready', false);
+    this.events.emit("ready", false);
   }
 
-  getAllClasses(): string[] {
-    if (!this._builderProgram) {
-      return [];
+  emit(tsNodes: ts.Node[]): void {
+    const printer = ts.createPrinter({});
+    for (const node of tsNodes) {
+      const text = printer.printNode(ts.EmitHint.Unspecified, node, node.getSourceFile());
+      //console.log(text);
+      // const text = printer.printNode(ts.EmitHint.Unspecified, node, node.getSourceFile());
+      const newFile = node
+        .getSourceFile()
+        .update(text, ts.createTextChangeRange(ts.createTextSpanFromBounds(node.getStart(), node.getEnd()), text.length));
+      console.log(printer.printFile(newFile));
     }
 
-    return this._builderProgram!.getProgram()
-      .getSourceFiles()
-      .map((sourceFile) =>
-        ts.forEachChild(sourceFile, (node) => {
-          if (node.kind === ts.SyntaxKind.ClassDeclaration) {
-            const classDecl = node as ts.ClassDeclaration;
-            let mods = "";
-
-            if (classDecl.modifiers) {
-              for (const mod of classDecl.modifiers) {
-                if (mod.kind === ts.SyntaxKind.Decorator) {
-                  const dec = mod as ts.Decorator;
-                  mods += ((dec.expression as ts.CallExpression).expression as ts.Identifier).getText() + ";";
-                }
-              }
-            }
-
-            return classDecl.name?.getText() + `(${mods})`;
-          } else {
-            return null;
-          }
-        })
-      )
-      .flat()
-      .filter((x) => !!x) as string[];
+    // for (const file of this.builderProgram?.getSourceFiles() ?? []) {
+    //   const text = printer.printFile(file);
+    //   console.log(text);
+    // }
   }
 }

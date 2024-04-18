@@ -5,5 +5,10 @@ export enum NodeTypes {
   FileList = "file-list",
 
   FilterBy = "filter-by",
-  HasDecorator = "has-decorator",
+
+  DecoratorPredicate = "has-decorator-predicate",
+
+  RenameClassAction = "rename-class-action",
+  DebugAction = "debug-action",
+  ApplyAction = "apply-action",
 }

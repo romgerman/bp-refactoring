@@ -15,7 +15,7 @@
         </select>
       </div>
     </template>
-    <Handle type="source" :position="Position.Right" />
+    <Handle id="array" type="source" :position="Position.Right" />
   </NodeWrapper>
 </template>
 

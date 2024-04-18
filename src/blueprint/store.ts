@@ -1,6 +1,16 @@
 import { TypescriptCompiler } from "../compiler/typescript";
 import { NodeTypes } from "../shared/node-types";
-import { BlueprintNode, ClassListNode, FileListNode, FilterByDecorator, ProjectNode } from "./blueprint-nodes";
+import {
+  BlueprintNode,
+  ClassListNode,
+  FileListNode,
+  DecoratorPredicateNode,
+  ProjectNode,
+  FilterByNode,
+  DebugActionNode,
+  RenameClassActionNode,
+  ApplyActionNode,
+} from "./blueprint-nodes";
 import { EventEmitter } from "eventemitter3";
 import { ROOT_NODES } from "./rules";
 
@@ -174,8 +184,16 @@ export class BlueprintStore {
         return new ClassListNode(this.compiler);
       case NodeTypes.FileList:
         return new FileListNode(this.compiler);
-      case NodeTypes.HasDecorator:
-        return new FilterByDecorator(this.compiler);
+      case NodeTypes.FilterBy:
+        return new FilterByNode(this.compiler);
+      case NodeTypes.DecoratorPredicate:
+        return new DecoratorPredicateNode(this.compiler);
+      case NodeTypes.RenameClassAction:
+        return new RenameClassActionNode(this.compiler);
+      case NodeTypes.DebugAction:
+        return new DebugActionNode(this.compiler);
+      case NodeTypes.ApplyAction:
+        return new ApplyActionNode(this.compiler);
       default:
         throw new Error(`NodeType.${type} is not processed`);
     }

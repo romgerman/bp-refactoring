@@ -21,12 +21,12 @@ const { onNodesInitialized } = useVueFlow();
 const { id: nodeId } = useNode();
 
 // After node has been added to graph request node data
-onNodesInitialized(() => {
-  sendEventCommand<GraphNodeGetViewData>({
-    command: "graph:node-get-view-data",
-    data: { id: nodeId },
-  });
-});
+// onNodesInitialized(() => {
+//   sendEventCommand<GraphNodeGetViewData>({
+//     command: "graph:node-get-view-data",
+//     data: { id: nodeId },
+//   });
+// });
 </script>
 
 <style lang="scss">

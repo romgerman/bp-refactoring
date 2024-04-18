@@ -13,6 +13,9 @@ import FileListNode from "./nodes/aggregation/FileListNode.vue";
 import HasDecoratorNode from "./nodes/filters/HasDecoratorNode.vue";
 import DropzoneBackground from "./DropzoneBackground.vue";
 import FilterByNode from "./nodes/filters/FilterByNode.vue";
+import RenameClassActionNode from "./nodes/actions/RenameClassActionNode.vue";
+import DebugActionNode from './nodes/actions/DebugActionNode.vue';
+import ApplyActionNode from "./nodes/actions/ApplyActionNode.vue";
 
 const { onConnect, onNodesChange, onEdgesChange, addEdges, removeNodes, getSelectedNodes } = useVueFlow();
 const { onDragOver, onDrop, onDragLeave, isDragOver } = useDragAndDrop();
@@ -20,8 +23,9 @@ const { onDragOver, onDrop, onDragLeave, isDragOver } = useDragAndDrop();
 const nodeStore = useNodeStore();
 
 onConnect((conn) => {
-  console.log(conn)
-  addEdges(conn);
+  if (conn.sourceHandle === conn.targetHandle || conn.targetHandle === "any") {
+    addEdges(conn);
+  }
 });
 
 onNodesChange((changes) => {
@@ -79,13 +83,23 @@ useEventListener("keyup", (e) => {
       <template #node-filter-by="nodeProps">
         <FilterByNode v-bind="nodeProps" />
       </template>
-      <template #node-has-decorator="nodeProps">
+      <template #node-has-decorator-predicate="nodeProps">
         <HasDecoratorNode v-bind="nodeProps" />
+      </template>
+
+      <template #node-rename-class-action="nodeProps">
+        <RenameClassActionNode v-bind="nodeProps" />
+      </template>
+      <template #node-debug-action="nodeProps">
+        <DebugActionNode v-bind="nodeProps" />
+      </template>
+      <template #node-apply-action="nodeProps">
+        <ApplyActionNode v-bind="nodeProps" />
       </template>
 
       <DropzoneBackground
         :style="{
-          backgroundColor: isDragOver ? '#e7f3ff' : 'transparent',
+          backgroundColor: isDragOver ? '#424a49' : 'transparent',
           transition: 'background-color 0.2s ease',
         }"
       />

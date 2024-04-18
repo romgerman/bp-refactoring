@@ -71,6 +71,8 @@ export class ProjectNode extends BlueprintNode<string> {
   }
 }
 
+// Aggregation
+
 export class ClassListNode extends BlueprintNode {
   readonly type: string = NodeTypes.ClassList;
 
@@ -99,7 +101,7 @@ export class ClassListNode extends BlueprintNode {
   }
 
   async getViewData(): Promise<string[]> {
-    const tsFileList: ts.SourceFile[] = await this.getInput(0).evaluate();
+    const tsFileList: ts.SourceFile[] = await this.evalInput(0);
 
     if (!tsFileList && ts.isSourceFile(tsFileList[0])) {
       return [];
@@ -135,26 +137,76 @@ export class FileListNode extends BlueprintNode {
   }
 }
 
-export class FilterByDecorator extends BlueprintNode<string[]> {
-  readonly type: string = NodeTypes.HasDecorator;
+// Filtering
 
-  override async evaluate(): Promise<ts.ClassDeclaration[]> {
-    const tsClassNodes: ts.ClassDeclaration[] = await this.getInput(0).evaluate();
+export class FilterByNode extends BlueprintNode {
+  readonly type: string = NodeTypes.FilterBy;
 
-    if (!tsClassNodes && ts.isClassDeclaration(tsClassNodes[0])) {
-      throw new Error("Invalid input on index 0. Expected type ts.ClassDeclaration[].");
+  async evaluate(): Promise<any> {
+    const array = this.getInput(0);
+    const predicate = this.getInput(1);
+
+    if (!array) {
+      throw new Error("Input array not specified for Filter By node");
     }
 
-    return tsClassNodes.filter((classDecl) => {
-      if (classDecl.modifiers) {
-        const decorators = classDecl.modifiers.filter((mod) => mod.kind === ts.SyntaxKind.Decorator) as ts.Decorator[];
-        return decorators.find((dec) =>
-          this.state?.includes(((dec.expression as ts.CallExpression).expression as ts.Identifier).getText())
-        );
-      } else {
-        return false;
-      }
-    });
+    if (!predicate) {
+      throw new Error("Predicate not specified for Filter By node");
+    }
+
+    if (!(predicate instanceof PredicateNode)) {
+      throw new Error("Predicate is not of type PredicateNode");
+    }
+
+    const predicateFn: Function = await predicate.evaluate();
+
+    if (!(typeof predicate === "function")) {
+      throw new Error("Predicate is not a function");
+    }
+
+    return predicateFn(array);
+  }
+
+  getViewData(): Promise<any> {
+    return Promise.resolve();
+  }
+}
+
+// Predicates
+
+export abstract class PredicateNode<T = any> extends BlueprintNode<T> {
+  readonly type: string = "predicate";
+
+  abstract evaluate(): Promise<Function>;
+  abstract getViewData(): Promise<any>;
+}
+
+export class DecoratorPredicateNode extends PredicateNode<{
+  customName: string;
+  selection: string;
+}> {
+  readonly type: string = NodeTypes.DecoratorPredicate;
+
+  override async evaluate(): Promise<Function> {
+    // const tsClassNodes: ts.ClassDeclaration[] = await this.getInput(0).evaluate();
+
+    // if (!Array.isArray(tsClassNodes) && ts.isClassDeclaration(tsClassNodes[0])) {
+    //   throw new Error("Invalid input on index 0. Expected type ts.ClassDeclaration[].");
+    // }
+
+    return (tsClassNodes: ts.ClassDeclaration[]) => {
+      return tsClassNodes.filter((classDecl) => {
+        if (classDecl.modifiers) {
+          const decorators = classDecl.modifiers.filter((mod) => mod.kind === ts.SyntaxKind.Decorator) as ts.Decorator[];
+          return decorators.find((dec) => {
+            const name = this.state?.customName || this.state?.selection;
+            return name === ((dec.expression as ts.CallExpression).expression as ts.Identifier).getText();
+          });
+        } else {
+          return false;
+        }
+      });
+    };
   }
 
   async getViewData(): Promise<string[]> {
@@ -174,5 +226,73 @@ export class FilterByDecorator extends BlueprintNode<string[]> {
       }
     }
     return Array.from(decoratorsSet.values());
+  }
+}
+
+// Actions
+
+export class RenameClassActionNode extends BlueprintNode<string> {
+  readonly type: string = NodeTypes.RenameClassAction;
+
+  async evaluate(): Promise<any> {
+    const tsClassList: ts.ClassDeclaration[] = await this.evalInput(0);
+
+    if (!Array.isArray(tsClassList) && !ts.isClassDeclaration(tsClassList[0])) {
+      throw new Error("Expected ts.ClassDeclaration[]");
+    }
+
+    const result: ts.ClassDeclaration[] = [];
+
+    for (let tsClass of tsClassList) {
+      if (tsClass.name) {
+        const newClass = ts.visitEachChild(
+          tsClass,
+          (node) => {
+            if (node?.kind === ts.SyntaxKind.Identifier) {
+              return ts.factory.createIdentifier(this.state ?? tsClass.name?.getText() ?? "");
+            }
+            return node;
+          },
+          undefined
+        );
+        tsClass = newClass;
+        console.log(tsClass.getSourceFile().fileName);
+        result.push(newClass);
+      } else {
+        result.push(tsClass);
+      }
+    }
+
+    return result;
+  }
+
+  getViewData(): Promise<any> {
+    return Promise.resolve();
+  }
+}
+
+export class DebugActionNode extends BlueprintNode {
+  readonly type: string = NodeTypes.DebugAction;
+
+  async evaluate(): Promise<any> {
+    console.log(await this.evalInput(0));
+    return Promise.resolve();
+  }
+
+  async getViewData(): Promise<any> {
+    console.log(await this.evalInput(0));
+    return Promise.resolve();
+  }
+}
+
+export class ApplyActionNode extends BlueprintNode {
+  readonly type: string = NodeTypes.ApplyAction;
+
+  async evaluate(): Promise<any> {
+    return await this.evalInput(0);
+  }
+
+  getViewData(): Promise<any> {
+    return Promise.resolve();
   }
 }
