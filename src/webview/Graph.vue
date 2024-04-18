@@ -1,30 +1,59 @@
 <script setup lang="ts">
 import { VueFlow, useVueFlow } from "@vue-flow/core";
 import { MiniMap } from "@vue-flow/minimap";
-import useDragAndDrop from './useDnD'
-import { useNodeStore } from "./store";
 import { useEventListener } from "@vueuse/core";
+import useDragAndDrop from "./useDnD";
+import { useNodeStore } from "./store";
+import { GraphNodeAdded, GraphNodeConnected, GraphNodeDisconnected, GraphNodeRemoved } from "@/shared/events";
+import { sendEventCommand } from "./utils";
 
 import ProjectNode from "./nodes/ProjectNode.vue";
 import FileListNode from "./nodes/ClassListNode.vue";
 import HasDecoratorNode from "./nodes/filters/HasDecoratorNode.vue";
 import DropzoneBackground from "./DropzoneBackground.vue";
 
-const { onConnect, addEdges, removeNodes, getSelectedNodes } = useVueFlow();
-const { onDragOver, onDrop, onDragLeave, isDragOver } = useDragAndDrop()
+const { onConnect, onNodesChange, onEdgesChange, addEdges, removeNodes, getSelectedNodes } = useVueFlow();
+const { onDragOver, onDrop, onDragLeave, isDragOver } = useDragAndDrop();
 
 const nodeStore = useNodeStore();
 
 onConnect((conn) => {
   addEdges(conn);
-  // sendEventCommand<UpdateNodeGraph>({
-  //   command: 'lifecycle:update-node-graph',
-  //   data: toObject()
-  // })
 });
 
-useEventListener('keyup', (e) => {
-  if (e.key === 'Delete') {
+onNodesChange((changes) => {
+  if (changes[0].type === "add") {
+    sendEventCommand<GraphNodeAdded>({
+      command: "graph:node-added",
+      data: {
+        id: changes[0].item.id,
+        type: changes[0].item.type,
+      },
+    });
+  } else if (changes[0].type === "remove") {
+    sendEventCommand<GraphNodeRemoved>({
+      command: "graph:node-removed",
+      data: { id: changes[0].id },
+    });
+  }
+});
+
+onEdgesChange((changes) => {
+  if (changes[0].type === "add") {
+    sendEventCommand<GraphNodeConnected>({
+      command: "graph:node-connected",
+      data: { sourceId: changes[0].item.source, targetId: changes[0].item.target },
+    });
+  } else if (changes[0].type === "remove") {
+    sendEventCommand<GraphNodeDisconnected>({
+      command: "graph:node-disconnected",
+      data: { sourceId: changes[0].source, targetId: changes[0].target },
+    });
+  }
+});
+
+useEventListener("keyup", (e) => {
+  if (e.key === "Delete") {
     removeNodes(getSelectedNodes.value);
   }
 });
@@ -43,10 +72,12 @@ useEventListener('keyup', (e) => {
         <HasDecoratorNode v-bind="hasDecoratorNodeProps" />
       </template>
 
-      <DropzoneBackground :style="{
-        backgroundColor: isDragOver ? '#e7f3ff' : 'transparent',
-        transition: 'background-color 0.2s ease',
-      }" />
+      <DropzoneBackground
+        :style="{
+          backgroundColor: isDragOver ? '#e7f3ff' : 'transparent',
+          transition: 'background-color 0.2s ease',
+        }"
+      />
       <MiniMap pannable zoomable />
     </VueFlow>
   </div>
@@ -60,6 +91,6 @@ useEventListener('keyup', (e) => {
 .dndflow {
   flex-direction: column;
   display: flex;
-  height: 100%
+  height: 100%;
 }
 </style>

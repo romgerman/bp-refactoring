@@ -15,27 +15,28 @@
 
 <script setup lang="ts">
 import type { NodeProps, ValidConnectionFunc } from "@vue-flow/core";
-import { Position, Handle } from "@vue-flow/core";
-import { useConnected } from "@/webview/utils";
+import { Position, Handle, useNode } from "@vue-flow/core";
 import { ref } from "vue";
 import NodeWrapper from "../NodeWrapper.vue";
+import { useEventCommandResult } from "@/webview/utils";
+import { GraphNodeSendViewData } from "@/shared/events";
 
 const props = defineProps<NodeProps>();
 const classList = ref<string[]>([]);
+const { id: nodeId } = useNode()
 
 const isValidConnectionTarget: ValidConnectionFunc = (conn, { sourceNode, targetNode }) => {
   return sourceNode.id !== targetNode.id;
 };
 
-useConnected((node) => {
-  if (node) {
-    // sendEventCommandAndWaitResult<GetClassList>({
-    //   command: "project:get-classlist",
-    // }, (data: string[]) => {
-    //   classList.value = data;
-    // });
+useEventCommandResult<GraphNodeSendViewData, { id: string; data: string[] }>(
+  "graph:node-send-view-data",
+  (data) => {
+    if (nodeId === data.id) {
+      classList.value = data.data;
+    }
   }
-});
+);
 
 </script>
 

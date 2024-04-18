@@ -5,7 +5,7 @@
       <div class="status" :class="tsCompilerStatus ? 'status--active' : 'status--inactive'"></div>
     </template>
     <template #body>
-      <vscode-button @click="scanForProjects">Scan</vscode-button>
+      <vscode-button @click="getNodeData">Scan</vscode-button>
       <div class="dropdown-container">
         <label for="my-dropdown">Choose tsconfig:</label>
         <select size="5" class="nodrag nowheel select" style="width: 100%; cursor: default" v-model="chosenConfig">
@@ -20,43 +20,58 @@
 </template>
 
 <script setup lang="ts">
-import type { NodeProps } from "@vue-flow/core";
-import { Position, Handle, useNode } from "@vue-flow/core";
 import { ref, watch } from "vue";
-import { sendEventCommand, sendEventCommandAndWaitResult, useEventCommandResult } from "@/webview/utils";
+import type { NodeProps } from "@vue-flow/core";
+import { Position, Handle, useNode, useVueFlow } from "@vue-flow/core";
+import { sendEventCommand, useEventCommandResult } from "@/webview/utils";
+import { GraphNodeGetViewData, GraphNodeSendViewData, GraphNodeUpdateState, TsCompilerStatusChanged } from "@/shared/events";
 import NodeWrapper from "./NodeWrapper.vue";
-import { ScanTsConfigs, TsCompilerStatusChanged, TsConfigChanged } from "@/shared/events";
 
 const tsConfigList = ref<{ value: string; label: string }[]>([]);
 const chosenConfig = ref<string | null>(null);
 const tsCompilerStatus = ref<boolean>(false);
 
 const props = defineProps<NodeProps>();
-const { node } = useNode();
+const { node, id: nodeId } = useNode();
+const { onNodesInitialized } = useVueFlow();
 
-watch(chosenConfig, (conf) => {
-  node.data = conf;
-  sendEventCommand<TsConfigChanged>({
-    command: "project:tsconfig-selected",
-    data: conf!,
-  });
-});
-
-function scanForProjects(): void {
-  sendEventCommandAndWaitResult<ScanTsConfigs>(
-    {
-      command: "lifecycle:scan-tsconfigs",
-    },
-    (data) => {
-      tsConfigList.value = data;
-    }
-  );
-}
-
-scanForProjects();
-
+// Subscribe to status of current project TS compiler
 useEventCommandResult<TsCompilerStatusChanged>("lifecycle:compiler:status", (data) => {
   tsCompilerStatus.value = data!;
+});
+
+// Subscribe to node data updates
+useEventCommandResult<GraphNodeSendViewData, { id: string; data: Array<{ value: string; label: string }> }>(
+  "graph:node-send-view-data",
+  (data) => {
+    if (nodeId === data.id) {
+      tsConfigList.value = data.data;
+    }
+  }
+);
+
+// Get current node view data
+function getNodeData(): void {
+  sendEventCommand<GraphNodeGetViewData>({
+    command: "graph:node-get-view-data",
+    data: { id: node.id },
+  });
+}
+
+// After node has been added to graph request node data
+onNodesInitialized(() => {
+  getNodeData();
+});
+
+watch(chosenConfig, (selectedConfig) => {
+  node.data = selectedConfig;
+  sendEventCommand<GraphNodeUpdateState>({
+    command: "graph:node-update-state",
+    data: {
+      id: nodeId,
+      state: selectedConfig,
+    },
+  });
 });
 </script>
 

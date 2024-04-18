@@ -54,6 +54,7 @@ export class BlueprintWebPanel {
 
   dispose(): void {
     vscode.Disposable.from(this._panel, ...this._disposables).dispose();
+    BlueprintWebPanel.currentPanel = undefined;
   }
 
   private _getWebviewContent(webview: vscode.Webview, extensionUri: vscode.Uri): string {

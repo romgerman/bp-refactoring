@@ -1,19 +1,27 @@
-import * as vscode from 'vscode';
+import * as vscode from "vscode";
 import { EventCommand } from "../shared/events/event-command";
+import { sendEventCommand } from "../utils";
 
 export interface IExtensionEventHandler<T extends EventCommand<any, any>> {
-  readonly command: T['command'];
-  handle(data: T['data'], panel: vscode.WebviewPanel): void;
+  readonly command: T["command"];
+  handle(data: T["data"], panel: vscode.WebviewPanel): any;
 }
 
 export class ExtensionEventBus {
   private _events: Map<string, Set<IExtensionEventHandler<any>>> = new Map();
 
-  constructor() { }
+  constructor() {}
 
-  emit<T extends EventCommand<any, any>>(command: T, panel: vscode.WebviewPanel): void {
+  async emit<T extends EventCommand<any, any>>(command: T, panel: vscode.WebviewPanel): Promise<void> {
     for (const handler of this._events.get(command.command)?.values() ?? []) {
-      handler.handle(command.data, panel);
+      const retVal = await handler.handle(command.data, panel);
+      if (!retVal) {
+        continue;
+      }
+      sendEventCommand(panel.webview, {
+        command: handler.command,
+        data: retVal,
+      });
     }
   }
 

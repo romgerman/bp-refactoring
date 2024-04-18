@@ -13,5 +13,9 @@
     "typescript.tsdk": "node_modules\\typescript\\lib",
     "cmake.configureOnOpen": false,
     "typescript.inlayHints.functionLikeReturnTypes.enabled": true,
-    "typescript.inlayHints.variableTypes.enabled": true
+    "typescript.inlayHints.variableTypes.enabled": true,
+    "[typescript]": {
+      "editor.formatOnSave": true,
+      "editor.defaultFormatter": "esbenp.prettier-vscode"
+    }
 }

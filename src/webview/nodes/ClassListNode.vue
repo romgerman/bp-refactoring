@@ -15,37 +15,30 @@
 
 <script setup lang="ts">
 import type { NodeProps, ValidConnectionFunc } from "@vue-flow/core";
-import { Position, Handle } from "@vue-flow/core";
+import { Position, Handle, useNode } from "@vue-flow/core";
 import { useConnected, useEventCommandResult } from "@/webview/utils";
-import { GetClassList, UpdateAllNodes } from "@/shared/events/index";
+import { GraphNodeSendViewData, UpdateAllNodes } from "@/shared/events/index";
 import { sendEventCommandAndWaitResult } from "@/webview/utils";
 import { ref } from "vue";
 import NodeWrapper from "./NodeWrapper.vue";
 
 const props = defineProps<NodeProps>();
 const classList = ref<string[]>([]);
+const { id: nodeId } = useNode()
 
 const isValidConnectionTarget: ValidConnectionFunc = (conn, { sourceNode, targetNode }) => {
   return sourceNode.id !== targetNode.id;
 };
 
-function refresh(): void {
-  sendEventCommandAndWaitResult<GetClassList>({
-    command: "project:get-classlist",
-  }, (data: string[]) => {
-    classList.value = data;
-  });
-}
+  useEventCommandResult<GraphNodeSendViewData, { id: string; data: string[] }>(
+    "graph:node-send-view-data",
+    (data) => {
+      if (nodeId === data.id) {
+        classList.value = data.data;
+      }
+    }
+  );
 
-useConnected((node) => {
-  if (node) {
-    refresh();
-  }
-});
-
-useEventCommandResult<UpdateAllNodes>("lifecycle:update-all-nodes", (data) => {
-  refresh();
-});
 </script>
 
 <style lang="scss">
