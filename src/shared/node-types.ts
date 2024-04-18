@@ -1,5 +1,8 @@
 export enum NodeTypes {
   Project = "project",
+
   ClassList = "class-list",
-  HasDecorator = "has-decorator"
+  FileList = "file-list",
+
+  HasDecorator = "has-decorator",
 }

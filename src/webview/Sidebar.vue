@@ -17,10 +17,15 @@ const nodeStore = useNodeStore();
     >
       <template #header>Project</template>
     </NodeWrapper>
+
     <NodeWrapper :draggable="true" @dragstart="onDragStart($event, NodeTypes.ClassList)">
       <template #header>Class List</template>
     </NodeWrapper>
-    <NodeWrapper :draggable="true" @dragstart="onDragStart($event, NodeTypes.HasDecorator)">
+    <NodeWrapper :draggable="true" @dragstart="onDragStart($event, NodeTypes.FileList)">
+      <template #header>File List</template>
+    </NodeWrapper>
+
+    <NodeWrapper :draggable="false" @dragstart="onDragStart($event, NodeTypes.HasDecorator)">
       <template #header>Has Decorator</template>
     </NodeWrapper>
   </div>

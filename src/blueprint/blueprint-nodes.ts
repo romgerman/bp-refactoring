@@ -111,6 +111,30 @@ export class ClassListNode extends BlueprintNode {
   }
 }
 
+export class FileListNode extends BlueprintNode {
+  type: string = NodeTypes.FileList;
+
+  async evaluate(): Promise<any> {
+    const tsFileList: ts.SourceFile[] = await this.evalInput(0);
+
+    if (!tsFileList && ts.isSourceFile(tsFileList[0])) {
+      throw new Error("Invalid input at index 0. Expected type ts.SourceFile[].");
+    }
+
+    return tsFileList;
+  }
+
+  async getViewData(): Promise<any> {
+    const tsFileList: ts.SourceFile[] = await this.evalInput(0);
+
+    if (!tsFileList && ts.isSourceFile(tsFileList[0])) {
+      return [];
+    }
+
+    return tsFileList.map((x) => x.fileName);
+  }
+}
+
 export class FilterByDecorator extends BlueprintNode<string[]> {
   readonly type: string = NodeTypes.HasDecorator;
 

@@ -8,7 +8,8 @@ import { GraphNodeAdded, GraphNodeConnected, GraphNodeDisconnected, GraphNodeRem
 import { sendEventCommand } from "./utils";
 
 import ProjectNode from "./nodes/ProjectNode.vue";
-import FileListNode from "./nodes/ClassListNode.vue";
+import ClassListNode from "./nodes/aggregation/ClassListNode.vue";
+import FileListNode from "./nodes/aggregation/FileListNode.vue";
 import HasDecoratorNode from "./nodes/filters/HasDecoratorNode.vue";
 import DropzoneBackground from "./DropzoneBackground.vue";
 
@@ -62,14 +63,19 @@ useEventListener("keyup", (e) => {
 <template>
   <div class="dndflow" @drop="onDrop">
     <VueFlow v-model="nodeStore.nodes" @dragover="onDragOver" @dragleave="onDragLeave">
-      <template #node-project="projectNodeProps">
-        <ProjectNode v-bind="projectNodeProps" />
+      <template #node-project="nodeProps">
+        <ProjectNode v-bind="nodeProps" />
       </template>
-      <template #node-class-list="fileListNodeProps">
-        <FileListNode v-bind="fileListNodeProps" />
+
+      <template #node-class-list="nodeProps">
+        <ClassListNode v-bind="nodeProps" />
       </template>
-      <template #node-has-decorator="hasDecoratorNodeProps">
-        <HasDecoratorNode v-bind="hasDecoratorNodeProps" />
+      <template #node-file-list="nodeProps">
+        <FileListNode v-bind="nodeProps" />
+      </template>
+
+      <template #node-has-decorator="nodeProps">
+        <HasDecoratorNode v-bind="nodeProps" />
       </template>
 
       <DropzoneBackground

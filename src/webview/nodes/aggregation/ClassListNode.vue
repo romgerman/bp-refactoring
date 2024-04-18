@@ -2,7 +2,7 @@
   <NodeWrapper>
     <template #header>Class list</template>
     <template #body>
-      <div class="nowheel" style="max-height: 200px; overflow: auto;">
+      <div class="nowheel" style="max-height: 200px; overflow: auto">
         <div v-for="cls in classList">
           {{ cls }}
         </div>
@@ -20,25 +20,21 @@ import { useConnected, useEventCommandResult } from "@/webview/utils";
 import { GraphNodeSendViewData, UpdateAllNodes } from "@/shared/events/index";
 import { sendEventCommandAndWaitResult } from "@/webview/utils";
 import { ref } from "vue";
-import NodeWrapper from "./NodeWrapper.vue";
+import NodeWrapper from "../NodeWrapper.vue";
 
 const props = defineProps<NodeProps>();
 const classList = ref<string[]>([]);
-const { id: nodeId } = useNode()
+const { id: nodeId } = useNode();
 
 const isValidConnectionTarget: ValidConnectionFunc = (conn, { sourceNode, targetNode }) => {
   return sourceNode.id !== targetNode.id;
 };
 
-  useEventCommandResult<GraphNodeSendViewData, { id: string; data: string[] }>(
-    "graph:node-send-view-data",
-    (data) => {
-      if (nodeId === data.id) {
-        classList.value = data.data;
-      }
-    }
-  );
-
+useEventCommandResult<GraphNodeSendViewData, { id: string; data: string[] }>("graph:node-send-view-data", (data) => {
+  if (nodeId === data.id) {
+    classList.value = data.data;
+  }
+});
 </script>
 
 <style lang="scss">
