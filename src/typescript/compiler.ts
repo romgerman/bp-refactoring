@@ -1,6 +1,7 @@
 import * as vscode from "vscode";
 import ts from "typescript";
 import EventEmitter from "eventemitter3";
+import { LanguageService } from "./language-service";
 
 const formatHost: ts.FormatDiagnosticsHost = {
   getCanonicalFileName: (path) => path,
@@ -29,11 +30,17 @@ export class TypescriptCompiler extends vscode.Disposable {
     return this._builderProgram;
   }
 
+  public get languageService(): LanguageService | null {
+    return this._ls;
+  }
+
   public readonly events = new EventEmitter<"ready">();
 
   private _watchProgramConfig: ts.WatchOfConfigFile<ts.BuilderProgram> | null = null;
   private _builderProgram: ts.BuilderProgram | null = null;
   private _ready = false;
+
+  private _ls: LanguageService | null = null;
 
   constructor() {
     super(() => this.stop());
@@ -45,7 +52,7 @@ export class TypescriptCompiler extends vscode.Disposable {
 
     const host = ts.createWatchCompilerHost(
       vscode.Uri.parse(configPath).fsPath,
-      {},
+      undefined,
       ts.sys,
       createProgram,
       reportDiagnostic,
@@ -54,6 +61,11 @@ export class TypescriptCompiler extends vscode.Disposable {
     host.afterProgramCreate = (program) => {
       this._builderProgram = program;
       this._ready = true;
+      this._ls = new LanguageService();
+      this._ls.start(
+        program.getSourceFiles().map((x) => x.fileName),
+        program.getCompilerOptions()
+      );
       this.events.emit("ready", true);
     };
 
@@ -61,6 +73,7 @@ export class TypescriptCompiler extends vscode.Disposable {
   }
 
   stop(): void {
+    this._ls?.stop();
     this._watchProgramConfig?.close();
     this._builderProgram = null;
     this._watchProgramConfig = null;
@@ -69,20 +82,10 @@ export class TypescriptCompiler extends vscode.Disposable {
   }
 
   emit(tsNodes: ts.Node[]): void {
-    const printer = ts.createPrinter({});
-    for (const node of tsNodes) {
-      const text = printer.printNode(ts.EmitHint.Unspecified, node, node.getSourceFile());
-      //console.log(text);
-      // const text = printer.printNode(ts.EmitHint.Unspecified, node, node.getSourceFile());
-      const newFile = node
-        .getSourceFile()
-        .update(text, ts.createTextChangeRange(ts.createTextSpanFromBounds(node.getStart(), node.getEnd()), text.length));
-      console.log(printer.printFile(newFile));
+    const printer = ts.createPrinter({ newLine: ts.NewLineKind.CarriageReturnLineFeed });
+    for (const file of tsNodes.map((x) => x.getSourceFile())) {
+      const text = printer.printFile(file);
+      ts.sys.writeFile(file.fileName, text);
     }
-
-    // for (const file of this.builderProgram?.getSourceFiles() ?? []) {
-    //   const text = printer.printFile(file);
-    //   console.log(text);
-    // }
   }
 }

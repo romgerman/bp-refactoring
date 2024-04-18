@@ -1,6 +1,6 @@
 import * as ts from "typescript";
 import * as vscode from "vscode";
-import { TypescriptCompiler } from "../compiler/typescript";
+import { TypescriptCompiler } from "../typescript/compiler";
 import { NodeTypes } from "../shared/node-types";
 
 function until(conditionFunction: Function): Promise<void> {
@@ -160,11 +160,11 @@ export class FilterByNode extends BlueprintNode {
 
     const predicateFn: Function = await predicate.evaluate();
 
-    if (!(typeof predicate === "function")) {
+    if (!(typeof predicateFn === "function")) {
       throw new Error("Predicate is not a function");
     }
 
-    return predicateFn(array);
+    return predicateFn(await array.evaluate());
   }
 
   getViewData(): Promise<any> {
@@ -194,6 +194,7 @@ export class DecoratorPredicateNode extends PredicateNode<{
     //   throw new Error("Invalid input on index 0. Expected type ts.ClassDeclaration[].");
     // }
 
+    console.log("name", this.state);
     return (tsClassNodes: ts.ClassDeclaration[]) => {
       return tsClassNodes.filter((classDecl) => {
         if (classDecl.modifiers) {
@@ -245,19 +246,16 @@ export class RenameClassActionNode extends BlueprintNode<string> {
 
     for (let tsClass of tsClassList) {
       if (tsClass.name) {
-        const newClass = ts.visitEachChild(
-          tsClass,
-          (node) => {
-            if (node?.kind === ts.SyntaxKind.Identifier) {
-              return ts.factory.createIdentifier(this.state ?? tsClass.name?.getText() ?? "");
-            }
-            return node;
-          },
-          undefined
-        );
-        tsClass = newClass;
-        console.log(tsClass.getSourceFile().fileName);
-        result.push(newClass);
+        //const info = this.compiler.languageService?.services?.getRenameInfo(tsClass.getSourceFile().fileName, tsClass.name.getStart(), {});
+        // const locs = this.compiler.languageService?.services?.findRenameLocations(
+        //   tsClass.getSourceFile().fileName,
+        //   tsClass.name.getStart(),
+        //   false,
+        //   false,
+        //   {}
+        // );
+        (tsClass.name as any) = ts.factory.createIdentifier(this.state ?? tsClass.name?.getText() ?? "");
+        result.push(tsClass);
       } else {
         result.push(tsClass);
       }

@@ -3,7 +3,7 @@ import { BlueprintStore } from "../../blueprint/store";
 import { ApplyChanges, GraphNodeAdded } from "../../shared/events";
 import { IExtensionEventHandler } from "../extension-event-bus";
 import { NodeTypes } from "../../shared/node-types";
-import { TypescriptCompiler } from "../../compiler/typescript";
+import { TypescriptCompiler } from "../../typescript/compiler";
 
 export class ApplyChangesEventHandler implements IExtensionEventHandler<ApplyChanges> {
   readonly command: "lifecycle:apply" = "lifecycle:apply";

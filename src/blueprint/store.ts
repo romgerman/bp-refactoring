@@ -1,4 +1,4 @@
-import { TypescriptCompiler } from "../compiler/typescript";
+import { TypescriptCompiler } from "../typescript/compiler";
 import { NodeTypes } from "../shared/node-types";
 import {
   BlueprintNode,

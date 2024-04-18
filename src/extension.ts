@@ -2,7 +2,7 @@ import "reflect-metadata";
 import * as vscode from "vscode";
 import { BlueprintWebPanel } from "./extension/blueprint-web-panel";
 import { ExtensionEventBus } from "./extension/extension-event-bus";
-import { TypescriptCompiler } from "./compiler/typescript";
+import { TypescriptCompiler } from "./typescript/compiler";
 import { sendEventCommand } from "./utils";
 import { GraphNodeSendViewData, TsCompilerStatusChanged } from "./shared/events";
 import { GraphNodeAddedEventHandler } from "./extension/events/graph-node-added";
