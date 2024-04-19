@@ -75,6 +75,28 @@ export class ProjectNode extends BlueprintNode<string> {
   }
 }
 
+// Data
+
+export class ConstantNode extends BlueprintNode<{ type: string; value: string }> {
+  readonly type: string = NodeTypes.Constant;
+
+  async evaluate(): Promise<any> {
+    return this.convertValue(this.state?.value, this.state?.type);
+  }
+
+  getViewData(): Promise<any> {
+    return Promise.resolve();
+  }
+
+  private convertValue(value?: string, type?: string): any {
+    if (type === "string") {
+      return value ?? "";
+    } else {
+      return null;
+    }
+  }
+}
+
 // Aggregation
 
 export class ClassListNode extends BlueprintNode {
@@ -172,7 +194,7 @@ export class FilterByNode extends BlueprintNode {
       throw new Error("Predicate is not a function");
     }
 
-    return predicateFn(await array.evaluate());
+    return await predicateFn(await array.evaluate());
   }
 
   getViewData(): Promise<any> {
@@ -202,13 +224,13 @@ export class DecoratorPredicateNode extends PredicateNode<{
     //   throw new Error("Invalid input on index 0. Expected type ts.ClassDeclaration[].");
     // }
 
-    console.log("name", this.state);
-    return (tsClassNodes: ts.ClassDeclaration[]) => {
+    return async (tsClassNodes: ts.ClassDeclaration[]) => {
+      const name = (await this.evalInput(0)) || this.state?.selection;
       return tsClassNodes.filter((classDecl) => {
         if (classDecl.modifiers) {
           const decorators = classDecl.modifiers.filter((mod) => mod.kind === ts.SyntaxKind.Decorator) as ts.Decorator[];
           return decorators.find((dec) => {
-            const name = this.state?.customName || this.state?.selection;
+            //const name = this.state?.customName || this.state?.selection;
             return name === ((dec.expression as ts.CallExpression).expression as ts.Identifier).getText();
           });
         } else {
@@ -218,11 +240,18 @@ export class DecoratorPredicateNode extends PredicateNode<{
     };
   }
 
-  async getViewData(): Promise<string[]> {
-    const tsClassNodes: ts.ClassDeclaration[] = await this.getInput(0).evaluate();
+  async getViewData(): Promise<{
+    customName: string | null;
+    decoratorList: string[];
+  }> {
+    const customName: BlueprintNode = this.getInput(0);
+    const tsClassNodes: ts.ClassDeclaration[] = await this.getInput(1)?.evaluate();
 
-    if (!tsClassNodes && ts.isClassDeclaration(tsClassNodes[0])) {
-      return [];
+    if (!isArrayOfType(tsClassNodes, ts.isClassDeclaration)) {
+      return {
+        customName: customName ? await customName.evaluate() : null,
+        decoratorList: [],
+      };
     }
 
     const decoratorsSet = new Set<string>();
@@ -234,7 +263,10 @@ export class DecoratorPredicateNode extends PredicateNode<{
           .forEach((d) => decoratorsSet.add(d));
       }
     }
-    return Array.from(decoratorsSet.values());
+    return {
+      customName: await customName.evaluate(),
+      decoratorList: Array.from(decoratorsSet.values()),
+    };
   }
 }
 

@@ -10,6 +10,7 @@ import {
   DebugActionNode,
   RenameClassActionNode,
   ApplyActionNode,
+  ConstantNode,
 } from "./blueprint-nodes";
 import { EventEmitter } from "eventemitter3";
 import { ROOT_NODES } from "./rules";
@@ -196,6 +197,8 @@ export class BlueprintStore {
         return new DebugActionNode(this.compiler);
       case NodeTypes.ApplyAction:
         return new ApplyActionNode(this.compiler);
+      case NodeTypes.Constant:
+        return new ConstantNode(this.compiler);
       default:
         throw new Error(`NodeType.${type} is not processed`);
     }

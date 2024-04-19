@@ -18,6 +18,12 @@ const nodeStore = useNodeStore();
       <template #header>Project</template>
     </NodeWrapper>
 
+    <h3>Data</h3>
+
+    <NodeWrapper :draggable="true" @dragstart="onDragStart($event, NodeTypes.Constant)">
+      <template #header>Constant</template>
+    </NodeWrapper>
+
     <h3>Aggregation</h3>
 
     <NodeWrapper :draggable="true" @dragstart="onDragStart($event, NodeTypes.ClassList)">

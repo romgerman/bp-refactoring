@@ -2,14 +2,15 @@
   <NodeWrapper>
     <template #header>Has Decorator</template>
     <template #body>
-      <div>
-        <vscode-text-field class="nodrag nowheel" v-model="model.customName">Custom Decorator Name</vscode-text-field>
+      <div style="margin-bottom: 10px;">
+        <vscode-text-field class="nodrag nowheel" readonly v-model="model.customName">Decorator Name</vscode-text-field>
       </div>
       <VueSelect class="nowheel nodrag" placeholder="Or choose..." :options="decoratorList" v-model="model.selection">
       </VueSelect>
     </template>
     <div class="target-handles">
-      <Handle id="0:array" type="target" :position="Position.Left" data-name="Array?" />
+      <Handle id="0:string" type="target" :position="Position.Left" data-name="Name?" />
+      <Handle id="1:array" type="target" :position="Position.Left" data-name="Array?" />
     </div>
     <Handle id="0:predicate" type="source" :position="Position.Right" :is-valid-connection="isValidConnectionTarget" />
   </NodeWrapper>
@@ -22,14 +23,14 @@ import { ref, watch } from "vue";
 import { sendEventCommand, useEventCommandResult } from "@/webview/utils";
 import { GraphNodeSendViewData, GraphNodeUpdateState } from "@/shared/events";
 
-import VueSelect from 'vue-select';
+import VueSelect from "vue-select";
 import NodeWrapper from "../NodeWrapper.vue";
 
 const props = defineProps<NodeProps>();
 const decoratorList = ref<string[]>([]);
 const model = ref({
-  customName: '',
-  selection: ''
+  customName: "",
+  selection: "",
 });
 const { id: nodeId } = useNode();
 
@@ -37,11 +38,15 @@ const isValidConnectionTarget: ValidConnectionFunc = (conn, { sourceNode, target
   return sourceNode.id !== targetNode.id;
 };
 
-useEventCommandResult<GraphNodeSendViewData, { id: string; data: string[] }>("graph:node-send-view-data", (data) => {
-  if (nodeId === data.id) {
-    decoratorList.value = data.data;
+useEventCommandResult<GraphNodeSendViewData, { id: string; data: { customName: string | null; decoratorList: string[] } }>(
+  "graph:node-send-view-data",
+  (data) => {
+    if (nodeId === data.id) {
+      decoratorList.value = data.data.decoratorList;
+      model.value.customName = data.data.customName ?? "";
+    }
   }
-});
+);
 
 watch(model.value, (value) => {
   sendEventCommand<GraphNodeUpdateState>({
@@ -50,7 +55,7 @@ watch(model.value, (value) => {
       id: nodeId,
       state: {
         customName: value.customName,
-        selection: value.selection
+        selection: value.selection,
       },
     },
   });

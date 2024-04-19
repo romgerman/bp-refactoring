@@ -2,6 +2,7 @@ import * as path from "path";
 import * as webpack from "webpack";
 import { VueLoaderPlugin } from "vue-loader";
 import MiniCssExtractPlugin from "mini-css-extract-plugin";
+import WebpackBar from "webpackbar";
 
 const extensionConfig: webpack.Configuration = {
   // VS Code extensions run in a Node.js-context 📖 -> https://webpack.js.org/configuration/node/
@@ -106,6 +107,7 @@ const webviewConfig: webpack.Configuration = {
       filename: "[name].webview.css",
       runtime: false,
     }),
+    new WebpackBar(),
   ],
 };
 
