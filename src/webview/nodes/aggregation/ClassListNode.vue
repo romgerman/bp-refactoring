@@ -1,11 +1,12 @@
 <template>
   <NodeWrapper>
-    <template #header>Class list</template>
+    <template #header>Class List</template>
     <template #body>
       <div class="nowheel" style="max-height: 200px; overflow: auto">
         <div v-for="cls in classList">
           {{ cls }}
         </div>
+        <div class="font-bold" v-if="greaterThanMaxItems">and {{ otherItemsCount }} more</div>
       </div>
     </template>
     <div class="target-handles">
@@ -16,7 +17,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
+import { computed, ref } from "vue";
 import { GraphNodeSendViewData } from "@/shared/events/index";
 import { useEventCommandResult } from "@/webview/utils";
 import type { NodeProps, ValidConnectionFunc } from "@vue-flow/core";
@@ -24,8 +25,12 @@ import { Handle, Position, useNode } from "@vue-flow/core";
 
 import NodeWrapper from "../NodeWrapper.vue";
 
+const MAX_ITEMS = 3;
+
 const props = defineProps<NodeProps>();
 const classList = ref<string[]>([]);
+const otherItemsCount = ref<number>(0);
+const greaterThanMaxItems = computed(() => otherItemsCount.value > MAX_ITEMS);
 const { id: nodeId } = useNode();
 
 const isValidConnectionTarget: ValidConnectionFunc = (conn, { sourceNode, targetNode }) => {
@@ -34,7 +39,8 @@ const isValidConnectionTarget: ValidConnectionFunc = (conn, { sourceNode, target
 
 useEventCommandResult<GraphNodeSendViewData, { id: string; data: string[] }>("graph:node-send-view-data", (data) => {
   if (nodeId === data.id) {
-    classList.value = data.data;
+    otherItemsCount.value = data.data.length - MAX_ITEMS;
+    classList.value = data.data.slice(0, MAX_ITEMS);
   }
 });
 </script>

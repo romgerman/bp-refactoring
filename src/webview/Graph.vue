@@ -53,6 +53,10 @@ onNodesChange((changes) => {
 onEdgesChange((changes) => {
   for (const change of changes) {
     if (change.type === "add") {
+      change.item.type = "smoothstep";
+      change.item.style = {
+        strokeWidth: 2.5
+      }
       const sourceHandle = parseHandleId(change.item.sourceHandle);
       const targetHandle = parseHandleId(change.item.targetHandle);
       sendEventCommand<GraphNodeConnected>({

@@ -5,15 +5,12 @@
       <div class="status" :class="tsCompilerStatus ? 'status--active' : 'status--inactive'"></div>
     </template>
     <template #body>
-      <vscode-button @click="getNodeData">Scan</vscode-button>
-      <div class="dropdown-container">
-        <label for="my-dropdown">Choose tsconfig:</label>
-        <select size="5" class="nodrag nowheel select" style="width: 100%; cursor: default" v-model="chosenConfig">
-          <option v-for="config in tsConfigList" :value="config.value">
-            {{ config.label }}
-          </option>
-        </select>
-      </div>
+      <vscode-button class="scan-btn" @click="getNodeData">Scan</vscode-button>
+      <VueSelect class="nodrag nowheel" placeholder="Choose tsconfig" :options="tsConfigList" :reduce="(item: any) => item.value" v-model="chosenConfig">
+        <template v-slot:option="option">
+          {{ (option as any).label }}
+        </template>
+      </VueSelect>
     </template>
     <Handle id="0:array" type="source" :position="Position.Right" />
   </NodeWrapper>
@@ -26,6 +23,7 @@ import { Position, Handle, useNode, useVueFlow } from "@vue-flow/core";
 import { sendEventCommand, useEventCommandResult } from "@/webview/utils";
 import { GraphNodeGetViewData, GraphNodeSendViewData, GraphNodeUpdateState, TsCompilerStatusChanged } from "@/shared/events";
 import NodeWrapper from "./NodeWrapper.vue";
+import VueSelect from 'vue-select';
 
 const tsConfigList = ref<{ value: string; label: string }[]>([]);
 const chosenConfig = ref<string | null>(null);
@@ -71,13 +69,13 @@ watch(chosenConfig, (selectedConfig) => {
 
 <style lang="scss">
 .vue-flow__node-project {
-  min-width: 300px;
+  width: 300px;
   min-height: 100px;
   color: #fff;
 }
 
-.select {
-  background-color: transparent;
+.scan-btn {
+  margin-bottom: 10px;
 }
 
 .status {

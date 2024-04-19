@@ -14,6 +14,10 @@ function until(conditionFunction: Function): Promise<void> {
   return new Promise(poll);
 }
 
+function isArrayOfType<T extends ts.Node>(items: any[], predicate: (node: ts.Node) => node is T): boolean {
+  return Array.isArray(items) && (items.length > 0 ? predicate(items[0]) : true);
+}
+
 export abstract class BlueprintNode<S = any> {
   abstract readonly type: string;
 
@@ -36,7 +40,7 @@ export abstract class BlueprintNode<S = any> {
 
   protected getInput(index: number): BlueprintNode {
     if (index < 0 || index >= this.inputs.length) {
-      throw new Error("Invalid input index");
+      console.warn("Invalid input index");
     }
     return this.inputs[index];
   }
@@ -77,16 +81,20 @@ export class ClassListNode extends BlueprintNode {
   readonly type: string = NodeTypes.ClassList;
 
   override async evaluate() {
-    const tsFileList: ts.SourceFile[] = await this.evalInput(0);
+    const tsFileList: Array<ts.SourceFile | ts.ClassDeclaration> = await this.evalInput(0);
 
-    if (!tsFileList && ts.isSourceFile(tsFileList[0])) {
-      throw new Error("Invalid input on index 0. Expected type ts.SourceFile[].");
+    if (!isArrayOfType(tsFileList, ts.isSourceFile) && !isArrayOfType(tsFileList, ts.isClassDeclaration)) {
+      throw new Error("Invalid input at index 0. Expected type SourceFile[] or ClassDeclaration[].");
     }
 
     return this.getClassList(tsFileList);
   }
 
-  private getClassList(tsFileList: ts.SourceFile[]): ts.ClassDeclaration[] {
+  private getClassList(tsFileList: Array<ts.SourceFile | ts.ClassDeclaration>): ts.ClassDeclaration[] {
+    if (isArrayOfType(tsFileList, ts.isClassDeclaration)) {
+      return tsFileList as ts.ClassDeclaration[];
+    }
+
     return tsFileList
       .flatMap((file) =>
         ts.forEachChild(file, (node) => {
@@ -103,7 +111,7 @@ export class ClassListNode extends BlueprintNode {
   async getViewData(): Promise<string[]> {
     const tsFileList: ts.SourceFile[] = await this.evalInput(0);
 
-    if (!tsFileList && ts.isSourceFile(tsFileList[0])) {
+    if (!isArrayOfType(tsFileList, ts.isSourceFile) && !isArrayOfType(tsFileList, ts.isClassDeclaration)) {
       return [];
     }
 
@@ -119,8 +127,8 @@ export class FileListNode extends BlueprintNode {
   async evaluate(): Promise<any> {
     const tsFileList: ts.SourceFile[] = await this.evalInput(0);
 
-    if (!tsFileList && ts.isSourceFile(tsFileList[0])) {
-      throw new Error("Invalid input at index 0. Expected type ts.SourceFile[].");
+    if (isArrayOfType(tsFileList, ts.isSourceFile)) {
+      return tsFileList;
     }
 
     return tsFileList;
@@ -129,11 +137,11 @@ export class FileListNode extends BlueprintNode {
   async getViewData(): Promise<any> {
     const tsFileList: ts.SourceFile[] = await this.evalInput(0);
 
-    if (!tsFileList && ts.isSourceFile(tsFileList[0])) {
-      return [];
+    if (isArrayOfType(tsFileList, ts.isSourceFile)) {
+      return tsFileList.map((x) => x.fileName);
     }
 
-    return tsFileList.map((x) => x.fileName);
+    return tsFileList.map((x) => x.getSourceFile().fileName);
   }
 }
 
@@ -151,7 +159,7 @@ export class FilterByNode extends BlueprintNode {
     }
 
     if (!predicate) {
-      throw new Error("Predicate not specified for Filter By node");
+      return await array.evaluate();
     }
 
     if (!(predicate instanceof PredicateNode)) {

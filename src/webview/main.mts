@@ -2,8 +2,9 @@
 
 import { createApp } from "vue";
 import { createPinia } from "pinia";
-import { provideVSCodeDesignSystem, vsCodeButton, vsCodeDropdown, vsCodeTextField } from "@vscode/webview-ui-toolkit";
+import { provideVSCodeDesignSystem, vsCodeButton, vsCodeTextField } from "@vscode/webview-ui-toolkit";
 import App from "./App.vue";
+import "vue-select/dist/vue-select.css";
 import "./styles.scss";
 
 window.vscode = acquireVsCodeApi();

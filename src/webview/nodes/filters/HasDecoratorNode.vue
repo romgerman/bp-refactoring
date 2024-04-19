@@ -5,16 +5,8 @@
       <div>
         <vscode-text-field class="nodrag nowheel" v-model="model.customName">Custom Decorator Name</vscode-text-field>
       </div>
-      <div class="nowheel" style="max-height: 200px; overflow: auto">
-        <div class="dropdown-container">
-          <label for="my-dropdown">Or choose from used decorators:</label>
-          <select size="5" class="nodrag nowheel select" style="width: 100%; cursor: default" v-model="model.selection">
-            <option v-for="cls in decoratorList" :value="cls">
-              {{ cls }}
-            </option>
-          </select>
-        </div>
-      </div>
+      <VueSelect class="nowheel nodrag" placeholder="Or choose..." :options="decoratorList" v-model="model.selection">
+      </VueSelect>
     </template>
     <div class="target-handles">
       <Handle id="0:array" type="target" :position="Position.Left" data-name="Array?" />
@@ -27,9 +19,11 @@
 import type { NodeProps, ValidConnectionFunc } from "@vue-flow/core";
 import { Position, Handle, useNode } from "@vue-flow/core";
 import { ref, watch } from "vue";
-import NodeWrapper from "../NodeWrapper.vue";
 import { sendEventCommand, useEventCommandResult } from "@/webview/utils";
 import { GraphNodeSendViewData, GraphNodeUpdateState } from "@/shared/events";
+
+import VueSelect from 'vue-select';
+import NodeWrapper from "../NodeWrapper.vue";
 
 const props = defineProps<NodeProps>();
 const decoratorList = ref<string[]>([]);
@@ -65,6 +59,7 @@ watch(model.value, (value) => {
 
 <style lang="scss">
 .vue-flow__node-has-decorator-predicate {
+  width: 200px;
   color: #fff;
 }
 </style>

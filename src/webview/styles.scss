@@ -6,6 +6,21 @@
   --vf-node-bg: var(--vscode-sidebar-background);
   --vf-node-color: var(--vscode-editorwidget-border);
   --vf-node-text: var(--vscode-foreground);
+
+  --vs-controls-color: #664cc3;
+  --vs-border-color: #664cc3;
+
+  --vs-dropdown-bg: #282c34;
+  --vs-dropdown-color: #cc99cd;
+  --vs-dropdown-option-color: #cc99cd;
+
+  --vs-selected-bg: #664cc3;
+  --vs-selected-color: #eeeeee;
+
+  --vs-search-input-color: #eeeeee;
+
+  --vs-dropdown-option--active-bg: #664cc3;
+  --vs-dropdown-option--active-color: #eeeeee;
 }
 
 html,
@@ -14,6 +29,7 @@ body {
   height: 100%;
   padding: 0;
   margin: 0;
+  user-select: none;
 }
 
 #app {
@@ -50,8 +66,18 @@ body.vscode-high-contrast {
 }
 
 .vue-flow__node.selected {
-  border: 2px solid #fff;
-  border-radius: 0.375rem;
-  margin-top: -2px;
-  margin-left: -2px;
+  &::before {
+    content: '';
+    position: absolute;
+    left: -1px;
+    right: -1px;
+    top: -1px;
+    bottom: -1px;
+    border: 2px solid #fff;
+    border-radius: 0.375rem;
+  }
+  // border: 2px solid #fff;
+  // border-radius: 0.375rem;
+  // margin-top: -2px;
+  // margin-left: -2px;
 }
