@@ -1,7 +1,6 @@
 import * as path from "path";
 import * as webpack from "webpack";
 import { VueLoaderPlugin } from "vue-loader";
-import ForkTsCheckerWebpackPlugin from "fork-ts-checker-webpack-plugin";
 import MiniCssExtractPlugin from "mini-css-extract-plugin";
 
 const extensionConfig: webpack.Configuration = {
@@ -38,7 +37,7 @@ const extensionConfig: webpack.Configuration = {
       },
     ],
   },
-  devtool: "inline-cheap-source-map",
+  devtool: "inline-source-map",
   infrastructureLogging: {
     // enables logging required for problem matchers
     level: "log",
@@ -69,11 +68,10 @@ const webviewConfig: webpack.Configuration = {
       {
         test: /\.m?ts$/,
         exclude: /node_modules/,
-        use: [
-          {
-            loader: "ts-loader",
-          },
-        ],
+        loader: "ts-loader",
+        options: {
+          appendTsSuffixTo: [/\.vue$/],
+        },
       },
       {
         test: /\.vue$/,
@@ -104,7 +102,6 @@ const webviewConfig: webpack.Configuration = {
   },
   plugins: [
     new VueLoaderPlugin(),
-    new ForkTsCheckerWebpackPlugin(),
     new MiniCssExtractPlugin({
       filename: "[name].webview.css",
       runtime: false,
