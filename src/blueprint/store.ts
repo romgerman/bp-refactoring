@@ -15,7 +15,9 @@ import { EventEmitter } from "eventemitter3";
 import { ROOT_NODES } from "./rules";
 
 export class BlueprintStore {
-  readonly events = new EventEmitter<"node-added" | "node-removed" | "node-connected" | "node-disconnected" | "node-state-changed">();
+  readonly events = new EventEmitter<
+    "node-added" | "node-removed" | "node-connected" | "node-disconnected" | "node-state-changed"
+  >();
 
   nodes: BlueprintNode[] = [];
   rootNode: BlueprintNode | null = null;
@@ -77,9 +79,9 @@ export class BlueprintStore {
     this.events.emit("node-removed", viewId);
   }
 
-  connect(sourceId: string, targetId: string): void {
-    const sourceNode = this.viewMap.get(sourceId);
-    const targetNode = this.viewMap.get(targetId);
+  connect(source: { id: string; index: number }, target: { id: string; index: number }): void {
+    const sourceNode = this.viewMap.get(source.id);
+    const targetNode = this.viewMap.get(target.id);
 
     if (!sourceNode) {
       throw new Error("Source node not found");
@@ -89,9 +91,9 @@ export class BlueprintStore {
       throw new Error("Target node not found");
     }
 
-    targetNode.inputs.push(sourceNode);
-    sourceNode.outputs.push(targetNode);
-    this.events.emit("node-connected", { sourceId, targetId, sourceNode, targetNode });
+    targetNode.inputs[target.index] = sourceNode;
+    sourceNode.outputs[source.index] = targetNode;
+    this.events.emit("node-connected", { sourceId: source.id, targetId: target.id, sourceNode, targetNode });
   }
 
   diconnect(sourceId: string, targetId: string): void {

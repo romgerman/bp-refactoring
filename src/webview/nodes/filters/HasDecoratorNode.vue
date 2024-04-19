@@ -49,12 +49,15 @@ useEventCommandResult<GraphNodeSendViewData, { id: string; data: string[] }>("gr
   }
 });
 
-watch(model, (value) => {
+watch(model.value, (value) => {
   sendEventCommand<GraphNodeUpdateState>({
     command: "graph:node-update-state",
     data: {
       id: nodeId,
-      state: value,
+      state: {
+        customName: value.customName,
+        selection: value.selection
+      },
     },
   });
 });

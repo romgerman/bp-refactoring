@@ -9,6 +9,16 @@ export class GraphNodeConnectedEventHandler implements IExtensionEventHandler<Gr
   constructor(private readonly store: BlueprintStore) {}
 
   async handle(data: GraphNodeConnected["data"], panel: vscode.WebviewPanel): Promise<void> {
-    this.store.connect(data?.sourceId!, data?.targetId!);
+    if (data) {
+      const source = {
+        id: data.sourceId,
+        index: data.sourceIndex,
+      };
+      const target = {
+        id: data.targetId,
+        index: data.targetIndex,
+      };
+      this.store.connect(source, target);
+    }
   }
 }
