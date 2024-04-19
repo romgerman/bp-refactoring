@@ -42,6 +42,9 @@
       position: absolute;
       top: -60%;
       right: 16px;
+      background: rgba(0, 0, 0, 0.6);
+      border-radius: 4px;
+      padding: 0 6px;
     }
   }
 }
