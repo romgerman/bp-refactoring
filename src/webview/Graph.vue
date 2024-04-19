@@ -130,7 +130,7 @@ useEventListener("keyup", (e) => {
           transition: 'background-color 0.2s ease',
         }"
       />
-      <MiniMap pannable zoomable />
+      <MiniMap pannable zoomable maskColor="#424a49" />
     </VueFlow>
   </div>
 </template>
