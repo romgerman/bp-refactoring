@@ -17,14 +17,15 @@
 </template>
 
 <script setup lang="ts">
-import { Handle, Position, useNode } from "@vue-flow/core";
+import { Handle, Position, useNode, useVueFlow } from "@vue-flow/core";
 import VueSelect from "vue-select";
 import NodeWrapper from "../NodeWrapper.vue";
-import { ref, watch } from "vue";
+import { nextTick, ref, watch } from "vue";
 import { sendEventCommand } from "@/webview/utils";
 import { GraphNodeUpdateState } from "@/shared/events";
 
 const { id: nodeId } = useNode();
+const { updateNodeInternals } = useVueFlow();
 
 const model = ref<{
   type: string | null;
@@ -41,6 +42,7 @@ function onTypeSelect(value: string): void {
 }
 
 watch(model.value, (value) => {
+  nextTick(() => updateNodeInternals([nodeId]));
   sendEventCommand<GraphNodeUpdateState>({
     command: "graph:node-update-state",
     data: {
