@@ -2,7 +2,7 @@
   <NodeWrapper>
     <template #header>Debug</template>
     <div class="target-handles">
-      <Handle id="any" type="target" :position="Position.Left" data-name="Any" />
+      <Handle id="0:any" type="target" :position="Position.Left" data-name="Any" />
     </div>
   </NodeWrapper>
 </template>

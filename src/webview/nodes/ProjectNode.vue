@@ -15,7 +15,7 @@
         </select>
       </div>
     </template>
-    <Handle id="array" type="source" :position="Position.Right" />
+    <Handle id="0:array" type="source" :position="Position.Right" />
   </NodeWrapper>
 </template>
 
@@ -85,13 +85,13 @@ watch(chosenConfig, (selectedConfig) => {
   width: 8px;
   height: 8px;
   border-radius: 50%;
-}
 
-.status--inactive {
-  background-color: red;
-}
+  &--inactive {
+    background-color: red;
+  }
 
-.status--active {
-  background-color: greenyellow;
+  &--active {
+    background-color: greenyellow;
+  }
 }
 </style>

@@ -2,10 +2,10 @@
   <NodeWrapper>
     <template #header>Filter By</template>
     <div class="target-handles">
-      <Handle id="array" type="target" :position="Position.Left" data-name="Array" />
-      <Handle id="predicate" type="target" :position="Position.Left" data-name="Predicate"/>
+      <Handle id="0:array" type="target" :position="Position.Left" data-name="Array" />
+      <Handle id="1:predicate" type="target" :position="Position.Left" data-name="Predicate"/>
     </div>
-    <Handle id="array" type="source" :position="Position.Right" :is-valid-connection="isValidConnectionTarget" />
+    <Handle id="0:array" type="source" :position="Position.Right" :is-valid-connection="isValidConnectionTarget" />
   </NodeWrapper>
 </template>
 

@@ -17,9 +17,9 @@
       </div>
     </template>
     <div class="target-handles">
-      <Handle id="array" type="target" :position="Position.Left" data-name="Array?" />
+      <Handle id="0:array" type="target" :position="Position.Left" data-name="Array?" />
     </div>
-    <Handle id="predicate" type="source" :position="Position.Right" :is-valid-connection="isValidConnectionTarget" />
+    <Handle id="0:predicate" type="source" :position="Position.Right" :is-valid-connection="isValidConnectionTarget" />
   </NodeWrapper>
 </template>
 

@@ -6,6 +6,7 @@ import useDragAndDrop from "./useDnD";
 import { useNodeStore } from "./store";
 import { GraphNodeAdded, GraphNodeConnected, GraphNodeDisconnected, GraphNodeRemoved } from "@/shared/events";
 import { sendEventCommand } from "./utils";
+import { parseHandleId } from "@/shared/handles";
 
 import ProjectNode from "./nodes/ProjectNode.vue";
 import ClassListNode from "./nodes/aggregation/ClassListNode.vue";
@@ -14,7 +15,7 @@ import HasDecoratorNode from "./nodes/filters/HasDecoratorNode.vue";
 import DropzoneBackground from "./DropzoneBackground.vue";
 import FilterByNode from "./nodes/filters/FilterByNode.vue";
 import RenameClassActionNode from "./nodes/actions/RenameClassActionNode.vue";
-import DebugActionNode from './nodes/actions/DebugActionNode.vue';
+import DebugActionNode from "./nodes/actions/DebugActionNode.vue";
 import ApplyActionNode from "./nodes/actions/ApplyActionNode.vue";
 
 const { onConnect, onNodesChange, onEdgesChange, addEdges, removeNodes, getSelectedNodes } = useVueFlow();
@@ -23,39 +24,52 @@ const { onDragOver, onDrop, onDragLeave, isDragOver } = useDragAndDrop();
 const nodeStore = useNodeStore();
 
 onConnect((conn) => {
-  if (conn.sourceHandle === conn.targetHandle || conn.targetHandle === "any") {
+  const sourceHandle = parseHandleId(conn.sourceHandle);
+  const targetHandle = parseHandleId(conn.targetHandle);
+  if (sourceHandle.type === targetHandle.type || targetHandle.type === "any") {
     addEdges(conn);
   }
 });
 
 onNodesChange((changes) => {
-  if (changes[0].type === "add") {
-    sendEventCommand<GraphNodeAdded>({
-      command: "graph:node-added",
-      data: {
-        id: changes[0].item.id,
-        type: changes[0].item.type,
-      },
-    });
-  } else if (changes[0].type === "remove") {
-    sendEventCommand<GraphNodeRemoved>({
-      command: "graph:node-removed",
-      data: { id: changes[0].id },
-    });
+  for (const change of changes) {
+    if (change.type === "add") {
+      sendEventCommand<GraphNodeAdded>({
+        command: "graph:node-added",
+        data: {
+          id: change.item.id,
+          type: change.item.type,
+        },
+      });
+    } else if (change.type === "remove") {
+      sendEventCommand<GraphNodeRemoved>({
+        command: "graph:node-removed",
+        data: { id: change.id },
+      });
+    }
   }
 });
 
 onEdgesChange((changes) => {
-  if (changes[0].type === "add") {
-    sendEventCommand<GraphNodeConnected>({
-      command: "graph:node-connected",
-      data: { sourceId: changes[0].item.source, targetId: changes[0].item.target },
-    });
-  } else if (changes[0].type === "remove") {
-    sendEventCommand<GraphNodeDisconnected>({
-      command: "graph:node-disconnected",
-      data: { sourceId: changes[0].source, targetId: changes[0].target },
-    });
+  for (const change of changes) {
+    if (change.type === "add") {
+      const sourceHandle = parseHandleId(change.item.sourceHandle);
+      const targetHandle = parseHandleId(change.item.targetHandle);
+      sendEventCommand<GraphNodeConnected>({
+        command: "graph:node-connected",
+        data: {
+          sourceId: change.item.source,
+          targetId: change.item.target,
+          sourceIndex: sourceHandle.index,
+          targetIndex: targetHandle.index,
+        },
+      });
+    } else if (change.type === "remove") {
+      sendEventCommand<GraphNodeDisconnected>({
+        command: "graph:node-disconnected",
+        data: { sourceId: change.source, targetId: change.target },
+      });
+    }
   }
 });
 
