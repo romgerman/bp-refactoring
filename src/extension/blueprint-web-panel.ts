@@ -48,6 +48,7 @@ export class BlueprintWebPanel {
     const panel = vscode.window.createWebviewPanel("hello-world", "Blueprint", vscode.ViewColumn.One, {
       enableScripts: true,
       localResourceRoots: [vscode.Uri.joinPath(extensionUri, "dist")],
+      retainContextWhenHidden: true,
     });
     BlueprintWebPanel.currentPanel = new BlueprintWebPanel(panel, extensionUri, eventBus);
   }

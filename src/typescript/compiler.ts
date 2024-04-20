@@ -82,7 +82,11 @@ export class TypescriptCompiler extends vscode.Disposable {
   }
 
   emit(tsNodes: ts.Node[]): void {
-    const printer = ts.createPrinter({ newLine: ts.NewLineKind.CarriageReturnLineFeed });
+    const printer = ts.createPrinter({
+      newLine: ts.NewLineKind.CarriageReturnLineFeed,
+      removeComments: false,
+      omitTrailingSemicolon: true,
+    });
     for (const file of tsNodes.map((x) => x.getSourceFile())) {
       const text = printer.printFile(file);
       ts.sys.writeFile(file.fileName, text);
