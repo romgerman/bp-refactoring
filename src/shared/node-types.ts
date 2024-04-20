@@ -13,6 +13,7 @@ export enum NodeTypes {
   // Filtering
   FilterBy = "filter-by",
   DecoratorPredicate = "has-decorator-predicate",
+  OfTypePredicate = "of-type-predicate",
 
   // Actions
   RenameAction = "rename-action",

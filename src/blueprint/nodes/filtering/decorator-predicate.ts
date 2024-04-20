@@ -1,7 +1,6 @@
 import * as ts from "typescript";
 import { NodeTypes } from "../../../shared/node-types";
 import { PredicateNode } from "./filter-by-node";
-import { BlueprintNode } from "../../blueprint-node";
 import { isArrayOfType } from "../../helpers";
 
 export class DecoratorPredicateNode extends PredicateNode<{
