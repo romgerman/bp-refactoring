@@ -1,4 +1,5 @@
 import * as ts from "typescript";
+import * as vscode from "vscode";
 import { NodeTypes } from "../../../shared/node-types";
 import { BlueprintNode } from "../../blueprint-node";
 import { isArrayOfType } from "../../helpers";
@@ -20,13 +21,28 @@ export class FileListNode extends BlueprintNode {
     return tsFileList;
   }
 
-  async getViewData(): Promise<any> {
+  async getViewData(): Promise<string[]> {
     const tsFileList = (await this.evalInput<ts.SourceFile[]>(0)) || [];
 
     if (isArrayOfType(tsFileList, ts.isSourceFile)) {
-      return tsFileList.map((x) => x.fileName);
+      tsFileList.map((sourceFile) => {
+        const folder = vscode.workspace.getWorkspaceFolder(vscode.Uri.parse("file:///" + sourceFile.fileName));
+        if (folder) {
+          return sourceFile.fileName.replace(folder.uri.path.slice(1), "");
+        } else {
+          return sourceFile.fileName;
+        }
+      });
     }
 
-    return tsFileList.map((x) => x.getSourceFile().fileName);
+    return tsFileList.map((x) => {
+      const sourceFile = x.getSourceFile();
+      const folder = vscode.workspace.getWorkspaceFolder(vscode.Uri.parse("file:///" + sourceFile.fileName));
+      if (folder) {
+        return sourceFile.fileName.replace(folder.uri.path.slice(1), "");
+      } else {
+        return sourceFile.fileName;
+      }
+    });
   }
 }
