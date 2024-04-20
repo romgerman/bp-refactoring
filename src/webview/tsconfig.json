@@ -8,7 +8,7 @@
       "ES2022"
     ],
     "sourceMap": true,
-    "strict": true,
+    "strict": false,
     "allowSyntheticDefaultImports": true,
     "types": ["vscode-webview"],
     "paths": {

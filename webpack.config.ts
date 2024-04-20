@@ -53,7 +53,6 @@ const webviewConfig: webpack.Configuration = {
     path: path.resolve(__dirname, "dist"),
     filename: "[name].webview.js",
   },
-  watch: true,
   watchOptions: {
     ignored: /node_modules/,
   },
