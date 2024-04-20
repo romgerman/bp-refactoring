@@ -14,6 +14,7 @@ const NODES = [
   { type: NodeTypes.ClassList, name: "Class List" },
   { type: NodeTypes.FileList, name: "File List" },
   { type: NodeTypes.FunctionList, name: "Function List" },
+  { type: NodeTypes.MemberList, name: "Member List" },
   { group: true, name: "Filtering" },
   { type: NodeTypes.FilterBy, name: "Filter By" },
   { type: NodeTypes.DecoratorPredicate, name: "Has Decorator" },
@@ -27,6 +28,7 @@ const NODES = [
 <template>
   <div class="nodes p-2">
     <NodeWrapper
+      condensed
       :draggable="!nodeStore.hasProjectNode"
       @dragstart="onDragStart($event, NodeTypes.Project)"
       :style="{ opacity: nodeStore.hasProjectNode ? 0.5 : 1 }"
@@ -36,7 +38,7 @@ const NODES = [
 
     <template v-for="node in NODES">
       <h3 v-if="node.group">{{ node.name }}</h3>
-      <NodeWrapper v-if="node.type" :draggable="true" @dragstart="onDragStart($event, node.type)">
+      <NodeWrapper v-if="node.type" condensed :draggable="true" @dragstart="onDragStart($event, node.type)">
         <template #header>{{ node.name }}</template>
       </NodeWrapper>
     </template>

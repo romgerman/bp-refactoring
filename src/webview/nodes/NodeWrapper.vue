@@ -2,7 +2,7 @@
   <div class="rounded-md shadow-lg bg-gray-900 wrapper">
     <div
       class="p-2 px-4 bg-gray-700 rounded-t-md items-center flex"
-      :class="{ 'rounded-md': !$slots.body, 'no-content-header': !$slots.body }"
+      :class="{ 'rounded-md': !$slots.body, 'no-content-header': !$slots.body && !condensed }"
     >
       <h3>
         <slot name="header" />
@@ -14,6 +14,12 @@
     <slot></slot>
   </div>
 </template>
+
+<script setup lang="ts">
+const props = defineProps({
+  condensed: Boolean,
+});
+</script>
 
 <style lang="scss">
 .wrapper {

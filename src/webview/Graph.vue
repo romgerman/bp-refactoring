@@ -16,6 +16,7 @@ import ConstantNode from "./nodes/data/ConstantNode.vue";
 import ClassListNode from "./nodes/aggregation/ClassListNode.vue";
 import FileListNode from "./nodes/aggregation/FileListNode.vue";
 import FunctionListNode from "./nodes/aggregation/FunctionListNode.vue";
+import MemberListNode from "./nodes/aggregation/MemberListNode.vue";
 
 import HasDecoratorNode from "./nodes/filters/HasDecoratorNode.vue";
 import FilterByNode from "./nodes/filters/FilterByNode.vue";
@@ -109,6 +110,9 @@ useEventListener("keyup", (e) => {
       </template>
       <template #node-function-list="nodeProps">
         <FunctionListNode v-bind="nodeProps" />
+      </template>
+      <template #node-member-list="nodeProps">
+        <MemberListNode v-bind="nodeProps"></MemberListNode>
       </template>
 
       <template #node-filter-by="nodeProps">

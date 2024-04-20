@@ -8,6 +8,7 @@ export enum NodeTypes {
   ClassList = "class-list",
   FileList = "file-list",
   FunctionList = "function-list",
+  MemberList = "member-list",
 
   // Filtering
   FilterBy = "filter-by",

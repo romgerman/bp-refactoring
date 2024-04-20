@@ -13,6 +13,7 @@ import { ConstantNode } from "./nodes/data/constant";
 import { DecoratorPredicateNode } from "./nodes/filtering/decorator-predicate";
 import { FilterByNode } from "./nodes/filtering/filter-by-node";
 import { FunctionListNode } from "./nodes/aggregation/function-list";
+import { MemberListNode } from "./nodes/aggregation/members-list";
 
 export class BlueprintStore {
   readonly events = new EventEmitter<
@@ -176,6 +177,8 @@ export class BlueprintStore {
         return new FileListNode(this.compiler);
       case NodeTypes.FunctionList:
         return new FunctionListNode(this.compiler);
+      case NodeTypes.MemberList:
+        return new MemberListNode(this.compiler);
       case NodeTypes.FilterBy:
         return new FilterByNode(this.compiler);
       case NodeTypes.DecoratorPredicate:

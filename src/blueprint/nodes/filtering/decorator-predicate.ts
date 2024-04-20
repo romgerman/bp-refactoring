@@ -37,12 +37,12 @@ export class DecoratorPredicateNode extends PredicateNode<{
     customName: string | null;
     decoratorList: string[];
   }> {
-    const customName: BlueprintNode = this.getInput(0)!;
+    const customName = this.getInput(0);
     const tsClassNodes: ts.ClassDeclaration[] = await this.getInput(1)?.evaluate();
 
     if (!isArrayOfType(tsClassNodes, ts.isClassDeclaration)) {
       return {
-        customName: customName ? await customName.evaluate() : null,
+        customName: customName ? await customName?.evaluate() : null,
         decoratorList: [],
       };
     }
@@ -57,7 +57,7 @@ export class DecoratorPredicateNode extends PredicateNode<{
       }
     }
     return {
-      customName: await customName.evaluate(),
+      customName: await customName?.evaluate(),
       decoratorList: Array.from(decoratorsSet.values()),
     };
   }
