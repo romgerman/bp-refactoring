@@ -1,18 +1,18 @@
 import "reflect-metadata";
 import * as vscode from "vscode";
-import { BlueprintWebPanel } from "./extension/blueprint-web-panel";
-import { ExtensionEventBus } from "./extension/extension-event-bus";
-import { TypescriptCompiler } from "./typescript/compiler";
+import { BlueprintWebPanel } from "./blueprint-web-panel";
+import { ExtensionEventBus } from "./extension-event-bus";
+import { TypescriptCompiler } from "../typescript/compiler";
 import { sendEventCommand } from "./utils";
-import { GraphNodeSendViewData, TsCompilerStatusChanged } from "./shared/events";
-import { GraphNodeAddedEventHandler } from "./extension/events/graph-node-added";
-import { GraphNodeRemovedEventHandler } from "./extension/events/graph-node-removed";
-import { BlueprintStore } from "./blueprint/store";
-import { GraphNodeConnectedEventHandler } from "./extension/events/graph-node-connected";
-import { GraphNodeDisconnectedEventHandler } from "./extension/events/graph-node-disconnected";
-import { GraphNodeGetViewDataEventHandler } from "./extension/events/graph-node-get-view-data";
-import { GraphNodeUpdateStateEventHandler } from "./extension/events/graph-node-update-state";
-import { ApplyChangesEventHandler } from "./extension/events/lifecycle-apply-changes";
+import { GraphNodeSendViewData, TsCompilerStatusChanged } from "../shared/events";
+import { GraphNodeAddedEventHandler } from "./events/graph-node-added";
+import { GraphNodeRemovedEventHandler } from "./events/graph-node-removed";
+import { BlueprintStore } from "../blueprint/store";
+import { GraphNodeConnectedEventHandler } from "./events/graph-node-connected";
+import { GraphNodeDisconnectedEventHandler } from "./events/graph-node-disconnected";
+import { GraphNodeGetViewDataEventHandler } from "./events/graph-node-get-view-data";
+import { GraphNodeUpdateStateEventHandler } from "./events/graph-node-update-state";
+import { ApplyChangesEventHandler } from "./events/lifecycle-apply-changes";
 
 export function activate(context: vscode.ExtensionContext) {
   console.log('Congratulations, your extension "bp-refactoring" is now active!');

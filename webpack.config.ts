@@ -10,7 +10,7 @@ const extensionConfig: webpack.Configuration = {
   // this leaves the source code as close as possible to the original (when packaging we set this to 'production')
   mode: "none",
   // the entry point of this extension, 📖 -> https://webpack.js.org/configuration/entry-context/
-  entry: "./src/extension.ts",
+  entry: "./src/extension/extension.ts",
   output: {
     // the bundle is stored in the 'dist' folder (check package.json), 📖 -> https://webpack.js.org/configuration/output/
     path: path.resolve(__dirname, "dist"),

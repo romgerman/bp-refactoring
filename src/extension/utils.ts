@@ -1,5 +1,5 @@
 import { Uri, Webview } from "vscode";
-import { EventCommand } from "./shared/events/event-command";
+import { EventCommand } from "../shared/events/event-command";
 
 export function getUri(webview: Webview, extensionUri: Uri, pathList: string[]) {
   return webview.asWebviewUri(Uri.joinPath(extensionUri, ...pathList));

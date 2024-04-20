@@ -1,7 +1,7 @@
 import * as vscode from "vscode";
 import { BlueprintStore } from "../../blueprint/store";
 import { GraphNodeGetViewData, GraphNodeSendViewData } from "../../shared/events";
-import { sendEventCommand } from "../../utils";
+import { sendEventCommand } from "../utils";
 import { IExtensionEventHandler } from "../extension-event-bus";
 
 export class GraphNodeGetViewDataEventHandler implements IExtensionEventHandler<GraphNodeGetViewData> {

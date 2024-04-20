@@ -1,6 +1,6 @@
 import * as vscode from "vscode";
 import { EventCommand } from "../shared/events/event-command";
-import { sendEventCommand } from "../utils";
+import { sendEventCommand } from "./utils";
 
 export interface IExtensionEventHandler<T extends EventCommand<any, any>> {
   readonly command: T["command"];

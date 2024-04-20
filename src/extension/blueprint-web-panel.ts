@@ -1,5 +1,5 @@
 import * as vscode from "vscode";
-import { getNonce, getUri } from "../utils";
+import { getNonce, getUri } from "./utils";
 import { ExtensionEventBus } from "./extension-event-bus";
 import { EventCommand } from "../shared/events/event-command";
 
