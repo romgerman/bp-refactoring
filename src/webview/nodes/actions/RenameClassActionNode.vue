@@ -2,7 +2,7 @@
   <NodeWrapper>
     <template #header>Rename Class</template>
     <template #body>
-      <div class="nowheel nodrag" style="overflow: auto;">
+      <div class="nowheel" style="max-height: 200px; overflow: auto">
         <div v-for="item in names">{{ item }}</div>
       </div>
     </template>
@@ -42,7 +42,6 @@ useEventCommandResult<GraphNodeSendViewData, { id: string; data: string[]; }>('g
 <style lang="scss">
 .vue-flow__node-rename-class-action {
   min-height: 100px;
-  max-height: 100px;
   display: flex;
   color: #fff;
 }
