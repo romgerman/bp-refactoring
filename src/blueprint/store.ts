@@ -47,20 +47,8 @@ export class BlueprintStore {
     const targetNode = this.viewMap.get(viewId);
     if (targetNode) {
       // Remove the node from node array
-      const index = this.nodes.findIndex((x) => x === targetNode);
+      const index = this.nodes.findIndex((n) => n === targetNode);
       this.nodes.splice(index, 1);
-
-      // Clear outputs of input nodes
-      for (const n of targetNode.inputs) {
-        const index = n.outputs.indexOf(targetNode);
-        n.outputs.splice(index, 1);
-      }
-
-      // Clear inputs of output nodes
-      for (const n of targetNode.outputs) {
-        const index = n.inputs.indexOf(targetNode);
-        n.inputs.splice(index, 1);
-      }
 
       // Clear outputs and inputs
       targetNode.outputs = [];
@@ -75,7 +63,7 @@ export class BlueprintStore {
       this.viewMapInverse.delete(targetNode);
     }
 
-    this.events.emit("node-removed", viewId);
+    this.events.emit("node-removed", { id: viewId });
   }
 
   connect(source: { id: string; index: number }, target: { id: string; index: number }): void {
@@ -107,8 +95,8 @@ export class BlueprintStore {
       throw new Error("Target node not found. Id " + targetId);
     }
 
-    targetNode.inputs.splice(targetNode.inputs.indexOf(sourceNode), 1);
-    sourceNode.outputs.splice(sourceNode.outputs.indexOf(targetNode), 1);
+    targetNode.inputs[targetNode.inputs.indexOf(sourceNode)] = undefined!;
+    sourceNode.outputs[sourceNode.outputs.indexOf(targetNode)] = undefined!;
     this.events.emit("node-disconnected", { sourceId, targetId, sourceNode, targetNode });
   }
 

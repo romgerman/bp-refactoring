@@ -44,8 +44,10 @@ export function activate(context: vscode.ExtensionContext) {
     .on("node-added", async ({ id }: { id: string }) => {
       await updateGraphViewData(id);
     })
-    .on("node-removed", async (id: string) => {})
     .on("node-connected", async ({ targetId }: { targetId: string }) => {
+      await updateGraphViewData(targetId);
+    })
+    .on("node-disconnected", async ({ targetId }: { targetId: string }) => {
       await updateGraphViewData(targetId);
     })
     .on("node-state-changed", async ({ id }: { id: string }) => {
