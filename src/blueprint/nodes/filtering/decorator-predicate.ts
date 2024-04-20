@@ -37,7 +37,7 @@ export class DecoratorPredicateNode extends PredicateNode<{
     customName: string | null;
     decoratorList: string[];
   }> {
-    const customName: BlueprintNode = this.getInput(0);
+    const customName: BlueprintNode = this.getInput(0)!;
     const tsClassNodes: ts.ClassDeclaration[] = await this.getInput(1)?.evaluate();
 
     if (!isArrayOfType(tsClassNodes, ts.isClassDeclaration)) {

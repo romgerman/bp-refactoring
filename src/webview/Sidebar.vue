@@ -9,7 +9,7 @@ const nodeStore = useNodeStore();
 
 const NODES = [
   { group: true, name: "Data" },
-  { type: NodeTypes.Constant, name: 'Project' },
+  { type: NodeTypes.Constant, name: 'Constant' },
   { group: true, name: "Aggregation" },
   { type: NodeTypes.ClassList, name: 'Class List' },
   { type: NodeTypes.FileList, name: 'File List' },

@@ -1,7 +1,7 @@
 <template>
   <div class="rounded-md shadow-lg bg-gray-900 wrapper">
     <div
-      class="p-2 bg-gray-700 rounded-t-md items-center flex"
+      class="p-2 px-4 bg-gray-700 rounded-t-md items-center flex"
       :class="{ 'rounded-md': !$slots.body, 'no-content-header': !$slots.body }"
     >
       <h3>

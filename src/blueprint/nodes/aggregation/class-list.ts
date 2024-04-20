@@ -7,10 +7,10 @@ export class ClassListNode extends BlueprintNode {
   readonly type: string = NodeTypes.ClassList;
 
   override async evaluate() {
-    const tsFileList: Array<ts.SourceFile | ts.ClassDeclaration> = await this.evalInput(0);
+    const tsFileList = await this.evalInput<Array<ts.SourceFile | ts.ClassDeclaration>>(0);
 
-    if (!isArrayOfType(tsFileList, ts.isSourceFile) && !isArrayOfType(tsFileList, ts.isClassDeclaration)) {
-      throw new Error("Invalid input at index 0. Expected type SourceFile[] or ClassDeclaration[].");
+    if (!tsFileList || (!isArrayOfType(tsFileList, ts.isSourceFile) && !isArrayOfType(tsFileList, ts.isClassDeclaration))) {
+      throw new Error("Expected SourceFile[] or ClassDeclaration[] at input 0");
     }
 
     return this.getClassList(tsFileList);
@@ -35,9 +35,9 @@ export class ClassListNode extends BlueprintNode {
   }
 
   async getViewData(): Promise<string[]> {
-    const tsFileList: ts.SourceFile[] = await this.evalInput(0);
+    const tsFileList = await this.evalInput<ts.SourceFile[]>(0);
 
-    if (!isArrayOfType(tsFileList, ts.isSourceFile) && !isArrayOfType(tsFileList, ts.isClassDeclaration)) {
+    if (!tsFileList || (!isArrayOfType(tsFileList, ts.isSourceFile) && !isArrayOfType(tsFileList, ts.isClassDeclaration))) {
       return [];
     }
 

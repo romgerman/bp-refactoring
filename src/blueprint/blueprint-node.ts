@@ -20,14 +20,14 @@ export abstract class BlueprintNode<S = any> {
   abstract evaluate(): Promise<any>;
   abstract getViewData(): Promise<any>;
 
-  protected getInput(index: number): BlueprintNode {
+  protected getInput(index: number): BlueprintNode | undefined {
     if (index < 0 || index >= this.inputs.length) {
       console.warn("Invalid input index");
     }
     return this.inputs[index];
   }
 
-  protected async evalInput<T = any>(index: number): Promise<T> {
-    return await this.getInput(index).evaluate();
+  protected async evalInput<T = any>(index: number): Promise<T | undefined> {
+    return await this.getInput(index)?.evaluate();
   }
 }

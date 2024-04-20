@@ -7,7 +7,11 @@ export class FileListNode extends BlueprintNode {
   type: string = NodeTypes.FileList;
 
   async evaluate(): Promise<any> {
-    const tsFileList: ts.SourceFile[] = await this.evalInput(0);
+    const tsFileList = await this.evalInput<ts.SourceFile[]>(0);
+
+    if (!tsFileList) {
+      throw new Error("Expected SourceFile[] at input 0");
+    }
 
     if (isArrayOfType(tsFileList, ts.isSourceFile)) {
       return tsFileList;
@@ -17,7 +21,7 @@ export class FileListNode extends BlueprintNode {
   }
 
   async getViewData(): Promise<any> {
-    const tsFileList: ts.SourceFile[] = await this.evalInput(0);
+    const tsFileList = (await this.evalInput<ts.SourceFile[]>(0)) || [];
 
     if (isArrayOfType(tsFileList, ts.isSourceFile)) {
       return tsFileList.map((x) => x.fileName);
