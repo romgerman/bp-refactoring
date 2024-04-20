@@ -1,6 +1,7 @@
 import * as ts from "typescript";
 import { NodeTypes } from "../../../shared/node-types";
 import { BlueprintNode } from "../../blueprint-node";
+import { isArrayOfType } from "../../helpers";
 
 export class RenameClassActionNode extends BlueprintNode<string> {
   readonly type: string = NodeTypes.RenameClassAction;
@@ -8,30 +9,32 @@ export class RenameClassActionNode extends BlueprintNode<string> {
   async evaluate(): Promise<any> {
     const tsClassList: ts.ClassDeclaration[] = await this.evalInput(0);
 
-    if (!Array.isArray(tsClassList) && !ts.isClassDeclaration(tsClassList[0])) {
+    if (!isArrayOfType(tsClassList, ts.isClassDeclaration)) {
       throw new Error("Expected ts.ClassDeclaration[]");
     }
 
-    const result: ts.ClassDeclaration[] = [];
+    const transformer = (sourceFile: ts.SourceFile) => {
+      const visitor = (node: ts.Node) => {
+        if (ts.isClassDeclaration(node)) {
+          if (node.name) {
+            const name = this.state ?? node.name.getText(sourceFile);
+            return ts.factory.updateClassDeclaration(
+              node,
+              node.modifiers,
+              ts.factory.createIdentifier(name),
+              node.typeParameters,
+              node.heritageClauses,
+              node.members
+            );
+          }
+        }
+        return ts.visitEachChild(node, visitor, undefined);
+      };
 
-    for (let tsClass of tsClassList) {
-      if (tsClass.name) {
-        //const info = this.compiler.languageService?.services?.getRenameInfo(tsClass.getSourceFile().fileName, tsClass.name.getStart(), {});
-        // const locs = this.compiler.languageService?.services?.findRenameLocations(
-        //   tsClass.getSourceFile().fileName,
-        //   tsClass.name.getStart(),
-        //   false,
-        //   false,
-        //   {}
-        // );
-        (tsClass.name as any) = ts.factory.createIdentifier(this.state ?? tsClass.name?.getText() ?? "");
-        result.push(tsClass);
-      } else {
-        result.push(tsClass);
-      }
-    }
+      return ts.visitNode(sourceFile, visitor);
+    };
 
-    return result;
+    return tsClassList.map((x) => x.getSourceFile()).map(transformer);
   }
 
   getViewData(): Promise<any> {
