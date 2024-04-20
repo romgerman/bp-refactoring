@@ -118,7 +118,7 @@ useEventListener("keyup", (e) => {
         <HasDecoratorNode v-bind="nodeProps" />
       </template>
 
-      <template #node-rename-class-action="nodeProps">
+      <template #node-rename-action="nodeProps">
         <RenameClassActionNode v-bind="nodeProps" />
       </template>
       <template #node-debug-action="nodeProps">

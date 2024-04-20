@@ -14,7 +14,7 @@ export enum NodeTypes {
   DecoratorPredicate = "has-decorator-predicate",
 
   // Actions
-  RenameClassAction = "rename-class-action",
+  RenameAction = "rename-action",
   DebugAction = "debug-action",
   ApplyAction = "apply-action",
 }

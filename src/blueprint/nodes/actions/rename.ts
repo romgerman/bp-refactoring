@@ -3,22 +3,32 @@ import { NodeTypes } from "../../../shared/node-types";
 import { BlueprintNode } from "../../blueprint-node";
 import { isArrayOfType } from "../../helpers";
 
-export class RenameClassActionNode extends BlueprintNode {
-  readonly type: string = NodeTypes.RenameClassAction;
+export class RenameActionNode extends BlueprintNode {
+  readonly type: string = NodeTypes.RenameAction;
 
   async evaluate(): Promise<any> {
-    const tsClassList = await this.evalInput<ts.ClassDeclaration[]>(0);
+    const tsDeclList = await this.evalInput<ts.ClassDeclaration[]>(0);
     const fullName = await this.evalInput<string>(1);
     const prefix = await this.evalInput<string>(2);
     const postfix = await this.evalInput<string>(3);
 
-    if (!tsClassList || !isArrayOfType(tsClassList, ts.isClassDeclaration)) {
-      throw new Error("Expected ts.ClassDeclaration[] at input 0");
+    if (!tsDeclList) {
+      throw new Error("Expected Array at input 0");
+    }
+
+    let renameType: "class" | "function" | null = null;
+
+    if (isArrayOfType(tsDeclList, ts.isClassDeclaration)) {
+      renameType = "class";
+    } else if (isArrayOfType(tsDeclList, ts.isFunctionDeclaration)) {
+      renameType = "function";
+    } else {
+      throw new Error("Expected ClassDeclaration[] or FunctionDeclaration[] at input 0");
     }
 
     const transformer = (sourceFile: ts.SourceFile) => {
       const visitor = (node: ts.Node) => {
-        if (ts.isClassDeclaration(node)) {
+        if (renameType === "class" && ts.isClassDeclaration(node)) {
           if (node.name) {
             let name = this.getNewName(node.name.getText(sourceFile), fullName, prefix, postfix);
 
@@ -31,14 +41,30 @@ export class RenameClassActionNode extends BlueprintNode {
               node.members
             );
           }
+        } else if (renameType === "function" && ts.isFunctionDeclaration(node)) {
+          if (node.name) {
+            let name = this.getNewName(node.name.getText(sourceFile), fullName, prefix, postfix);
+
+            return ts.factory.updateFunctionDeclaration(
+              node,
+              node.modifiers,
+              node.asteriskToken,
+              ts.factory.createIdentifier(name),
+              node.typeParameters,
+              node.parameters,
+              node.type,
+              node.body
+            );
+          }
         }
+
         return ts.visitEachChild(node, visitor, undefined);
       };
 
       return ts.visitNode(sourceFile, visitor);
     };
 
-    return tsClassList.map((x) => x.getSourceFile()).map(transformer);
+    return tsDeclList.map((x) => x.getSourceFile()).map(transformer);
   }
 
   private getNewName(name: string, fullName?: string, prefix?: string, postfix?: string): string {
@@ -58,11 +84,11 @@ export class RenameClassActionNode extends BlueprintNode {
   }
 
   async getViewData(): Promise<any> {
-    const tsClassList = await this.evalInput<ts.ClassDeclaration[]>(0);
+    const tsDeclList = await this.evalInput<ts.ClassDeclaration[]>(0);
     const fullName = await this.evalInput<string>(1);
     const prefix = await this.evalInput<string>(2);
     const postfix = await this.evalInput<string>(3);
 
-    return tsClassList?.filter((x) => !!x.name).map((x) => this.getNewName(x.name!.getText(), fullName, prefix, postfix)) ?? [];
+    return tsDeclList?.filter((x) => !!x.name).map((x) => this.getNewName(x.name!.getText(), fullName, prefix, postfix)) ?? [];
   }
 }

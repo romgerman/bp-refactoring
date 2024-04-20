@@ -1,6 +1,6 @@
 <template>
   <NodeWrapper>
-    <template #header>Rename Class</template>
+    <template #header>Rename</template>
     <template #body>
       <div class="nowheel" style="max-height: 200px; overflow: auto">
         <div v-for="item in names">{{ item }}</div>
@@ -17,12 +17,12 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch } from "vue";
+import { ref } from "vue";
 import type { NodeProps, ValidConnectionFunc } from "@vue-flow/core";
 import { Handle, Position, useNode } from "@vue-flow/core";
 import NodeWrapper from "../NodeWrapper.vue";
-import { sendEventCommand, useEventCommandResult } from "@/webview/utils";
-import { GraphNodeSendViewData, GraphNodeUpdateState } from "@/shared/events";
+import { useEventCommandResult } from "@/webview/utils";
+import { GraphNodeSendViewData } from "@/shared/events";
 
 const props = defineProps<NodeProps>();
 const { id: nodeId } = useNode()
@@ -40,7 +40,7 @@ useEventCommandResult<GraphNodeSendViewData, { id: string; data: string[]; }>('g
 </script>
 
 <style lang="scss">
-.vue-flow__node-rename-class-action {
+.vue-flow__node-rename-action {
   min-height: 100px;
   display: flex;
   color: #fff;

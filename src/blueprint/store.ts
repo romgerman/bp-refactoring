@@ -6,7 +6,7 @@ import { BlueprintNode } from "./blueprint-node";
 import { ProjectNode } from "./nodes/project";
 import { ApplyActionNode } from "./nodes/actions/apply";
 import { DebugActionNode } from "./nodes/actions/debug";
-import { RenameClassActionNode } from "./nodes/actions/rename-class";
+import { RenameActionNode } from "./nodes/actions/rename";
 import { ClassListNode } from "./nodes/aggregation/class-list";
 import { FileListNode } from "./nodes/aggregation/file-list";
 import { ConstantNode } from "./nodes/data/constant";
@@ -180,8 +180,8 @@ export class BlueprintStore {
         return new FilterByNode(this.compiler);
       case NodeTypes.DecoratorPredicate:
         return new DecoratorPredicateNode(this.compiler);
-      case NodeTypes.RenameClassAction:
-        return new RenameClassActionNode(this.compiler);
+      case NodeTypes.RenameAction:
+        return new RenameActionNode(this.compiler);
       case NodeTypes.DebugAction:
         return new DebugActionNode(this.compiler);
       case NodeTypes.ApplyAction:

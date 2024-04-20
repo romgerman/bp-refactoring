@@ -18,7 +18,7 @@ const NODES = [
   { type: NodeTypes.FilterBy, name: "Filter By" },
   { type: NodeTypes.DecoratorPredicate, name: "Has Decorator" },
   { group: true, name: "Actions" },
-  { type: NodeTypes.RenameClassAction, name: "Rename Class" },
+  { type: NodeTypes.RenameAction, name: "Rename" },
   { type: NodeTypes.DebugAction, name: "Debug" },
   { type: NodeTypes.ApplyAction, name: "Apply Changes" },
 ];
