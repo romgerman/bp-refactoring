@@ -1,19 +1,17 @@
 import { TypescriptCompiler } from "../typescript/compiler";
 import { NodeTypes } from "../shared/node-types";
-import {
-  BlueprintNode,
-  ClassListNode,
-  FileListNode,
-  DecoratorPredicateNode,
-  ProjectNode,
-  FilterByNode,
-  DebugActionNode,
-  RenameClassActionNode,
-  ApplyActionNode,
-  ConstantNode,
-} from "./blueprint-nodes";
 import { EventEmitter } from "eventemitter3";
 import { ROOT_NODES } from "./rules";
+import { BlueprintNode } from "./blueprint-node";
+import { ProjectNode } from "./nodes/project";
+import { ApplyActionNode } from "./nodes/actions/apply";
+import { DebugActionNode } from "./nodes/actions/debug";
+import { RenameClassActionNode } from "./nodes/actions/rename-class";
+import { ClassListNode } from "./nodes/aggregation/class-list";
+import { FileListNode } from "./nodes/aggregation/file-list";
+import { ConstantNode } from "./nodes/data/constant";
+import { DecoratorPredicateNode } from "./nodes/filtering/decorator-predicate";
+import { FilterByNode } from "./nodes/filtering/filter-by-node";
 
 export class BlueprintStore {
   readonly events = new EventEmitter<
