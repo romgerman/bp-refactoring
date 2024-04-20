@@ -9,17 +9,18 @@ const nodeStore = useNodeStore();
 
 const NODES = [
   { group: true, name: "Data" },
-  { type: NodeTypes.Constant, name: 'Constant' },
+  { type: NodeTypes.Constant, name: "Constant" },
   { group: true, name: "Aggregation" },
-  { type: NodeTypes.ClassList, name: 'Class List' },
-  { type: NodeTypes.FileList, name: 'File List' },
+  { type: NodeTypes.ClassList, name: "Class List" },
+  { type: NodeTypes.FileList, name: "File List" },
+  { type: NodeTypes.FunctionList, name: "Function List" },
   { group: true, name: "Filtering" },
-  { type: NodeTypes.FilterBy, name: 'Filter By' },
-  { type: NodeTypes.DecoratorPredicate, name: 'Has Decorator' },
+  { type: NodeTypes.FilterBy, name: "Filter By" },
+  { type: NodeTypes.DecoratorPredicate, name: "Has Decorator" },
   { group: true, name: "Actions" },
-  { type: NodeTypes.RenameClassAction, name: 'Rename Class' },
-  { type: NodeTypes.DebugAction, name: 'Debug' },
-  { type: NodeTypes.ApplyAction, name: 'Apply Changes' },
+  { type: NodeTypes.RenameClassAction, name: "Rename Class" },
+  { type: NodeTypes.DebugAction, name: "Debug" },
+  { type: NodeTypes.ApplyAction, name: "Apply Changes" },
 ];
 </script>
 

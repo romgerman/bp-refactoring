@@ -7,6 +7,7 @@ export enum NodeTypes {
   // Aggregation
   ClassList = "class-list",
   FileList = "file-list",
+  FunctionList = "function-list",
 
   // Filtering
   FilterBy = "filter-by",
