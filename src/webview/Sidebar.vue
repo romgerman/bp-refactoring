@@ -18,6 +18,7 @@ const NODES = [
   { group: true, name: "Filtering" },
   { type: NodeTypes.FilterBy, name: "Filter By" },
   { type: NodeTypes.DecoratorPredicate, name: "Has Decorator" },
+  { type: NodeTypes.OfTypePredicate, name: "Of Type" },
   { group: true, name: "Actions" },
   { type: NodeTypes.RenameAction, name: "Rename" },
   { type: NodeTypes.DebugAction, name: "Debug" },
@@ -27,6 +28,7 @@ const NODES = [
 
 <template>
   <div class="nodes p-2">
+    <!-- Currently you can have only one project active -->
     <NodeWrapper
       condensed
       :draggable="!nodeStore.hasProjectNode"

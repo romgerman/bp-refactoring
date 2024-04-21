@@ -10,19 +10,12 @@ export class DecoratorPredicateNode extends PredicateNode<{
   readonly type: string = NodeTypes.DecoratorPredicate;
 
   override async evaluate(): Promise<Function> {
-    // const tsClassNodes: ts.ClassDeclaration[] = await this.getInput(0).evaluate();
-
-    // if (!Array.isArray(tsClassNodes) && ts.isClassDeclaration(tsClassNodes[0])) {
-    //   throw new Error("Invalid input on index 0. Expected type ts.ClassDeclaration[].");
-    // }
-
     return async (tsClassNodes: ts.ClassDeclaration[]) => {
       const name = (await this.evalInput(0)) || this.state?.selection;
       return tsClassNodes.filter((classDecl) => {
         if (classDecl.modifiers) {
           const decorators = classDecl.modifiers.filter((mod) => mod.kind === ts.SyntaxKind.Decorator) as ts.Decorator[];
           return decorators.find((dec) => {
-            //const name = this.state?.customName || this.state?.selection;
             return name === ((dec.expression as ts.CallExpression).expression as ts.Identifier).getText();
           });
         } else {
