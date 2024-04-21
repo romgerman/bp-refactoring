@@ -1,5 +1,6 @@
 import { NodeTypes } from "../../../shared/node-types";
 import { BlueprintNode } from "../../blueprint-node";
+import { RegExpNode } from "../data/regexp";
 
 export abstract class PredicateNode<T = any> extends BlueprintNode<T> {
   readonly type: string = "predicate";
@@ -11,7 +12,7 @@ export abstract class PredicateNode<T = any> extends BlueprintNode<T> {
 export class FilterByNode extends BlueprintNode {
   readonly type: string = NodeTypes.FilterBy;
 
-  async evaluate(): Promise<any> {
+  override async evaluate(): Promise<any> {
     const array = this.getInput(0);
     const predicate = this.getInput(1);
 
@@ -23,8 +24,8 @@ export class FilterByNode extends BlueprintNode {
       return await array.evaluate();
     }
 
-    if (!(predicate instanceof PredicateNode)) {
-      throw new Error("Predicate is not of type PredicateNode");
+    if (!(predicate instanceof RegExpNode)) {
+      throw new Error("Predicate is not of type RegExpNode");
     }
 
     const predicateFn: Function = await predicate.evaluate();
@@ -33,7 +34,20 @@ export class FilterByNode extends BlueprintNode {
       throw new Error("Predicate is not a function");
     }
 
-    return await predicateFn(await array.evaluate());
+    const data = await array.evaluate();
+    const result = data.filter((entry: any) => {
+      const name = entry?.name?.getText() as string;
+      if (typeof entry === "string") {
+        return predicateFn(entry);
+      } else if (name) {
+        return predicateFn(name);
+      } else {
+        throw new Error("The name is not a string");
+      }
+    });
+
+    console.log(data.slice(0, 10), result);
+    return result;
   }
 
   getViewData(): Promise<any> {
