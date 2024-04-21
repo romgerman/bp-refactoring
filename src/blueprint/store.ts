@@ -1,3 +1,4 @@
+import { match } from "ts-pattern";
 import { TypescriptCompiler } from "../typescript/compiler";
 import { NodeTypes } from "../shared/node-types";
 import { EventEmitter } from "eventemitter3";
@@ -16,6 +17,7 @@ import { FunctionListNode } from "./nodes/aggregation/function-list";
 import { MemberListNode } from "./nodes/aggregation/members-list";
 import { OfTypePredicateNode } from "./nodes/filtering/of-type-predicate";
 import { PreviewNode } from "./nodes/aggregation/preview";
+import { ByNamePredicateNode } from "./nodes/filtering/by-name";
 
 export class BlueprintStore {
   readonly events = new EventEmitter<
@@ -170,36 +172,22 @@ export class BlueprintStore {
     return result;
   }
 
-  getNodeByType(type: string): BlueprintNode {
-    switch (type) {
-      case NodeTypes.Project:
-        return new ProjectNode(this.compiler);
-      case NodeTypes.ClassList:
-        return new ClassListNode(this.compiler);
-      case NodeTypes.FileList:
-        return new FileListNode(this.compiler);
-      case NodeTypes.FunctionList:
-        return new FunctionListNode(this.compiler);
-      case NodeTypes.MemberList:
-        return new MemberListNode(this.compiler);
-      case NodeTypes.Preview:
-        return new PreviewNode(this.compiler);
-      case NodeTypes.FilterBy:
-        return new FilterByNode(this.compiler);
-      case NodeTypes.DecoratorPredicate:
-        return new DecoratorPredicateNode(this.compiler);
-      case NodeTypes.OfTypePredicate:
-        return new OfTypePredicateNode(this.compiler);
-      case NodeTypes.RenameAction:
-        return new RenameActionNode(this.compiler);
-      case NodeTypes.DebugAction:
-        return new DebugActionNode(this.compiler);
-      case NodeTypes.ApplyAction:
-        return new ApplyActionNode(this.compiler);
-      case NodeTypes.Constant:
-        return new ConstantNode(this.compiler);
-      default:
-        throw new Error(`NodeType.${type} is not processed`);
-    }
+  getNodeByType(type: NodeTypes): BlueprintNode {
+    return match(type)
+      .with(NodeTypes.Project, () => new ProjectNode(this.compiler))
+      .with(NodeTypes.ClassList, () => new ClassListNode(this.compiler))
+      .with(NodeTypes.FileList, () => new FileListNode(this.compiler))
+      .with(NodeTypes.FunctionList, () => new FunctionListNode(this.compiler))
+      .with(NodeTypes.MemberList, () => new MemberListNode(this.compiler))
+      .with(NodeTypes.Preview, () => new PreviewNode(this.compiler))
+      .with(NodeTypes.FilterBy, () => new FilterByNode(this.compiler))
+      .with(NodeTypes.DecoratorPredicate, () => new DecoratorPredicateNode(this.compiler))
+      .with(NodeTypes.OfTypePredicate, () => new OfTypePredicateNode(this.compiler))
+      .with(NodeTypes.RenameAction, () => new RenameActionNode(this.compiler))
+      .with(NodeTypes.DebugAction, () => new DebugActionNode(this.compiler))
+      .with(NodeTypes.ApplyAction, () => new ApplyActionNode(this.compiler))
+      .with(NodeTypes.Constant, () => new ConstantNode(this.compiler))
+      .with(NodeTypes.ByNamePredicate, () => new ByNamePredicateNode(this.compiler))
+      .exhaustive();
   }
 }
