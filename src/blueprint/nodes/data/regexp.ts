@@ -1,8 +1,8 @@
 import { NodeTypes } from "../../../shared/node-types";
 import { BlueprintNode } from "../../blueprint-node";
 
-export class ConstantStringNode extends BlueprintNode<{ value: string }> {
-  readonly type: string = NodeTypes.ConstantString;
+export class RegExpNode extends BlueprintNode<{ value: string }> {
+  readonly type: string = NodeTypes.RegExp;
 
   async evaluate(): Promise<any> {
     try {

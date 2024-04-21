@@ -15,7 +15,7 @@ import { FilterByNode } from "./nodes/filtering/filter-by-node";
 import { FunctionListNode } from "./nodes/aggregation/function-list";
 import { MemberListNode } from "./nodes/aggregation/members-list";
 import { OfTypePredicateNode } from "./nodes/filtering/of-type-predicate";
-import { ConstantStringNode } from "./nodes/data/constantString";
+import { RegExpNode } from "./nodes/data/regexp";
 
 export class BlueprintStore {
   readonly events = new EventEmitter<
@@ -195,8 +195,8 @@ export class BlueprintStore {
         return new ApplyActionNode(this.compiler);
       case NodeTypes.Constant:
         return new ConstantNode(this.compiler);
-      case NodeTypes.ConstantString:
-        return new ConstantStringNode(this.compiler);
+      case NodeTypes.RegExp:
+        return new RegExpNode(this.compiler);
       default:
         throw new Error(`NodeType.${type} is not processed`);
     }

@@ -1,8 +1,8 @@
 <template>
   <NodeWrapper>
-    <template #header>ConstantString</template>
+    <template #header>RegExp</template>
     <template #body>
-      <vscode-text-field placeholder="Value" v-model="model.value"></vscode-text-field>
+      <vscode-text-field placeholder="Expression" v-model="model.value"></vscode-text-field>
     </template>
     <Handle id="0:string" type="source" :position="Position.Right" />
   </NodeWrapper>
