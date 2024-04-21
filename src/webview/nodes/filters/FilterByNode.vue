@@ -3,7 +3,7 @@
     <template #header>Filter By</template>
     <div class="target-handles">
       <Handle id="0:array" type="target" :position="Position.Left" data-name="Array" />
-      <Handle id="1:regexp" type="target" :position="Position.Left" data-name="Regexp"/>
+      <Handle id="1:predicate" type="target" :position="Position.Left" data-name="Regexp"/>
     </div>
     <Handle id="0:array" type="source" :position="Position.Right" :is-valid-connection="isValidConnectionTarget" />
   </NodeWrapper>

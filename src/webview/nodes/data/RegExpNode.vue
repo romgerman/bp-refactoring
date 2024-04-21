@@ -4,7 +4,7 @@
     <template #body>
       <vscode-text-field placeholder="Expression" v-model="model.value"></vscode-text-field>
     </template>
-    <Handle id="0:regexp" type="source" :position="Position.Right" />
+    <Handle id="0:predicate" type="source" :position="Position.Right" />
   </NodeWrapper>
 </template>
 
