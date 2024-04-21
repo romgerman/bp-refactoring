@@ -17,7 +17,7 @@ export class FunctionListNode extends BlueprintNode {
   }
 
   private getFunctionList(tsFileList: Array<ts.SourceFile | ts.FunctionDeclaration>): ts.FunctionDeclaration[] {
-    if (isArrayOfType(tsFileList, ts.isClassDeclaration)) {
+    if (isArrayOfType(tsFileList, ts.isFunctionDeclaration)) {
       return tsFileList as ts.FunctionDeclaration[];
     }
 
