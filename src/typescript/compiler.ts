@@ -34,7 +34,7 @@ export class TypescriptCompiler extends vscode.Disposable {
     return this._ls;
   }
 
-  public readonly events = new EventEmitter<"ready">();
+  public readonly events = new EventEmitter<"ready" | "file-changed">();
 
   private _watchProgramConfig: ts.WatchOfConfigFile<ts.BuilderProgram> | null = null;
   private _builderProgram: ts.BuilderProgram | null = null;
@@ -67,6 +67,9 @@ export class TypescriptCompiler extends vscode.Disposable {
         program.getCompilerOptions()
       );
       this.events.emit("ready", true);
+    };
+    host.onWatchStatusChange = () => {
+      this.events.emit("file-changed");
     };
 
     ts.createWatchProgram(host);

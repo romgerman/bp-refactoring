@@ -19,6 +19,7 @@ export abstract class BlueprintNode<S = any> {
 
   abstract evaluate(): Promise<any>;
   abstract getViewData(): Promise<any>;
+  public onStateChanged(): void {}
 
   protected getInput(index: number): BlueprintNode | undefined {
     if (index < 0 || index >= this.inputs.length) {
