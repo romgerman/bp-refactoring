@@ -20,13 +20,12 @@
 import { computed, ref } from "vue";
 import { GraphNodeSendViewData } from "@/shared/events";
 import { useEventCommandResult } from "@/webview/utils";
-import type { NodeProps, ValidConnectionFunc } from "@vue-flow/core";
+import type { ValidConnectionFunc } from "@vue-flow/core";
 import { Handle, Position, useNode } from "@vue-flow/core";
 import NodeWrapper from "../NodeWrapper.vue";
 
 const MAX_ITEMS = 3;
 
-const props = defineProps<NodeProps>();
 const fileList = ref<string[]>([]);
 const otherItemsCount = ref<number>(0);
 const greaterThanMaxItems = computed(() => otherItemsCount.value > MAX_ITEMS);
@@ -43,9 +42,3 @@ useEventCommandResult<GraphNodeSendViewData, { id: string; data: string[] }>("gr
   }
 });
 </script>
-
-<style lang="scss">
-.vue-flow__node-file-list {
-  color: #fff;
-}
-</style>

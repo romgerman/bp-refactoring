@@ -19,9 +19,11 @@ import ClassListNode from "./nodes/aggregation/ClassListNode.vue";
 import FileListNode from "./nodes/aggregation/FileListNode.vue";
 import FunctionListNode from "./nodes/aggregation/FunctionListNode.vue";
 import MemberListNode from "./nodes/aggregation/MemberListNode.vue";
+import PreviewNode from "./nodes/aggregation/PreviewNode.vue";
 
 import HasDecoratorNode from "./nodes/filters/HasDecoratorNode.vue";
 import FilterByNode from "./nodes/filters/FilterByNode.vue";
+import OfTypeNode from "./nodes/filters/OfTypeNode.vue";
 
 import RenameClassActionNode from "./nodes/actions/RenameClassActionNode.vue";
 import DebugActionNode from "./nodes/actions/DebugActionNode.vue";
@@ -117,7 +119,10 @@ useEventListener("keyup", (e) => {
         <FunctionListNode v-bind="nodeProps" />
       </template>
       <template #node-member-list="nodeProps">
-        <MemberListNode v-bind="nodeProps"></MemberListNode>
+        <MemberListNode v-bind="nodeProps" />
+      </template>
+      <template #node-preview="nodeProps">
+        <PreviewNode v-bind="nodeProps" />
       </template>
 
       <template #node-filter-by="nodeProps">
@@ -125,6 +130,9 @@ useEventListener("keyup", (e) => {
       </template>
       <template #node-has-decorator-predicate="nodeProps">
         <HasDecoratorNode v-bind="nodeProps" />
+      </template>
+      <template #node-of-type-predicate="nodeProps">
+        <OfTypeNode v-bind="nodeProps" />
       </template>
 
       <template #node-rename-action="nodeProps">

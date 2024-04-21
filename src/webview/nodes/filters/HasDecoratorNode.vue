@@ -65,6 +65,5 @@ watch(model.value, (value) => {
 <style lang="scss">
 .vue-flow__node-has-decorator-predicate {
   width: 200px;
-  color: #fff;
 }
 </style>

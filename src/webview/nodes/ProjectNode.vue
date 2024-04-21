@@ -18,8 +18,7 @@
 
 <script setup lang="ts">
 import { ref, watch } from "vue";
-import type { NodeProps } from "@vue-flow/core";
-import { Position, Handle, useNode, useVueFlow } from "@vue-flow/core";
+import { Position, Handle, useNode } from "@vue-flow/core";
 import { sendEventCommand, useEventCommandResult } from "@/webview/utils";
 import { GraphNodeGetViewData, GraphNodeSendViewData, GraphNodeUpdateState, TsCompilerStatusChanged } from "@/shared/events";
 import NodeWrapper from "./NodeWrapper.vue";
@@ -29,7 +28,6 @@ const tsConfigList = ref<{ value: string; label: string }[]>([]);
 const chosenConfig = ref<string | null>(null);
 const tsCompilerStatus = ref<boolean>(false);
 
-const props = defineProps<NodeProps>();
 const { node, id: nodeId } = useNode();
 
 // Subscribe to status of current project TS compiler
@@ -71,7 +69,6 @@ watch(chosenConfig, (selectedConfig) => {
 .vue-flow__node-project {
   width: 300px;
   min-height: 100px;
-  color: #fff;
 }
 
 .scan-btn {

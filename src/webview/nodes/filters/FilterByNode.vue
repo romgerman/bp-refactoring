@@ -10,21 +10,11 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
-import type { NodeProps, ValidConnectionFunc } from "@vue-flow/core";
-import { Handle, Position, useNode } from "@vue-flow/core";
+import type { ValidConnectionFunc } from "@vue-flow/core";
+import { Handle, Position } from "@vue-flow/core";
 import NodeWrapper from "../NodeWrapper.vue";
-
-const props = defineProps<NodeProps>();
-const { id: nodeId } = useNode()
-
 const isValidConnectionTarget: ValidConnectionFunc = (conn, { sourceNode, targetNode }) => {
   return sourceNode.id !== targetNode.id;
 };
 </script>
 
-<style lang="scss">
-.vue-flow__node-filter-by {
-  color: #fff;
-}
-</style>
