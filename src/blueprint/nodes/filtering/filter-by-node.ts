@@ -46,7 +46,6 @@ export class FilterByNode extends BlueprintNode {
       }
     });
 
-    console.log(data.slice(0, 10), result);
     return result;
   }
 
