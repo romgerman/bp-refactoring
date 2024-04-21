@@ -9,11 +9,13 @@ export enum NodeTypes {
   FileList = "file-list",
   FunctionList = "function-list",
   MemberList = "member-list",
+  Preview = "preview",
 
   // Filtering
   FilterBy = "filter-by",
   DecoratorPredicate = "has-decorator-predicate",
   OfTypePredicate = "of-type-predicate",
+  ByNamePredicate = "by-name-predicate",
 
   // Actions
   RenameAction = "rename-action",

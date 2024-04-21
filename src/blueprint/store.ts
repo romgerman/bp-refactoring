@@ -15,6 +15,7 @@ import { FilterByNode } from "./nodes/filtering/filter-by-node";
 import { FunctionListNode } from "./nodes/aggregation/function-list";
 import { MemberListNode } from "./nodes/aggregation/members-list";
 import { OfTypePredicateNode } from "./nodes/filtering/of-type-predicate";
+import { PreviewNode } from "./nodes/aggregation/preview";
 
 export class BlueprintStore {
   readonly events = new EventEmitter<
@@ -180,6 +181,8 @@ export class BlueprintStore {
         return new FunctionListNode(this.compiler);
       case NodeTypes.MemberList:
         return new MemberListNode(this.compiler);
+      case NodeTypes.Preview:
+        return new PreviewNode(this.compiler);
       case NodeTypes.FilterBy:
         return new FilterByNode(this.compiler);
       case NodeTypes.DecoratorPredicate:
