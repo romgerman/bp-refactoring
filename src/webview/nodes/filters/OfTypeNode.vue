@@ -49,6 +49,5 @@ watch(selection, (value) => {
 <style lang="scss">
 .vue-flow__node-of-type-predicate {
   width: 200px;
-  color: #fff;
 }
 </style>

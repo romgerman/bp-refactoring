@@ -43,6 +43,5 @@ useEventCommandResult<GraphNodeSendViewData, { id: string; data: string[]; }>('g
 .vue-flow__node-rename-action {
   min-height: 100px;
   display: flex;
-  color: #fff;
 }
 </style>

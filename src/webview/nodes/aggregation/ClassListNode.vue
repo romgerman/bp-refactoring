@@ -44,9 +44,3 @@ useEventCommandResult<GraphNodeSendViewData, { id: string; data: string[] }>("gr
   }
 });
 </script>
-
-<style lang="scss">
-.vue-flow__node-class-list {
-  color: #fff;
-}
-</style>

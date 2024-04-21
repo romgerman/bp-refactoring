@@ -58,7 +58,6 @@ watch(model.value, (value) => {
 
 <style lang="scss">
 .vue-flow__node-constant {
-  color: #fff;
   width: 200px;
 }
 </style>
