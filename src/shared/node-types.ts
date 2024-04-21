@@ -3,6 +3,7 @@ export enum NodeTypes {
 
   // Data
   Constant = "constant",
+  ConstantString = "constant-string",
 
   // Aggregation
   ClassList = "class-list",

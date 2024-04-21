@@ -10,6 +10,7 @@ const nodeStore = useNodeStore();
 const NODES = [
   { group: true, name: "Data" },
   { type: NodeTypes.Constant, name: "Constant" },
+  { type: NodeTypes.ConstantString, name: "Constant String" },
   { group: true, name: "Aggregation" },
   { type: NodeTypes.ClassList, name: "Class List" },
   { type: NodeTypes.FileList, name: "File List" },

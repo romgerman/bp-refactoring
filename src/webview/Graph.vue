@@ -11,7 +11,9 @@ import { parseHandleId } from "@/shared/handles";
 import DropzoneBackground from "./DropzoneBackground.vue";
 
 import ProjectNode from "./nodes/ProjectNode.vue";
+
 import ConstantNode from "./nodes/data/ConstantNode.vue";
+import ConstantStringNode from "./nodes/data/ConstantStringNode.vue";
 
 import ClassListNode from "./nodes/aggregation/ClassListNode.vue";
 import FileListNode from "./nodes/aggregation/FileListNode.vue";
@@ -100,6 +102,9 @@ useEventListener("keyup", (e) => {
 
       <template #node-constant="nodeProps">
         <ConstantNode v-bind="nodeProps" />
+      </template>
+      <template #node-constant-string="nodeProps">
+        <ConstantStringNode v-bind="nodeProps" />
       </template>
 
       <template #node-class-list="nodeProps">
