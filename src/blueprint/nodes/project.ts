@@ -20,7 +20,9 @@ export class ProjectNode extends BlueprintNode<string> {
     if (!this.state) {
       throw new Error("No tsconfig selected");
     }
-    this.compiler.start(this.state!);
+    if (!this.compiler.isReady) {
+      this.compiler.start(this.state!);
+    }
     await until(() => this.compiler.isReady);
 
     return this.compiler.builderProgram?.getProgram().getSourceFiles();
@@ -35,5 +37,13 @@ export class ProjectNode extends BlueprintNode<string> {
     }
 
     return [];
+  }
+
+  public override onStateChanged(): void {
+    if (this.state) {
+      this.compiler.start(this.state);
+    } else {
+      this.compiler.stop();
+    }
   }
 }

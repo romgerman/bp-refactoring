@@ -112,6 +112,7 @@ export class BlueprintStore {
     }
 
     node.state = state;
+    node.onStateChanged();
     this.events.emit("node-state-changed", { id: viewId, state: state, targetNode: node });
   }
 
