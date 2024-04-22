@@ -3,7 +3,6 @@ export enum NodeTypes {
 
   // Data
   Constant = "constant",
-  RegExp = "regexp",
 
   // Aggregation
   ClassList = "class-list",
@@ -17,6 +16,7 @@ export enum NodeTypes {
   DecoratorPredicate = "has-decorator-predicate",
   OfTypePredicate = "of-type-predicate",
   ByNamePredicate = "by-name-predicate",
+  ByRegExpPredicate = "regexp-predicate",
 
   // Actions
   RenameAction = "rename-action",
