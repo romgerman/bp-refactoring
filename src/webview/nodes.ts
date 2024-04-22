@@ -1,4 +1,4 @@
-import { NodeTypes } from "@/shared/node-types";
+import { NodeTypes } from "../shared/node-types";
 
 export const NODES = [
   { group: true, name: "Data" },
