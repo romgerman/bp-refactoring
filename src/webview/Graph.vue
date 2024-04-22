@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { VueFlow, useVueFlow } from "@vue-flow/core";
+import { ConnectionLineType, ConnectionMode, MarkerType, SelectionMode, VueFlow, useVueFlow } from "@vue-flow/core";
 import { MiniMap } from "@vue-flow/minimap";
 import { useEventListener } from "@vueuse/core";
 import useDragAndDrop from "./useDnD";
@@ -27,7 +27,24 @@ import RenameClassActionNode from "./nodes/actions/RenameClassActionNode.vue";
 import DebugActionNode from "./nodes/actions/DebugActionNode.vue";
 import ApplyActionNode from "./nodes/actions/ApplyActionNode.vue";
 
-const { onConnect, onNodesChange, onEdgesChange, addEdges, removeNodes, getSelectedNodes } = useVueFlow();
+const { onConnect, onNodesChange, onEdgesChange, addEdges, removeNodes, getSelectedNodes } = useVueFlow({
+  connectionLineOptions: {
+    type: ConnectionLineType.SmoothStep,
+    style: {
+      strokeWidth: 2.5,
+    },
+  },
+  defaultEdgeOptions: {
+    type: "smoothstep",
+    style: {
+      strokeWidth: 2.5,
+    },
+  },
+  connectionMode: ConnectionMode.Strict,
+  connectionRadius: 15,
+  elevateNodesOnSelect: true,
+  elevateEdgesOnSelect: true,
+});
 const { onDragOver, onDrop, onDragLeave, isDragOver } = useDragAndDrop();
 
 const nodeStore = useNodeStore();
@@ -62,10 +79,6 @@ onNodesChange((changes) => {
 onEdgesChange((changes) => {
   for (const change of changes) {
     if (change.type === "add") {
-      change.item.type = "smoothstep";
-      change.item.style = {
-        strokeWidth: 2.5
-      }
       const sourceHandle = parseHandleId(change.item.sourceHandle);
       const targetHandle = parseHandleId(change.item.targetHandle);
       sendEventCommand<GraphNodeConnected>({
