@@ -22,7 +22,7 @@ export class ByRegExpPredicateNode extends PredicateNode<{ value: string }> {
 
         return result;
       } catch {
-        throw new Error("Incorrect regular expression");
+        throw new Error("Invalid regular expression");
       }
     };
   }

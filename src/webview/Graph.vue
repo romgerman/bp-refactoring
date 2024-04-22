@@ -118,9 +118,6 @@ useEventListener("keyup", (e) => {
       <template #node-constant="nodeProps">
         <ConstantNode v-bind="nodeProps" />
       </template>
-      <template #node-by-regexp="nodeProps">
-        <ByRegExpNode v-bind="nodeProps" />
-      </template>
 
       <template #node-class-list="nodeProps">
         <ClassListNode v-bind="nodeProps" />
@@ -146,6 +143,9 @@ useEventListener("keyup", (e) => {
       </template>
       <template #node-of-type-predicate="nodeProps">
         <OfTypeNode v-bind="nodeProps" />
+      </template>
+      <template #node-by-regexp-predicate="nodeProps">
+        <ByRegExpNode v-bind="nodeProps" />
       </template>
 
       <template #node-rename-action="nodeProps">
