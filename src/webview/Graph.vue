@@ -14,7 +14,7 @@ import ConnectionPopup from "./ConnectionPopup.vue";
 import ProjectNode from "./nodes/ProjectNode.vue";
 
 import ConstantNode from "./nodes/data/ConstantNode.vue";
-import RegExpNode from "./nodes/data/RegExpNode.vue";
+import ByRegExpNode from "./nodes/data/ByRegExpNode.vue";
 
 import ClassListNode from "./nodes/aggregation/ClassListNode.vue";
 import FileListNode from "./nodes/aggregation/FileListNode.vue";
@@ -119,8 +119,8 @@ useEventListener("keyup", (e) => {
       <template #node-constant="nodeProps">
         <ConstantNode v-bind="nodeProps" />
       </template>
-      <template #node-regexp="nodeProps">
-        <RegExpNode v-bind="nodeProps" />
+      <template #node-by-regexp="nodeProps">
+        <ByRegExpNode v-bind="nodeProps" />
       </template>
 
       <template #node-class-list="nodeProps">

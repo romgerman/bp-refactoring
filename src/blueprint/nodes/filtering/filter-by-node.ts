@@ -1,6 +1,5 @@
 import { NodeTypes } from "../../../shared/node-types";
 import { BlueprintNode } from "../../blueprint-node";
-import { RegExpNode } from "../data/regexp";
 
 export abstract class PredicateNode<T = any> extends BlueprintNode<T> {
   readonly type: string = "predicate";
@@ -24,8 +23,8 @@ export class FilterByNode extends BlueprintNode {
       return await array.evaluate();
     }
 
-    if (!(predicate instanceof RegExpNode)) {
-      throw new Error("Predicate is not of type RegExpNode");
+    if (!(predicate instanceof PredicateNode)) {
+      throw new Error("Predicate is not of type PredicateNode");
     }
 
     const predicateFn: Function = await predicate.evaluate();
