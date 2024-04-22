@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="container w-full max-w-full">
     <div><vscode-button @click="applyChanges">Apply Changes</vscode-button></div>
     <div class="graph-container">
       <Graph></Graph>
