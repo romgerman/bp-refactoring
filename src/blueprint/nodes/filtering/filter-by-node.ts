@@ -11,7 +11,7 @@ export abstract class PredicateNode<T = any> extends BlueprintNode<T> {
 export class FilterByNode extends BlueprintNode {
   readonly type: string = NodeTypes.FilterBy;
 
-  override async evaluate(): Promise<any> {
+  async evaluate(): Promise<any> {
     const array = this.getInput(0);
     const predicate = this.getInput(1);
 
