@@ -13,6 +13,7 @@ export const NODES = [
   { type: NodeTypes.FilterBy, name: "Filter By" },
   { type: NodeTypes.DecoratorPredicate, name: "Has Decorator" },
   { type: NodeTypes.OfTypePredicate, name: "Of Type" },
+  { type: NodeTypes.ByRegExpPredicate, name: "Regular Expression" },
   { group: true, name: "Actions" },
   { type: NodeTypes.RenameAction, name: "Rename" },
   { type: NodeTypes.DebugAction, name: "Debug" },
