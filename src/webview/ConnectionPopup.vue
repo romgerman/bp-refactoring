@@ -8,7 +8,14 @@
         </NodeWrapper>
         <template v-for="node in nodes">
           <h3 v-if="node.group" class="my-1">{{ node.name }}</h3>
-          <NodeWrapper v-if="node.type" condensed class="cursor-pointer mb-1" @click="addNode(node.type)">
+          <NodeWrapper
+            v-if="node.type"
+            condensed
+            class="cursor-pointer mb-1"
+            draggable="true"
+            @dragstart="onDragStart($event, node.type)"
+            @click="addNode(node.type)"
+          >
             <template #header>{{ node.name }}</template>
           </NodeWrapper>
         </template>
@@ -25,10 +32,13 @@ import { onClickOutside } from "@vueuse/core";
 import { useConnectionPopup } from "./useConnectionPopup";
 import { NODES } from "./nodes";
 import { getId } from "./node-id";
+import { useNodeStore } from "./store";
+import useDragAndDrop from "./useDnD";
 
 import NodeWrapper from "./nodes/NodeWrapper.vue";
-import { useNodeStore } from "./store";
 
+const { onDragStart } = useDragAndDrop();
+const { addNodes } = useVueFlow();
 const nodeStore = useNodeStore();
 
 const reference = ref(null);
@@ -49,8 +59,6 @@ const nodes = computed(() =>
       x.name.toLocaleLowerCase().includes(query.value.toLocaleLowerCase()) || x.type?.includes(query.value.toLocaleLowerCase())
   )
 );
-
-const { addNodes } = useVueFlow();
 
 function addNode(type: string): void {
   const targetId = getId("quick");
