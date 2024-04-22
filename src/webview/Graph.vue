@@ -23,6 +23,7 @@ import PreviewNode from "./nodes/aggregation/PreviewNode.vue";
 import HasDecoratorNode from "./nodes/filters/HasDecoratorNode.vue";
 import FilterByNode from "./nodes/filters/FilterByNode.vue";
 import OfTypeNode from "./nodes/filters/OfTypeNode.vue";
+import ByRegExpNode from "./nodes/filters/ByRegExpNode.vue";
 
 import RenameClassActionNode from "./nodes/actions/RenameClassActionNode.vue";
 import DebugActionNode from "./nodes/actions/DebugActionNode.vue";
@@ -142,6 +143,9 @@ useEventListener("keyup", (e) => {
       </template>
       <template #node-of-type-predicate="nodeProps">
         <OfTypeNode v-bind="nodeProps" />
+      </template>
+      <template #node-by-regexp-predicate="nodeProps">
+        <ByRegExpNode v-bind="nodeProps" />
       </template>
 
       <template #node-rename-action="nodeProps">

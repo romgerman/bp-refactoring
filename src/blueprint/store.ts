@@ -16,6 +16,7 @@ import { FilterByNode } from "./nodes/filtering/filter-by-node";
 import { FunctionListNode } from "./nodes/aggregation/function-list";
 import { MemberListNode } from "./nodes/aggregation/members-list";
 import { OfTypePredicateNode } from "./nodes/filtering/of-type-predicate";
+import { ByRegExpPredicateNode } from "./nodes/filtering/by-regexp";
 import { PreviewNode } from "./nodes/aggregation/preview";
 import { ByNamePredicateNode } from "./nodes/filtering/by-name";
 
@@ -183,6 +184,7 @@ export class BlueprintStore {
       .with(NodeTypes.FilterBy, () => new FilterByNode(this.compiler))
       .with(NodeTypes.DecoratorPredicate, () => new DecoratorPredicateNode(this.compiler))
       .with(NodeTypes.OfTypePredicate, () => new OfTypePredicateNode(this.compiler))
+      .with(NodeTypes.ByRegExpPredicate, () => new ByRegExpPredicateNode(this.compiler))
       .with(NodeTypes.RenameAction, () => new RenameActionNode(this.compiler))
       .with(NodeTypes.DebugAction, () => new DebugActionNode(this.compiler))
       .with(NodeTypes.ApplyAction, () => new ApplyActionNode(this.compiler))

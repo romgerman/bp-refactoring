@@ -17,4 +17,3 @@ const isValidConnectionTarget: ValidConnectionFunc = (conn, { sourceNode, target
   return sourceNode.id !== targetNode.id;
 };
 </script>
-

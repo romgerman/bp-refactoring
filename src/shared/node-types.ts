@@ -16,6 +16,7 @@ export enum NodeTypes {
   DecoratorPredicate = "has-decorator-predicate",
   OfTypePredicate = "of-type-predicate",
   ByNamePredicate = "by-name-predicate",
+  ByRegExpPredicate = "by-regexp-predicate",
 
   // Actions
   RenameAction = "rename-action",
