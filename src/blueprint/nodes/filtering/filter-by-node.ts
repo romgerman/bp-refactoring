@@ -33,19 +33,7 @@ export class FilterByNode extends BlueprintNode {
       throw new Error("Predicate is not a function");
     }
 
-    const data = await array.evaluate();
-    const result = data.filter((entry: any) => {
-      const name = entry?.name?.getText() as string;
-      if (typeof entry === "string") {
-        return predicateFn(entry);
-      } else if (name) {
-        return predicateFn(name);
-      } else {
-        throw new Error("The name is not a string");
-      }
-    });
-
-    return result;
+    return await predicateFn(await array.evaluate());
   }
 
   getViewData(): Promise<any> {
