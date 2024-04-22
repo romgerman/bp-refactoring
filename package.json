@@ -59,6 +59,7 @@
     "webpackbar": "^6.0.1"
   },
   "dependencies": {
+    "@floating-ui/vue": "^1.0.6",
     "@vscode/webview-ui-toolkit": "^1.4.0",
     "@vue-flow/background": "^1.3.0",
     "@vue-flow/core": "^1.33.5",

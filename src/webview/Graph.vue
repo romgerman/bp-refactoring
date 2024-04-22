@@ -9,6 +9,7 @@ import { sendEventCommand } from "./utils";
 import { parseHandleId } from "@/shared/handles";
 
 import DropzoneBackground from "./DropzoneBackground.vue";
+import ConnectionPopup from "./ConnectionPopup.vue";
 
 import ProjectNode from "./nodes/ProjectNode.vue";
 import ConstantNode from "./nodes/data/ConstantNode.vue";
@@ -161,6 +162,7 @@ useEventListener("keyup", (e) => {
       />
       <MiniMap pannable zoomable maskColor="#424a49" />
     </VueFlow>
+    <ConnectionPopup />
   </div>
 </template>
 
@@ -170,6 +172,7 @@ useEventListener("keyup", (e) => {
 @import "@vue-flow/minimap/dist/style.css";
 
 .dndflow {
+  position: relative;
   flex-direction: column;
   display: flex;
   height: 100%;
