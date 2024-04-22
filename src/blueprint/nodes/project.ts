@@ -33,7 +33,12 @@ export class ProjectNode extends BlueprintNode<string> {
 
     if (allConfigFiles.length !== 0) {
       const folder = vscode.workspace.getWorkspaceFolder(allConfigFiles[0]);
-      return allConfigFiles.map((x) => ({ value: x.toString(), label: x.path.replace(folder?.uri.path!, "") }));
+      return allConfigFiles
+        .map((x) => ({ value: x.toString(), label: x.path.replace(folder?.uri.path!, "") }))
+        .sort((a, b) => {
+          const weight = a > b ? 1 : -1;
+          return a.label.length - b.label.length - weight;
+        });
     }
 
     return [];
