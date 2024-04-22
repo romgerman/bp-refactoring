@@ -16,7 +16,7 @@ export class RenameActionNode extends BlueprintNode {
       throw new Error("Expected Array at input 0");
     }
 
-    let renameType: "class" | "function" | null = null;
+    let renameType: "class" | "function" | "file" | null = null;
 
     if (isArrayOfType(tsDeclList, ts.isClassDeclaration)) {
       renameType = "class";
@@ -28,66 +28,36 @@ export class RenameActionNode extends BlueprintNode {
 
     const transformer = (sourceFile: ts.SourceFile) => {
       const visitor = (node: ts.Node) => {
-        if (renameType === "class" && ts.isClassDeclaration(node)) {
-          if (node.name) {
-            const name = this.getNewName(node.name.getText(sourceFile), fullName, prefix, postfix);
-            const nameIdentifier = ts.factory.createIdentifier(name);
+        if (renameType === "class" && ts.isClassDeclaration(node) && node.name) {
+          const name = this.getNewName(node.name.getText(sourceFile), fullName, prefix, postfix);
+          const nameIdentifier = ts.factory.createIdentifier(name);
 
-            const languageService = this.compiler.languageService?.services;
-            const renameLocations = languageService?.findRenameLocations(sourceFile.fileName, node.name.pos, false, false, {});
-            const changeTracker = this.compiler.changeTracker;
+          this.renameSymbol(sourceFile, node, nameIdentifier);
 
-            if (renameLocations) {
-              for (const rename of renameLocations) {
-                const refSource = this.compiler.builderProgram?.getSourceFile(rename.fileName)!;
-                changeTracker.replaceNode({
-                  sourceFile: refSource,
-                  node: nameIdentifier,
-                  span: rename.textSpan,
-                });
-              }
-            }
+          return ts.factory.updateClassDeclaration(
+            node,
+            node.modifiers,
+            nameIdentifier,
+            node.typeParameters,
+            node.heritageClauses,
+            node.members
+          );
+        } else if (renameType === "function" && ts.isFunctionDeclaration(node) && node.name) {
+          const name = this.getNewName(node.name.getText(sourceFile), fullName, prefix, postfix);
+          const nameIdentifier = ts.factory.createIdentifier(name);
 
-            return ts.factory.updateClassDeclaration(
-              node,
-              node.modifiers,
-              nameIdentifier,
-              node.typeParameters,
-              node.heritageClauses,
-              node.members
-            );
-          }
-        } else if (renameType === "function" && ts.isFunctionDeclaration(node)) {
-          if (node.name) {
-            const name = this.getNewName(node.name.getText(sourceFile), fullName, prefix, postfix);
-            const nameIdentifier = ts.factory.createIdentifier(name);
+          this.renameSymbol(sourceFile, node, nameIdentifier);
 
-            const languageService = this.compiler.languageService?.services;
-            const renameLocations = languageService?.findRenameLocations(sourceFile.fileName, node.name.pos, false, false, {});
-            const changeTracker = this.compiler.changeTracker;
-
-            if (renameLocations) {
-              for (const rename of renameLocations) {
-                const refSource = this.compiler.builderProgram?.getSourceFile(rename.fileName)!;
-                changeTracker.replaceNode({
-                  sourceFile: refSource,
-                  node: nameIdentifier,
-                  span: rename.textSpan,
-                });
-              }
-            }
-
-            return ts.factory.updateFunctionDeclaration(
-              node,
-              node.modifiers,
-              node.asteriskToken,
-              nameIdentifier,
-              node.typeParameters,
-              node.parameters,
-              node.type,
-              node.body
-            );
-          }
+          return ts.factory.updateFunctionDeclaration(
+            node,
+            node.modifiers,
+            node.asteriskToken,
+            nameIdentifier,
+            node.typeParameters,
+            node.parameters,
+            node.type,
+            node.body
+          );
         }
 
         return ts.visitEachChild(node, visitor, undefined);
@@ -97,6 +67,32 @@ export class RenameActionNode extends BlueprintNode {
     };
 
     return tsDeclList.map((x) => x.getSourceFile()).map(transformer);
+  }
+
+  private renameSymbol(sourceFile: ts.SourceFile, node: ts.Node & { name?: ts.Identifier }, newNode: ts.Identifier): void {
+    if (!node.name) {
+      return;
+    }
+
+    const languageService = this.compiler.languageService?.services;
+    const renameLocations = languageService?.findRenameLocations(sourceFile.fileName, node.name.pos, false, false, {});
+    const changeTracker = this.compiler.changeTracker;
+
+    if (renameLocations) {
+      for (const rename of renameLocations) {
+        const refSource = this.compiler.builderProgram?.getSourceFile(rename.fileName)!;
+        changeTracker.replaceNode({
+          sourceFile: refSource,
+          node: newNode,
+          span: rename.textSpan,
+        });
+      }
+    }
+  }
+
+  private renameFiles(): void {
+    const languageService = this.compiler.languageService?.services;
+    //languageService?.getEditsForFileRename()
   }
 
   private getNewName(name: string, fullName?: string, prefix?: string, postfix?: string): string {
