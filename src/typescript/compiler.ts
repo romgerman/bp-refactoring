@@ -2,6 +2,7 @@ import * as vscode from "vscode";
 import ts from "typescript";
 import EventEmitter from "eventemitter3";
 import { LanguageService } from "./language-service";
+import { ChangeTracker } from "./change-tracker";
 
 const formatHost: ts.FormatDiagnosticsHost = {
   getCanonicalFileName: (path) => path,
@@ -34,7 +35,13 @@ export class TypescriptCompiler extends vscode.Disposable {
     return this._ls;
   }
 
+  public get changeTracker(): ChangeTracker {
+    return this._changeTracker;
+  }
+
   public readonly events = new EventEmitter<"ready" | "file-changed">();
+
+  private _changeTracker = new ChangeTracker();
 
   private _watchProgramConfig: ts.WatchOfConfigFile<ts.BuilderProgram> | null = null;
   private _builderProgram: ts.BuilderProgram | null = null;
@@ -48,6 +55,8 @@ export class TypescriptCompiler extends vscode.Disposable {
 
   start(configPath: string): void {
     this.stop();
+    this._changeTracker = new ChangeTracker();
+
     const createProgram = ts.createAbstractBuilder;
 
     const host = ts.createWatchCompilerHost(
