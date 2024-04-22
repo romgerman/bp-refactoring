@@ -14,7 +14,8 @@ export class ApplyChangesEventHandler implements IExtensionEventHandler<ApplyCha
     const applyNode = this.store.nodes.find((x) => x.type === NodeTypes.ApplyAction);
     if (applyNode) {
       const nodes = await this.store.evaluateGraph(this.store.getNodeId(applyNode)!);
-      this.compiler.emit(nodes);
+      //this.compiler.emit(nodes);
+      this.compiler.changeTracker.appyChanges();
     }
   }
 }

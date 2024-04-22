@@ -30,12 +30,28 @@ export class RenameActionNode extends BlueprintNode {
       const visitor = (node: ts.Node) => {
         if (renameType === "class" && ts.isClassDeclaration(node)) {
           if (node.name) {
-            let name = this.getNewName(node.name.getText(sourceFile), fullName, prefix, postfix);
+            const name = this.getNewName(node.name.getText(sourceFile), fullName, prefix, postfix);
+            const nameIdentifier = ts.factory.createIdentifier(name);
+
+            const languageService = this.compiler.languageService?.services;
+            const renameLocations = languageService?.findRenameLocations(sourceFile.fileName, node.name.pos, false, false, {});
+            const changeTracker = this.compiler.changeTracker;
+
+            if (renameLocations) {
+              for (const rename of renameLocations) {
+                const refSource = this.compiler.builderProgram?.getSourceFile(rename.fileName)!;
+                changeTracker.replaceNode({
+                  sourceFile: refSource,
+                  node: nameIdentifier,
+                  span: rename.textSpan,
+                });
+              }
+            }
 
             return ts.factory.updateClassDeclaration(
               node,
               node.modifiers,
-              ts.factory.createIdentifier(name),
+              nameIdentifier,
               node.typeParameters,
               node.heritageClauses,
               node.members
@@ -43,13 +59,29 @@ export class RenameActionNode extends BlueprintNode {
           }
         } else if (renameType === "function" && ts.isFunctionDeclaration(node)) {
           if (node.name) {
-            let name = this.getNewName(node.name.getText(sourceFile), fullName, prefix, postfix);
+            const name = this.getNewName(node.name.getText(sourceFile), fullName, prefix, postfix);
+            const nameIdentifier = ts.factory.createIdentifier(name);
+
+            const languageService = this.compiler.languageService?.services;
+            const renameLocations = languageService?.findRenameLocations(sourceFile.fileName, node.name.pos, false, false, {});
+            const changeTracker = this.compiler.changeTracker;
+
+            if (renameLocations) {
+              for (const rename of renameLocations) {
+                const refSource = this.compiler.builderProgram?.getSourceFile(rename.fileName)!;
+                changeTracker.replaceNode({
+                  sourceFile: refSource,
+                  node: nameIdentifier,
+                  span: rename.textSpan,
+                });
+              }
+            }
 
             return ts.factory.updateFunctionDeclaration(
               node,
               node.modifiers,
               node.asteriskToken,
-              ts.factory.createIdentifier(name),
+              nameIdentifier,
               node.typeParameters,
               node.parameters,
               node.type,
