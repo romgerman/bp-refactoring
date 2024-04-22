@@ -1,22 +1,22 @@
-import { OnConnectStartParams, useVueFlow } from "@vue-flow/core";
 import { useEventListener } from "@vueuse/core";
-import { ref } from "vue";
 
-export function useConnectionPopup(open: (e: MouseEvent, params: OnConnectStartParams) => void, close: () => void) {
-  const { onConnectStart, onConnectEnd } = useVueFlow();
-  const connectParams = ref<OnConnectStartParams>();
-
-  onConnectStart((e) => {
-    connectParams.value = e;
-  });
-
+export function useConnectionPopup(open: (e: MouseEvent) => void, close: () => void) {
   useEventListener("keyup", (e) => {
     if (e.key === "Escape") {
       close();
     }
   });
 
-  onConnectEnd((e) => {
-    open(e as MouseEvent, connectParams.value);
-  });
+  useEventListener(
+    "contextmenu",
+    (e) => {
+      e.stopImmediatePropagation();
+      if (e.target instanceof HTMLElement && e.target.closest(".vue-flow__node")) {
+        return;
+      } else {
+        open(e);
+      }
+    },
+    { capture: true }
+  );
 }
