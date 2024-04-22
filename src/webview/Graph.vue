@@ -23,7 +23,7 @@ import PreviewNode from "./nodes/aggregation/PreviewNode.vue";
 import HasDecoratorNode from "./nodes/filters/HasDecoratorNode.vue";
 import FilterByNode from "./nodes/filters/FilterByNode.vue";
 import OfTypeNode from "./nodes/filters/OfTypeNode.vue";
-import ByRegExpNode from "./nodes/data/ByRegExpNode.vue";
+import ByRegExpNode from "./nodes/filters/ByRegExpNode.vue";
 
 import RenameClassActionNode from "./nodes/actions/RenameClassActionNode.vue";
 import DebugActionNode from "./nodes/actions/DebugActionNode.vue";
