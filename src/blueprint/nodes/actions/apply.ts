@@ -5,7 +5,8 @@ export class ApplyActionNode extends BlueprintNode {
   readonly type: string = NodeTypes.ApplyAction;
 
   async evaluate(): Promise<any> {
-    return await this.evalInput(0);
+    const result = await this.evalInput(0);
+    return result;
   }
 
   getViewData(): Promise<any> {

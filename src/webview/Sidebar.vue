@@ -3,29 +3,10 @@ import NodeWrapper from "./nodes/NodeWrapper.vue";
 import useDragAndDrop from "./useDnD";
 import { useNodeStore } from "./store";
 import { NodeTypes } from "@/shared/node-types";
+import { NODES } from "./nodes";
 
 const { onDragStart } = useDragAndDrop();
 const nodeStore = useNodeStore();
-
-const NODES = [
-  { group: true, name: "Data" },
-  { type: NodeTypes.Constant, name: "Constant" },
-  { type: NodeTypes.RegExp, name: "Regular Expression" },
-  { group: true, name: "Aggregation" },
-  { type: NodeTypes.ClassList, name: "Class List" },
-  { type: NodeTypes.FileList, name: "File List" },
-  { type: NodeTypes.FunctionList, name: "Function List" },
-  { type: NodeTypes.MemberList, name: "Member List" },
-  { type: NodeTypes.Preview, name: "Preview" },
-  { group: true, name: "Filtering" },
-  { type: NodeTypes.FilterBy, name: "Filter By" },
-  { type: NodeTypes.DecoratorPredicate, name: "Has Decorator" },
-  { type: NodeTypes.OfTypePredicate, name: "Of Type" },
-  { group: true, name: "Actions" },
-  { type: NodeTypes.RenameAction, name: "Rename" },
-  { type: NodeTypes.DebugAction, name: "Debug" },
-  { type: NodeTypes.ApplyAction, name: "Apply Changes" },
-];
 </script>
 
 <template>

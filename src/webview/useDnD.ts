@@ -1,14 +1,6 @@
 import { Element, useVueFlow } from "@vue-flow/core";
 import { ref, watch } from "vue";
-
-let id = 0;
-
-/**
- * @returns {string} - A unique id.
- */
-function getId() {
-  return `dndnode_${id++}`;
-}
+import { getId } from "./node-id";
 
 /**
  * In a real world scenario you'd want to avoid creating refs in a global scope like this as they might not be cleaned up properly.
@@ -83,7 +75,7 @@ export default function useDragAndDrop() {
       y: event.clientY,
     });
 
-    const nodeId = getId();
+    const nodeId = getId("dnd");
 
     const newNode: Element = {
       id: nodeId,
