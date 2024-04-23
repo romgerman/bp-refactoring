@@ -4,7 +4,18 @@ module.exports = {
     './src/**/*.{js,jsx,ts,tsx,vue}',
   ],
   theme: {
-    extend: {},
+    extend: {
+      backgroundColor: {
+        'vscode-side-bar': 'var(--vscode-sideBar-background)',
+        'vscode-cmd-center': 'var(--vscode-commandCenter-background)'
+      },
+      borderColor: {
+        vscode: 'var(--vscode-sideBar-border)'
+      },
+      borderWidth: {
+        '1': '1px'
+      }
+    },
   },
   variants: {
     extend: {},

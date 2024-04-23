@@ -1,6 +1,6 @@
 <template>
   <div v-if="reference" ref="floating" :style="floatingStyles" class="node-selection-popup">
-    <div class="rounded-md bg-slate-800 shadow-lg ring-1 ring-black ring-opacity-5 text-gray-50 p-3 h-full flex flex-col">
+    <div class="rounded-md bg-vscode-side-bar shadow-lg ring-1 ring-black ring-opacity-5 border-1 border-vscode p-3 h-full flex flex-col">
       <vscode-text-field placeholder="search..." autofocus class="w-full mb-2" v-model="query"></vscode-text-field>
       <div class="node-list">
         <NodeWrapper v-if="!nodeStore.hasProjectNode" condensed class="cursor-pointer" @click="addNode('project')">
