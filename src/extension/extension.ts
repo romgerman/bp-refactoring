@@ -4,7 +4,7 @@ import { BlueprintWebPanel } from "./blueprint-web-panel";
 import { ExtensionEventBus } from "./extension-event-bus";
 import { TypescriptCompiler } from "../typescript/compiler";
 import { sendEventCommand } from "./utils";
-import { GraphNodeSendViewData, TsCompilerStatusChanged } from "../shared/events";
+import { ApplyChangesComplete, GraphNodeSendViewData, TsCompilerStatusChanged } from "../shared/events";
 import { GraphNodeAddedEventHandler } from "./events/graph-node-added";
 import { GraphNodeRemovedEventHandler } from "./events/graph-node-removed";
 import { BlueprintStore } from "../blueprint/store";
@@ -18,12 +18,18 @@ export function activate(context: vscode.ExtensionContext) {
   console.log('Congratulations, your extension "bp-refactoring" is now active!');
 
   const compiler = new TypescriptCompiler();
-  compiler.events.on("ready", (status: boolean) => {
-    sendEventCommand<TsCompilerStatusChanged>(BlueprintWebPanel.currentPanel?.webview!, {
-      command: "lifecycle:compiler:status",
-      data: status,
+  compiler.events
+    .on("ready", (status: boolean) => {
+      sendEventCommand<TsCompilerStatusChanged>(BlueprintWebPanel.currentPanel?.webview!, {
+        command: "lifecycle:compiler:status",
+        data: status,
+      });
+    })
+    .on("emit-completed", () => {
+      sendEventCommand<ApplyChangesComplete>(BlueprintWebPanel.currentPanel?.webview!, {
+        command: "lifecycle:apply-complete",
+      });
     });
-  });
 
   async function updateGraphViewData(targetId: string) {
     try {

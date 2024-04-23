@@ -39,7 +39,7 @@ export class TypescriptCompiler extends vscode.Disposable {
     return this._changeTracker;
   }
 
-  public readonly events = new EventEmitter<"ready" | "file-changed">();
+  public readonly events = new EventEmitter<"ready" | "file-changed" | "emit-completed">();
 
   private _changeTracker = new ChangeTracker();
 
@@ -93,7 +93,12 @@ export class TypescriptCompiler extends vscode.Disposable {
     this.events.emit("ready", false);
   }
 
-  emit(tsNodes: ts.Node[]): void {
+  emit(): void {
+    this.changeTracker.appyChanges();
+    this.events.emit("emit-completed");
+  }
+
+  printToFiles(tsNodes: ts.Node[]): void {
     const printer = ts.createPrinter({
       newLine: ts.NewLineKind.CarriageReturnLineFeed,
       removeComments: false,
