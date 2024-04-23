@@ -66,11 +66,23 @@ export function activate(context: vscode.ExtensionContext) {
   // The command has been defined in the package.json file
   // Now provide the implementation of the command with registerCommand
   // The commandId parameter must match the command field in package.json
-  let disposable = vscode.commands.registerCommand("bp-refactoring.open-view", () => {
+  const openViewDisposable = vscode.commands.registerCommand("bp-refactoring.open-view", () => {
     BlueprintWebPanel.createOrShow(context.extensionUri, bus);
   });
 
-  context.subscriptions.push(disposable);
+  const groupNodesDisposable = vscode.commands.registerCommand("bp-refactoring.group-nodes", () => {
+    console.log("ok");
+  });
+
+  const copyCommandDisposable = vscode.commands.registerCommand("editor.action.clipboardCopyAction", (e) => {
+    console.log("copy!");
+  });
+
+  const pasteCommandDisposable = vscode.commands.registerCommand("editor.action.clipboardPasteAction", (e) => {
+    console.log("paste!");
+  });
+
+  context.subscriptions.push(openViewDisposable, groupNodesDisposable, copyCommandDisposable, pasteCommandDisposable);
 }
 
 export function deactivate() {}

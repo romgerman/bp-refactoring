@@ -10,10 +10,10 @@ export function useConnectionPopup(open: (e: MouseEvent) => void, close: () => v
   useEventListener(
     "contextmenu",
     (e) => {
-      e.stopImmediatePropagation();
       if (e.target instanceof HTMLElement && e.target.closest(".vue-flow__node")) {
         return;
       } else {
+        e.stopImmediatePropagation();
         open(e);
       }
     },

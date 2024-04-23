@@ -16,8 +16,19 @@
       {
         "command": "bp-refactoring.open-view",
         "title": "Open Blueprint View"
+      },
+      {
+        "command": "bp-refactoring.group-nodes",
+        "title": "Group Nodes"
       }
-    ]
+    ],
+    "menus": {
+      "webview/context": [
+        {
+          "command": "bp-refactoring.group-nodes"
+        }
+      ]
+    }
   },
   "scripts": {
     "vscode:prepublish": "npm run package",
