@@ -6,7 +6,13 @@
     </template>
     <template #body>
       <vscode-button class="scan-btn" @click="getNodeData">Scan</vscode-button>
-      <VueSelect class="nodrag nowheel" placeholder="Choose tsconfig" :options="tsConfigList" :reduce="(item: any) => item.value" v-model="chosenConfig">
+      <VueSelect
+        class="nodrag nowheel"
+        placeholder="Choose tsconfig"
+        :options="tsConfigList"
+        :reduce="(item: any) => item.value"
+        v-model="chosenConfig"
+      >
         <template v-slot:option="option">
           {{ (option as any).label }}
         </template>
@@ -22,7 +28,7 @@ import { Position, Handle, useNode } from "@vue-flow/core";
 import { sendEventCommand, useEventCommandResult } from "@/webview/utils";
 import { GraphNodeGetViewData, GraphNodeSendViewData, GraphNodeUpdateState, TsCompilerStatusChanged } from "@/shared/events";
 import NodeWrapper from "./NodeWrapper.vue";
-import VueSelect from 'vue-select';
+import VueSelect from "vue-select";
 
 const tsConfigList = ref<{ value: string; label: string }[]>([]);
 const chosenConfig = ref<string | null>(null);

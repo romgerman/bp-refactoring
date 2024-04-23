@@ -12,27 +12,21 @@
       <Handle id="2:string" type="target" :position="Position.Left" data-name="Prefix?" />
       <Handle id="3:string" type="target" :position="Position.Left" data-name="Postfix?" />
     </div>
-    <Handle id="0:array" type="source" :position="Position.Right" :is-valid-connection="isValidConnectionTarget" />
+    <Handle id="0:array" type="source" :position="Position.Right" />
   </NodeWrapper>
 </template>
 
 <script setup lang="ts">
 import { ref } from "vue";
-import type { NodeProps, ValidConnectionFunc } from "@vue-flow/core";
 import { Handle, Position, useNode } from "@vue-flow/core";
 import NodeWrapper from "../NodeWrapper.vue";
 import { useEventCommandResult } from "@/webview/utils";
 import { GraphNodeSendViewData } from "@/shared/events";
 
-const props = defineProps<NodeProps>();
-const { id: nodeId } = useNode()
+const { id: nodeId } = useNode();
 const names = ref<string[]>([]);
 
-const isValidConnectionTarget: ValidConnectionFunc = (conn, { sourceNode, targetNode }) => {
-  return sourceNode.id !== targetNode.id;
-};
-
-useEventCommandResult<GraphNodeSendViewData, { id: string; data: string[]; }>('graph:node-send-view-data', ({ id, data }) => {
+useEventCommandResult<GraphNodeSendViewData, { id: string; data: string[] }>("graph:node-send-view-data", ({ id, data }) => {
   if (id === nodeId) {
     names.value = data;
   }

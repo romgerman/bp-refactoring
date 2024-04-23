@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ConnectionLineType, ConnectionMode, MarkerType, SelectionMode, VueFlow, useVueFlow } from "@vue-flow/core";
+import { ConnectionLineType, ConnectionMode, MarkerType, SelectionMode, ValidConnectionFunc, VueFlow, useVueFlow } from "@vue-flow/core";
 import { MiniMap } from "@vue-flow/minimap";
 import { useEventListener } from "@vueuse/core";
 import useDragAndDrop from "./useDnD";
@@ -30,6 +30,10 @@ import RenameClassActionNode from "./nodes/actions/RenameClassActionNode.vue";
 import DebugActionNode from "./nodes/actions/DebugActionNode.vue";
 import ApplyActionNode from "./nodes/actions/ApplyActionNode.vue";
 
+const isValidConnectionFn: ValidConnectionFunc = (conn, { sourceNode, targetNode }) => {
+  return sourceNode.id !== targetNode.id;
+};
+
 const { onConnect, onNodesChange, onEdgesChange, addEdges, removeNodes, getSelectedNodes } = useVueFlow({
   connectionLineOptions: {
     type: ConnectionLineType.SmoothStep,
@@ -47,6 +51,7 @@ const { onConnect, onNodesChange, onEdgesChange, addEdges, removeNodes, getSelec
   connectionRadius: 15,
   elevateNodesOnSelect: true,
   elevateEdgesOnSelect: true,
+  isValidConnection: isValidConnectionFn
 });
 const { onDragOver, onDrop, onDragLeave, isDragOver } = useDragAndDrop();
 

@@ -2,7 +2,7 @@
   <NodeWrapper>
     <template #header>File List</template>
     <template #body>
-      <div class="nowheel" style="max-height: 200px; overflow: auto;">
+      <div class="nowheel" style="max-height: 200px; overflow: auto">
         <div v-for="file in fileList">
           {{ file }}
         </div>
@@ -12,7 +12,7 @@
     <div class="target-handles">
       <Handle id="0:array" type="target" :position="Position.Left" data-name="Array" />
     </div>
-    <Handle id="0:array" type="source" :position="Position.Right" :is-valid-connection="isValidConnectionTarget" />
+    <Handle id="0:array" type="source" :position="Position.Right" />
   </NodeWrapper>
 </template>
 
@@ -20,7 +20,6 @@
 import { computed, ref } from "vue";
 import { GraphNodeSendViewData } from "@/shared/events";
 import { useEventCommandResult } from "@/webview/utils";
-import type { ValidConnectionFunc } from "@vue-flow/core";
 import { Handle, Position, useNode } from "@vue-flow/core";
 import NodeWrapper from "../NodeWrapper.vue";
 
@@ -30,10 +29,6 @@ const fileList = ref<string[]>([]);
 const otherItemsCount = ref<number>(0);
 const greaterThanMaxItems = computed(() => otherItemsCount.value > MAX_ITEMS);
 const { id: nodeId } = useNode();
-
-const isValidConnectionTarget: ValidConnectionFunc = (conn, { sourceNode, targetNode }) => {
-  return sourceNode.id !== targetNode.id;
-};
 
 useEventCommandResult<GraphNodeSendViewData, { id: string; data: string[] }>("graph:node-send-view-data", (data) => {
   if (nodeId === data.id) {
