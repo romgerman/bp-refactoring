@@ -175,10 +175,6 @@ useEventListener("keyup", (e) => {
 </template>
 
 <style>
-@import "@vue-flow/core/dist/style.css";
-@import "@vue-flow/core/dist/theme-default.css";
-@import "@vue-flow/minimap/dist/style.css";
-
 .dndflow {
   position: relative;
   flex-direction: column;
