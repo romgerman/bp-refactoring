@@ -14,6 +14,7 @@ export const NODES = [
   { type: NodeTypes.DecoratorPredicate, name: "Has Decorator" },
   { type: NodeTypes.OfTypePredicate, name: "Of Type" },
   { type: NodeTypes.ByRegExpPredicate, name: "Regular Expression" },
+  { type: NodeTypes.ByGlobPredicate, name: "Glob Pattern" },
   { group: true, name: "Actions" },
   { type: NodeTypes.RenameAction, name: "Rename" },
   { type: NodeTypes.DebugAction, name: "Debug" },

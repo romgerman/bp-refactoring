@@ -18,7 +18,7 @@ import { MemberListNode } from "./nodes/aggregation/members-list";
 import { OfTypePredicateNode } from "./nodes/filtering/of-type-predicate";
 import { ByRegExpPredicateNode } from "./nodes/filtering/by-regexp";
 import { PreviewNode } from "./nodes/aggregation/preview";
-import { ByNamePredicateNode } from "./nodes/filtering/by-name";
+import { ByGlobPredicateNode } from "./nodes/filtering/by-glob";
 
 export class BlueprintStore {
   readonly events = new EventEmitter<
@@ -189,7 +189,7 @@ export class BlueprintStore {
       .with(NodeTypes.DebugAction, () => new DebugActionNode(this.compiler))
       .with(NodeTypes.ApplyAction, () => new ApplyActionNode(this.compiler))
       .with(NodeTypes.Constant, () => new ConstantNode(this.compiler))
-      .with(NodeTypes.ByNamePredicate, () => new ByNamePredicateNode(this.compiler))
+      .with(NodeTypes.ByGlobPredicate, () => new ByGlobPredicateNode(this.compiler))
       .exhaustive();
   }
 }
