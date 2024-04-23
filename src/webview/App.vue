@@ -1,6 +1,7 @@
 <template>
   <div class="container w-full max-w-full">
-    <div><vscode-button @click="applyChanges">Apply Changes</vscode-button></div>
+    <TaskBar />
+    <div class="border-b-1 border-vscode"></div>
     <div class="graph-container">
       <Graph></Graph>
     </div>
@@ -20,19 +21,6 @@
 </style>
 
 <script setup lang="ts">
-import { ApplyChanges } from "@/shared/events";
 import Graph from "./Graph.vue";
-import { sendEventCommand } from "./utils";
-import { useVueFlow } from "@vue-flow/core";
-import { NodeTypes } from "@/shared/node-types";
-
-const { nodes } = useVueFlow();
-
-function applyChanges(): void {
-  if (nodes.value.find((x) => x.type === NodeTypes.ApplyAction)) {
-    sendEventCommand<ApplyChanges>({
-      command: "lifecycle:apply",
-    });
-  }
-}
+import TaskBar from "./TaskBar.vue";
 </script>
