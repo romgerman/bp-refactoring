@@ -2,6 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 
+@import '~@vscode/codicons/dist/codicon.css';
+
 :root {
   // Vue Flow
   --vf-node-bg: var(--vscode-sidebar-background);
