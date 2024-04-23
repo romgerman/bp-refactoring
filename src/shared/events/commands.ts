@@ -2,6 +2,8 @@ import { EventCommand } from "./event-command";
 
 export interface ApplyChanges extends EventCommand<"lifecycle:apply"> {}
 export interface ApplyChangesComplete extends EventCommand<"lifecycle:apply-complete"> {}
+export interface SaveBlueprint extends EventCommand<"lifecycle:save", { data: any }> {}
+export interface LoadBlueprint extends EventCommand<"lifecycle:load", { data: any }> {}
 
 export interface TsCompilerStatusChanged extends EventCommand<"lifecycle:compiler:status", boolean> {}
 

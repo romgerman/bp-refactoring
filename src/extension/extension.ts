@@ -13,6 +13,8 @@ import { GraphNodeDisconnectedEventHandler } from "./events/graph-node-disconnec
 import { GraphNodeGetViewDataEventHandler } from "./events/graph-node-get-view-data";
 import { GraphNodeUpdateStateEventHandler } from "./events/graph-node-update-state";
 import { ApplyChangesEventHandler } from "./events/lifecycle-apply-changes";
+import { SaveBlueprintEventHandler } from "./events/save-blueprint";
+import { LoadBlueprintEventHandler } from "./events/load-blueprint";
 
 export function activate(context: vscode.ExtensionContext) {
   console.log('Congratulations, your extension "bp-refactoring" is now active!');
@@ -67,7 +69,9 @@ export function activate(context: vscode.ExtensionContext) {
     .addHandler(new GraphNodeDisconnectedEventHandler(store))
     .addHandler(new GraphNodeGetViewDataEventHandler(store))
     .addHandler(new GraphNodeUpdateStateEventHandler(store))
-    .addHandler(new ApplyChangesEventHandler(store, compiler));
+    .addHandler(new ApplyChangesEventHandler(store, compiler))
+    .addHandler(new SaveBlueprintEventHandler())
+    .addHandler(new LoadBlueprintEventHandler());
 
   // The command has been defined in the package.json file
   // Now provide the implementation of the command with registerCommand

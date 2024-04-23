@@ -1,6 +1,9 @@
 <template>
   <div class="p-2 flex justify-center">
-    <div></div>
+    <div class="flex gap-2">
+      <vscode-button @click="loadFile">Load</vscode-button>
+      <vscode-button @click="saveFile">Save</vscode-button>
+    </div>
     <div class="flex-1"></div>
     <div class="flex gap-2">
       <vscode-progress-ring v-if="inProgress"></vscode-progress-ring>
@@ -10,13 +13,15 @@
 </template>
 
 <script setup lang="ts">
-import { ApplyChanges, ApplyChangesComplete } from "@/shared/events";
-import { sendEventCommand, useEventCommandResultOnce } from "./utils";
+import { ApplyChanges, ApplyChangesComplete, GraphNodeAdded, GraphNodeConnected, GraphNodeGetViewData, LoadBlueprint, SaveBlueprint } from "@/shared/events";
+import { sendEventCommand, sendEventCommandAndWaitResult, useEventCommandResultOnce } from "./utils";
 import { useVueFlow } from "@vue-flow/core";
 import { NodeTypes } from "@/shared/node-types";
 import { ref } from "vue";
+import { updateCounter } from "./node-id";
+import { parseHandleId } from "@/shared/handles";
 
-const { nodes } = useVueFlow();
+const { nodes, edges, toObject, fromObject } = useVueFlow();
 const inProgress = ref<boolean>(false);
 
 function applyChanges(): void {
@@ -29,5 +34,48 @@ function applyChanges(): void {
       inProgress.value = false;
     });
   }
+}
+
+function loadFile(): void {
+  sendEventCommandAndWaitResult<LoadBlueprint>(
+    {
+      command: "lifecycle:load",
+    },
+    (data) => {
+      const json = JSON.parse(data.data);
+      fromObject(json);
+
+      for (const node of nodes.value) {
+        sendEventCommand<GraphNodeAdded>({
+          command: "graph:node-added",
+          data: {
+            id: node.id,
+            type: node.type
+          }
+        });
+      }
+
+      for (const edge of edges.value) {
+        sendEventCommand<GraphNodeConnected>({
+          command: 'graph:node-connected',
+          data: {
+            sourceId: edge.source,
+            sourceIndex: parseHandleId(edge.sourceHandle).index,
+            targetId: edge.target,
+            targetIndex: parseHandleId(edge.targetHandle).index
+          }
+        })
+      }
+    }
+  );
+}
+
+function saveFile(): void {
+  sendEventCommand<SaveBlueprint>({
+    command: "lifecycle:save",
+    data: {
+      data: toObject(),
+    },
+  });
 }
 </script>
