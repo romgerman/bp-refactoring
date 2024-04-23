@@ -5,38 +5,26 @@ import { BlueprintNode } from "../../blueprint-node";
 import { isArrayOfType } from "../../helpers";
 
 export class FileListNode extends BlueprintNode {
-  type: string = NodeTypes.FileList;
+  readonly type: string = NodeTypes.FileList;
 
-  async evaluate(): Promise<any> {
-    const tsFileList = await this.evalInput<ts.SourceFile[]>(0);
+  async evaluate(): Promise<ts.SourceFile[]> {
+    const array = await this.evalInput<ts.SourceFile[]>(0);
 
-    if (!tsFileList) {
+    if (!array || !isArrayOfType(array, ts.isSourceFile)) {
       throw new Error("Expected SourceFile[] at input 0");
     }
 
-    if (isArrayOfType(tsFileList, ts.isSourceFile)) {
-      return tsFileList;
-    }
-
-    return tsFileList;
+    return array;
   }
 
   async getViewData(): Promise<string[]> {
-    const tsFileList = (await this.evalInput<ts.SourceFile[]>(0)) || [];
+    const array = (await this.evalInput<ts.SourceFile[]>(0)) || [];
 
-    if (isArrayOfType(tsFileList, ts.isSourceFile)) {
-      tsFileList.map((sourceFile) => {
-        const folder = vscode.workspace.getWorkspaceFolder(vscode.Uri.parse("file:///" + sourceFile.fileName));
-        if (folder) {
-          return sourceFile.fileName.replace(folder.uri.path.slice(1), "");
-        } else {
-          return sourceFile.fileName;
-        }
-      });
+    if (!isArrayOfType(array, ts.isSourceFile)) {
+      return [];
     }
 
-    return tsFileList.map((x) => {
-      const sourceFile = x.getSourceFile();
+    return array.map((sourceFile) => {
       const folder = vscode.workspace.getWorkspaceFolder(vscode.Uri.parse("file:///" + sourceFile.fileName));
       if (folder) {
         return sourceFile.fileName.replace(folder.uri.path.slice(1), "");

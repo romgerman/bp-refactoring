@@ -10,9 +10,9 @@ export class DecoratorPredicateNode extends PredicateNode<{
   readonly type: string = NodeTypes.DecoratorPredicate;
 
   override async evaluate(): Promise<Function> {
-    return async (tsClassNodes: ts.ClassDeclaration[]) => {
+    return async (array: ts.ClassDeclaration[]) => {
       const name = (await this.evalInput(0)) || this.state?.selection;
-      return tsClassNodes.filter((classDecl) => {
+      return array.filter((classDecl) => {
         if (classDecl.modifiers) {
           const decorators = classDecl.modifiers.filter((mod) => mod.kind === ts.SyntaxKind.Decorator) as ts.Decorator[];
           return decorators.find((dec) => {
@@ -30,9 +30,9 @@ export class DecoratorPredicateNode extends PredicateNode<{
     decoratorList: string[];
   }> {
     const customName = this.getInput(0);
-    const tsClassNodes: ts.ClassDeclaration[] = await this.getInput(1)?.evaluate();
+    const array: ts.ClassDeclaration[] = await this.getInput(1)?.evaluate();
 
-    if (!isArrayOfType(tsClassNodes, ts.isClassDeclaration)) {
+    if (!isArrayOfType(array, ts.isClassDeclaration)) {
       return {
         customName: customName ? await customName?.evaluate() : null,
         decoratorList: [],
@@ -40,7 +40,7 @@ export class DecoratorPredicateNode extends PredicateNode<{
     }
 
     const decoratorsSet = new Set<string>();
-    for (const classDecl of tsClassNodes) {
+    for (const classDecl of array) {
       if (classDecl.modifiers) {
         const decorators = classDecl.modifiers.filter((mod) => mod.kind === ts.SyntaxKind.Decorator) as ts.Decorator[];
         decorators

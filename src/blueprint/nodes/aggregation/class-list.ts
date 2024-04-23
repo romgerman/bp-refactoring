@@ -6,22 +6,22 @@ import { isArrayOfType } from "../../helpers";
 export class ClassListNode extends BlueprintNode {
   readonly type: string = NodeTypes.ClassList;
 
-  override async evaluate() {
-    const tsFileList = await this.evalInput<Array<ts.SourceFile | ts.ClassDeclaration>>(0);
+  override async evaluate(): Promise<ts.ClassDeclaration[]> {
+    const array = await this.evalInput<(ts.SourceFile | ts.ClassDeclaration)[]>(0);
 
-    if (!tsFileList || (!isArrayOfType(tsFileList, ts.isSourceFile) && !isArrayOfType(tsFileList, ts.isClassDeclaration))) {
+    if (!array || (!isArrayOfType(array, ts.isSourceFile) && !isArrayOfType(array, ts.isClassDeclaration))) {
       throw new Error("Expected SourceFile[] or ClassDeclaration[] at input 0");
     }
 
-    return this.getClassList(tsFileList);
+    return this.getClassList(array);
   }
 
-  private getClassList(tsFileList: Array<ts.SourceFile | ts.ClassDeclaration>): ts.ClassDeclaration[] {
-    if (isArrayOfType(tsFileList, ts.isClassDeclaration)) {
-      return tsFileList as ts.ClassDeclaration[];
+  private getClassList(array: Array<ts.SourceFile | ts.ClassDeclaration>): ts.ClassDeclaration[] {
+    if (isArrayOfType(array, ts.isClassDeclaration)) {
+      return array;
     }
 
-    return tsFileList
+    return array
       .flatMap((file) =>
         ts.forEachChild(file, (node) => {
           if (node.kind === ts.SyntaxKind.ClassDeclaration) {
@@ -35,13 +35,13 @@ export class ClassListNode extends BlueprintNode {
   }
 
   async getViewData(): Promise<string[]> {
-    const tsFileList = await this.evalInput<ts.SourceFile[]>(0);
+    const array = await this.evalInput<ts.SourceFile[]>(0);
 
-    if (!tsFileList || (!isArrayOfType(tsFileList, ts.isSourceFile) && !isArrayOfType(tsFileList, ts.isClassDeclaration))) {
+    if (!array || (!isArrayOfType(array, ts.isSourceFile) && !isArrayOfType(array, ts.isClassDeclaration))) {
       return [];
     }
 
-    return this.getClassList(tsFileList)
+    return this.getClassList(array)
       .map((x) => x.name?.getText())
       .filter((x) => x) as string[];
   }

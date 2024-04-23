@@ -7,23 +7,23 @@ export class MemberListNode extends BlueprintNode {
   readonly type: string = NodeTypes.MemberList;
 
   async evaluate(): Promise<any> {
-    const list = (await this.evalInput<ts.ClassDeclaration[]>(0)) ?? [];
+    const array = await this.evalInput<ts.ClassDeclaration[]>(0);
 
-    if (!list || !isArrayOfType(list, ts.isClassDeclaration)) {
+    if (!array || !isArrayOfType(array, ts.isClassDeclaration)) {
       throw new Error("Expected ClassDeclaration[] at input 0");
     }
 
-    return list.flatMap((n) => n.members);
+    return array.flatMap((n) => n.members);
   }
 
   async getViewData(): Promise<any> {
-    const list = (await this.evalInput<ts.ClassDeclaration[]>(0)) ?? [];
+    const array = (await this.evalInput<ts.ClassDeclaration[]>(0)) ?? [];
 
-    if (!list || !isArrayOfType(list, ts.isClassDeclaration)) {
+    if (!array || !isArrayOfType(array, ts.isClassDeclaration)) {
       return [];
     }
 
-    return list.flatMap((n) => n.members).map((n) => n.name?.getText() + ` (${this.kindToString(n.kind)})`);
+    return array.flatMap((n) => n.members).map((n) => n.name?.getText() + ` (${this.kindToString(n.kind)})`);
   }
 
   private kindToString(kind: ts.SyntaxKind): string {

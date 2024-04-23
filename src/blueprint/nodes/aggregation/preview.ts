@@ -11,15 +11,17 @@ export class PreviewNode extends BlueprintNode {
   }
 
   async getViewData(): Promise<any> {
-    const data = await this.evalInput<ts.Node[]>(0);
+    const array = await this.evalInput<ts.Node[]>(0);
 
-    if (Array.isArray(data)) {
-      if (isArrayOfType(data, ts.isSourceFile)) {
-        return data.map((n) => (n as ts.SourceFile).fileName);
-      }
-      return data.filter((n) => (n as { name?: ts.Identifier }).name).map((n) => (n as { name?: ts.Identifier }).name?.getText());
-    } else {
+    if (!Array.isArray(array)) {
       return [];
+    } else {
+      if (isArrayOfType(array, ts.isSourceFile)) {
+        return array.map((n) => (n as ts.SourceFile).fileName);
+      }
+      return array
+        .filter((n) => (n as { name?: ts.Identifier }).name)
+        .map((n) => (n as { name?: ts.Identifier }).name?.getText());
     }
   }
 }

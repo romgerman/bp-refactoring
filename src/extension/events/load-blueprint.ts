@@ -11,7 +11,7 @@ export class LoadBlueprintEventHandler implements IExtensionEventHandler<LoadBlu
   async handle(data: LoadBlueprint["data"], panel: vscode.WebviewPanel): Promise<object | void> {
     const openUri = await vscode.window.showOpenDialog({
       filters: {
-        "Blueprint Files": ["json"],
+        "Blueprint Files": ["blueprint.json"],
       },
       canSelectMany: false,
     });

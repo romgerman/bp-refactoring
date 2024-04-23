@@ -1,4 +1,5 @@
 import * as vscode from "vscode";
+import * as ts from "typescript";
 import { NodeTypes } from "../../shared/node-types";
 import { BlueprintNode } from "../blueprint-node";
 
@@ -16,7 +17,7 @@ function until(conditionFunction: Function): Promise<void> {
 export class ProjectNode extends BlueprintNode<string> {
   readonly type: string = NodeTypes.Project;
 
-  override async evaluate() {
+  override async evaluate(): Promise<readonly ts.SourceFile[]> {
     if (!this.state) {
       throw new Error("No tsconfig selected");
     }
@@ -25,7 +26,7 @@ export class ProjectNode extends BlueprintNode<string> {
     }
     await until(() => this.compiler.isReady);
 
-    return this.compiler.builderProgram?.getProgram().getSourceFiles();
+    return this.compiler.builderProgram!.getProgram().getSourceFiles();
   }
 
   async getViewData(): Promise<{ value: string; label: string }[]> {

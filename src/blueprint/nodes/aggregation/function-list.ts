@@ -7,21 +7,21 @@ export class FunctionListNode extends BlueprintNode {
   readonly type: string = NodeTypes.FunctionList;
 
   override async evaluate() {
-    const tsFileList = await this.evalInput<Array<ts.SourceFile | ts.FunctionDeclaration>>(0);
+    const array = await this.evalInput<(ts.SourceFile | ts.FunctionDeclaration)[]>(0);
 
-    if (!tsFileList || (!isArrayOfType(tsFileList, ts.isSourceFile) && !isArrayOfType(tsFileList, ts.isFunctionDeclaration))) {
+    if (!array || (!isArrayOfType(array, ts.isSourceFile) && !isArrayOfType(array, ts.isFunctionDeclaration))) {
       throw new Error("Expected SourceFile[] or ClassDeclaration[] at input 0");
     }
 
-    return this.getFunctionList(tsFileList);
+    return this.getFunctionList(array);
   }
 
-  private getFunctionList(tsFileList: Array<ts.SourceFile | ts.FunctionDeclaration>): ts.FunctionDeclaration[] {
-    if (isArrayOfType(tsFileList, ts.isFunctionDeclaration)) {
-      return tsFileList as ts.FunctionDeclaration[];
+  private getFunctionList(array: Array<ts.SourceFile | ts.FunctionDeclaration>): ts.FunctionDeclaration[] {
+    if (isArrayOfType(array, ts.isFunctionDeclaration)) {
+      return array as ts.FunctionDeclaration[];
     }
 
-    return tsFileList
+    return array
       .flatMap((file) =>
         ts.forEachChild(file, (node) => {
           if (node.kind === ts.SyntaxKind.FunctionDeclaration) {
@@ -35,13 +35,13 @@ export class FunctionListNode extends BlueprintNode {
   }
 
   async getViewData(): Promise<string[]> {
-    const tsFileList = await this.evalInput<ts.SourceFile[]>(0);
+    const array = await this.evalInput<ts.SourceFile[]>(0);
 
-    if (!tsFileList || (!isArrayOfType(tsFileList, ts.isSourceFile) && !isArrayOfType(tsFileList, ts.isFunctionDeclaration))) {
+    if (!array || (!isArrayOfType(array, ts.isSourceFile) && !isArrayOfType(array, ts.isFunctionDeclaration))) {
       return [];
     }
 
-    return this.getFunctionList(tsFileList)
+    return this.getFunctionList(array)
       .map((x) => x.name?.getText())
       .filter((x) => x) as string[];
   }
