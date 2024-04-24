@@ -18,3 +18,4 @@ export interface GraphNodeDisconnected extends EventCommand<"graph:node-disconne
 export interface GraphNodeGetViewData extends EventCommand<"graph:node-get-view-data", { id: string }> {}
 export interface GraphNodeSendViewData extends EventCommand<"graph:node-send-view-data", { id: string; data: any }> {}
 export interface GraphNodeUpdateState extends EventCommand<"graph:node-update-state", { id: string; state: any }> {}
+export interface GraphClean extends EventCommand<"graph:clean"> {}

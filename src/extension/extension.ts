@@ -15,6 +15,7 @@ import { GraphNodeUpdateStateEventHandler } from "./events/graph-node-update-sta
 import { ApplyChangesEventHandler } from "./events/lifecycle-apply-changes";
 import { SaveBlueprintEventHandler } from "./events/save-blueprint";
 import { LoadBlueprintEventHandler } from "./events/load-blueprint";
+import { GraphCleanEventHandler } from "./events/graph-clean";
 
 export function activate(context: vscode.ExtensionContext) {
   console.log('Congratulations, your extension "bp-refactoring" is now active!');
@@ -70,6 +71,7 @@ export function activate(context: vscode.ExtensionContext) {
     .addHandler(new GraphNodeGetViewDataEventHandler(store))
     .addHandler(new GraphNodeUpdateStateEventHandler(store))
     .addHandler(new ApplyChangesEventHandler(store, compiler))
+    .addHandler(new GraphCleanEventHandler(store))
     .addHandler(new SaveBlueprintEventHandler())
     .addHandler(new LoadBlueprintEventHandler());
 

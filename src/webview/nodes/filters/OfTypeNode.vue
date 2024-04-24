@@ -20,7 +20,7 @@
 
 <script setup lang="ts">
 import { ref, watch } from "vue";
-import { Position, Handle, useNode } from "@vue-flow/core";
+import { Position, Handle, useNode, useVueFlow } from "@vue-flow/core";
 import VueSelect from "vue-select";
 import NodeWrapper from "../NodeWrapper.vue";
 import { sendEventCommand } from "@/webview/event-utils";
@@ -28,6 +28,7 @@ import { GraphNodeUpdateState } from "@/shared/events";
 
 const { node, id: nodeId } = useNode();
 const selection = ref<string | null>(null);
+const { onNodesInitialized } = useVueFlow()
 
 const types = [
   { value: "class-decl", label: "Class" },
@@ -35,13 +36,19 @@ const types = [
   { value: "method-decl", label: "Method" },
 ];
 
+onNodesInitialized(() => {
+  if (typeof node.data === "string") {
+    selection.value = node.data;
+  }
+});
+
 watch(selection, (value) => {
   sendEventCommand<GraphNodeUpdateState>({
     command: "graph:node-update-state",
     data: {
       id: nodeId,
       state: {
-        type: value,
+        type: (node.data = value),
       },
     },
   });

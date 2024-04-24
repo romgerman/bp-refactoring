@@ -173,6 +173,13 @@ export class BlueprintStore {
     return result;
   }
 
+  clean(): void {
+    this.rootNode = null;
+    this.nodes = [];
+    this.viewMap.clear();
+    this.viewMapInverse.clear();
+  }
+
   getNodeByType(type: NodeTypes): BlueprintNode {
     return match(type)
       .with(NodeTypes.Project, () => new ProjectNode(this.compiler))

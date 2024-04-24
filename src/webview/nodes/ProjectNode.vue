@@ -5,7 +5,7 @@
       <div class="status" :class="tsCompilerStatus ? 'status--active' : 'status--inactive'"></div>
     </template>
     <template #body>
-      <vscode-button class="scan-btn" @click="getNodeData">Scan</vscode-button>
+      <vscode-button class="scan-btn" @click="updateNodeData">Scan</vscode-button>
       <VueSelect
         class="nodrag nowheel"
         placeholder="Choose tsconfig"
@@ -24,17 +24,24 @@
 
 <script setup lang="ts">
 import { ref, watch } from "vue";
-import { Position, Handle, useNode } from "@vue-flow/core";
+import { Position, Handle, useNode, useVueFlow } from "@vue-flow/core";
 import { sendEventCommand, useEventCommandResult } from "@/webview/event-utils";
 import { GraphNodeGetViewData, GraphNodeSendViewData, GraphNodeUpdateState, TsCompilerStatusChanged } from "@/shared/events";
-import NodeWrapper from "./NodeWrapper.vue";
 import VueSelect from "vue-select";
+import NodeWrapper from "./NodeWrapper.vue";
 
 const tsConfigList = ref<{ value: string; label: string }[]>([]);
 const chosenConfig = ref<string | null>(null);
 const tsCompilerStatus = ref<boolean>(false);
 
 const { node, id: nodeId } = useNode();
+const { onNodesInitialized } = useVueFlow();
+
+onNodesInitialized(() => {
+  if (typeof node.data === "string") {
+    chosenConfig.value = node.data;
+  }
+});
 
 // Subscribe to status of current project TS compiler
 useEventCommandResult<TsCompilerStatusChanged>("lifecycle:compiler:status", (data) => {
@@ -52,7 +59,7 @@ useEventCommandResult<GraphNodeSendViewData, { id: string; data: Array<{ value: 
 );
 
 // Get current node view data
-function getNodeData(): void {
+function updateNodeData(): void {
   sendEventCommand<GraphNodeGetViewData>({
     command: "graph:node-get-view-data",
     data: { id: node.id },
