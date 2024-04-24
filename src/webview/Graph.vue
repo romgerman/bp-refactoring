@@ -31,10 +31,10 @@ import DebugActionNode from "./nodes/actions/DebugActionNode.vue";
 import ApplyActionNode from "./nodes/actions/ApplyActionNode.vue";
 
 const isValidConnectionFn: ValidConnectionFunc = (conn, { sourceNode, targetNode }) => {
-  return sourceNode.id !== targetNode.id;
+  return sourceNode.id !== targetNode.id && getIncomers(targetNode).length === 0;
 };
 
-const { onConnect, onNodesChange, onEdgesChange, addEdges, removeNodes, getSelectedNodes } = useVueFlow({
+const { onConnect, onNodesChange, onEdgesChange, addEdges, removeNodes, getSelectedNodes, getIncomers } = useVueFlow({
   connectionLineOptions: {
     type: ConnectionLineType.SmoothStep,
     style: {
