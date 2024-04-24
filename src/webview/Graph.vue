@@ -30,8 +30,9 @@ import RenameClassActionNode from "./nodes/actions/RenameClassActionNode.vue";
 import DebugActionNode from "./nodes/actions/DebugActionNode.vue";
 import ApplyActionNode from "./nodes/actions/ApplyActionNode.vue";
 
-const isValidConnectionFn: ValidConnectionFunc = (conn, { sourceNode, targetNode }) => {
-  return sourceNode.id !== targetNode.id && getIncomers(targetNode).length === 0;
+const isValidConnectionFn: ValidConnectionFunc = (conn, { sourceNode, targetNode, edges }) => {
+  console.log(edges)
+  return sourceNode.id !== targetNode.id;// && edges.filter(x => x.sourceHandle === conn.sourceHandle).length === 0;
 };
 
 const { onConnect, onNodesChange, onEdgesChange, addEdges, removeNodes, removeEdges, getSelectedEdges, getSelectedNodes, getIncomers } = useVueFlow({
