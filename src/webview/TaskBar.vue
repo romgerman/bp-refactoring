@@ -13,7 +13,7 @@
 </template>
 
 <script setup lang="ts">
-import { ApplyChanges, ApplyChangesComplete, GraphNodeAdded, GraphNodeConnected, GraphNodeGetViewData, LoadBlueprint, SaveBlueprint } from "@/shared/events";
+import { ApplyChanges, ApplyChangesComplete, GraphNodeAdded, GraphNodeConnected, LoadBlueprint, SaveBlueprint } from "@/shared/events";
 import { sendEventCommand, sendEventCommandAndWaitResult, useEventCommandResultOnce } from "./event-utils";
 import { useVueFlow } from "@vue-flow/core";
 import { NodeTypes } from "@/shared/node-types";
@@ -44,6 +44,7 @@ function loadFile(): void {
     (data) => {
       const json = JSON.parse(data.data);
       fromObject(json);
+      updateCounter(nodes.value.length);
 
       for (const node of nodes.value) {
         sendEventCommand<GraphNodeAdded>({

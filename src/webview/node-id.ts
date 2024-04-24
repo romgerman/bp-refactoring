@@ -7,6 +7,6 @@ export function getId(type: "dnd" | "quick"): string {
   return `${type}_${id++}`;
 }
 
-export function updateCounter(count: number): void {
-  id = count;
+export function updateCounter(value: number): void {
+  id += value;
 }
