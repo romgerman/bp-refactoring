@@ -17,8 +17,8 @@
 </template>
 
 <script setup lang="ts">
-import { Position, Handle, useNode } from "@vue-flow/core";
-import { ref, watch } from "vue";
+import { Position, Handle, useNode, useVueFlow } from "@vue-flow/core";
+import { ref, toRaw, watch } from "vue";
 import { sendEventCommand, useEventCommandResult } from "@/webview/event-utils";
 import { GraphNodeSendViewData, GraphNodeUpdateState } from "@/shared/events";
 
@@ -30,7 +30,13 @@ const model = ref({
   customName: "",
   selection: "",
 });
-const { id: nodeId } = useNode();
+const { id: nodeId, node } = useNode();
+const { onNodesInitialized } = useVueFlow();
+onNodesInitialized(() => {
+  if (Object.keys(node.data).length > 0) {
+    model.value = node.data;
+  }
+});
 
 useEventCommandResult<GraphNodeSendViewData, { id: string; data: { customName: string | null; decoratorList: string[] } }>(
   "graph:node-send-view-data",
@@ -47,10 +53,7 @@ watch(model.value, (value) => {
     command: "graph:node-update-state",
     data: {
       id: nodeId,
-      state: {
-        customName: value.customName,
-        selection: value.selection,
-      },
+      state: toRaw(value)
     },
   });
 });
