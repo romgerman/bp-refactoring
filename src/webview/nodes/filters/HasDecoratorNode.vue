@@ -53,7 +53,7 @@ watch(model.value, (value) => {
     command: "graph:node-update-state",
     data: {
       id: nodeId,
-      state: toRaw(value)
+      state: (node.data = toRaw(value))
     },
   });
 });
