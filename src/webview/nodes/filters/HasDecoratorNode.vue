@@ -19,7 +19,7 @@
 <script setup lang="ts">
 import { Position, Handle, useNode } from "@vue-flow/core";
 import { ref, watch } from "vue";
-import { sendEventCommand, useEventCommandResult } from "@/webview/utils";
+import { sendEventCommand, useEventCommandResult } from "@/webview/event-utils";
 import { GraphNodeSendViewData, GraphNodeUpdateState } from "@/shared/events";
 
 import VueSelect from "vue-select";

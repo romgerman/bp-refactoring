@@ -5,7 +5,7 @@ import { useEventListener } from "@vueuse/core";
 import useDragAndDrop from "./useDnD";
 import { useNodeStore } from "./store";
 import { GraphNodeAdded, GraphNodeConnected, GraphNodeDisconnected, GraphNodeRemoved } from "@/shared/events";
-import { sendEventCommand } from "./utils";
+import { sendEventCommand } from "./event-utils";
 import { parseHandleId } from "@/shared/handles";
 
 import DropzoneBackground from "./DropzoneBackground.vue";

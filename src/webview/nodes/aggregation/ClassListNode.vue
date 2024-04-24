@@ -19,7 +19,7 @@
 <script setup lang="ts">
 import { computed, ref } from "vue";
 import { GraphNodeSendViewData } from "@/shared/events/index";
-import { useEventCommandResult } from "@/webview/utils";
+import { useEventCommandResult } from "@/webview/event-utils";
 import { Handle, Position, useNode } from "@vue-flow/core";
 
 import NodeWrapper from "../NodeWrapper.vue";

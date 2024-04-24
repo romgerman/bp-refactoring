@@ -12,7 +12,7 @@
 import { Handle, Position, useNode } from "@vue-flow/core";
 import NodeWrapper from "../NodeWrapper.vue";
 import { ref, watch } from "vue";
-import { sendEventCommand } from "@/webview/utils";
+import { sendEventCommand } from "@/webview/event-utils";
 import { GraphNodeUpdateState } from "@/shared/events";
 
 const { id: nodeId } = useNode();
