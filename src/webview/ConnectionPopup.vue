@@ -1,9 +1,18 @@
 <template>
   <div v-if="reference" ref="floating" :style="floatingStyles" class="node-selection-popup">
-    <div class="rounded-md bg-vscode-side-bar shadow-lg ring-1 ring-black ring-opacity-5 border-1 border-vscode p-3 h-full flex flex-col">
+    <div
+      class="rounded-md bg-vscode-side-bar shadow-lg ring-1 ring-black ring-opacity-5 border-1 border-vscode p-3 h-full flex flex-col"
+    >
       <vscode-text-field placeholder="search..." autofocus class="w-full mb-2" v-model="query"></vscode-text-field>
-      <div class="node-list">
-        <NodeWrapper v-if="!nodeStore.hasProjectNode" condensed class="cursor-pointer" @click="addNode('project')">
+      <div class="node-list pr-1">
+        <NodeWrapper
+          v-if="!nodeStore.hasProjectNode"
+          condensed
+          class="cursor-pointer"
+          draggable="true"
+          @dragstart="onDragStart($event, NodeTypes.Project)"
+          @click="addNode('project')"
+        >
           <template #header>Project</template>
         </NodeWrapper>
         <template v-for="node in nodes">
@@ -33,12 +42,13 @@ import { useConnectionPopup } from "./useConnectionPopup";
 import { NODES } from "./nodes";
 import { getId } from "./node-id";
 import { useNodeStore } from "./store";
+import { NodeTypes } from "@/shared/node-types";
 import useDragAndDrop from "./useDnD";
 
 import NodeWrapper from "./nodes/NodeWrapper.vue";
 
 const { onDragStart } = useDragAndDrop();
-const { addNodes } = useVueFlow();
+const { addNodes, screenToFlowCoordinate } = useVueFlow();
 const nodeStore = useNodeStore();
 
 const reference = ref(null);
@@ -62,7 +72,11 @@ const nodes = computed(() =>
 
 function addNode(type: string): void {
   const targetId = getId("quick");
-  addNodes([{ id: targetId, type: type, position: { x: popupX.value, y: popupY.value } }]);
+  const position = screenToFlowCoordinate({
+    x: popupX.value,
+    y: popupY.value
+  })
+  addNodes([{ id: targetId, type: type, position }]);
   closePopup();
 }
 
@@ -98,7 +112,7 @@ useConnectionPopup(
 
 <style lang="scss" scoped>
 .node-selection-popup {
-  width: 200px;
+  width: 220px;
   height: 300px;
 }
 
