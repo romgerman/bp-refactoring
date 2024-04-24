@@ -15,7 +15,7 @@ import { ref, watch, toRaw } from "vue";
 import { sendEventCommand } from "@/webview/event-utils";
 import { GraphNodeUpdateState } from "@/shared/events";
 
-const { id: nodeId } = useNode();
+const { node, id: nodeId } = useNode();
 const model = ref<{ globPattern: string }>({ globPattern: "" });
 
 watch(model.value, (value) => {
@@ -23,7 +23,7 @@ watch(model.value, (value) => {
     command: "graph:node-update-state",
     data: {
       id: nodeId,
-      state: toRaw(value)
+      state: (node.data = toRaw(value))
     },
   });
 });

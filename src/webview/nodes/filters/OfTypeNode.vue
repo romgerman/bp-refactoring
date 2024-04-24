@@ -26,7 +26,7 @@ import NodeWrapper from "../NodeWrapper.vue";
 import { sendEventCommand } from "@/webview/event-utils";
 import { GraphNodeUpdateState } from "@/shared/events";
 
-const { id: nodeId } = useNode();
+const { node, id: nodeId } = useNode();
 const selection = ref<string | null>(null);
 
 const types = [

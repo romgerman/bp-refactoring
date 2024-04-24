@@ -8,7 +8,6 @@
         :options="CONST_TYPES"
         :reduce="(item: any) => item.value"
         v-model="model.type"
-        @input="onTypeSelect($event)"
       ></VueSelect>
       <vscode-text-field placeholder="Value" v-model="model.value"></vscode-text-field>
     </template>
@@ -17,14 +16,14 @@
 </template>
 
 <script setup lang="ts">
+import { nextTick, ref, toRaw, watch } from "vue";
 import { Handle, Position, useNode, useVueFlow } from "@vue-flow/core";
 import VueSelect from "vue-select";
-import NodeWrapper from "../NodeWrapper.vue";
-import { nextTick, ref, watch } from "vue";
 import { sendEventCommand } from "@/webview/event-utils";
 import { GraphNodeUpdateState } from "@/shared/events";
+import NodeWrapper from "../NodeWrapper.vue";
 
-const { id: nodeId } = useNode();
+const { node, id: nodeId } = useNode();
 const { updateNodeInternals } = useVueFlow();
 
 const model = ref<{
@@ -37,20 +36,13 @@ const model = ref<{
 
 const CONST_TYPES: Array<{ label: string; value: string }> = [{ label: "String", value: "string" }];
 
-function onTypeSelect(value: string): void {
-  model.value.value = "";
-}
-
 watch(model.value, (value) => {
   nextTick(() => updateNodeInternals([nodeId]));
   sendEventCommand<GraphNodeUpdateState>({
     command: "graph:node-update-state",
     data: {
       id: nodeId,
-      state: {
-        type: value.type,
-        value: value.value,
-      },
+      state: (node.data = toRaw(value)),
     },
   });
 });

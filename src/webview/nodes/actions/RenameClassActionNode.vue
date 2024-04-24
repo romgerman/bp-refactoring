@@ -19,9 +19,9 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { Handle, Position, useNode } from "@vue-flow/core";
-import NodeWrapper from "../NodeWrapper.vue";
 import { useEventCommandResult } from "@/webview/event-utils";
 import { GraphNodeSendViewData } from "@/shared/events";
+import NodeWrapper from "../NodeWrapper.vue";
 
 const { id: nodeId } = useNode();
 const names = ref<string[]>([]);
