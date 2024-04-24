@@ -1,5 +1,13 @@
 <script setup lang="ts">
-import { ConnectionLineType, ConnectionMode, MarkerType, SelectionMode, ValidConnectionFunc, VueFlow, useVueFlow } from "@vue-flow/core";
+import {
+  ConnectionLineType,
+  ConnectionMode,
+  MarkerType,
+  SelectionMode,
+  ValidConnectionFunc,
+  VueFlow,
+  useVueFlow,
+} from "@vue-flow/core";
 import { MiniMap } from "@vue-flow/minimap";
 import { useEventListener } from "@vueuse/core";
 import useDragAndDrop from "./useDnD";
@@ -30,30 +38,30 @@ import RenameClassActionNode from "./nodes/actions/RenameClassActionNode.vue";
 import DebugActionNode from "./nodes/actions/DebugActionNode.vue";
 import ApplyActionNode from "./nodes/actions/ApplyActionNode.vue";
 
-const isValidConnectionFn: ValidConnectionFunc = (conn, { sourceNode, targetNode, edges }) => {
-  console.log(edges)
-  return sourceNode.id !== targetNode.id;// && edges.filter(x => x.sourceHandle === conn.sourceHandle).length === 0;
+const isValidConnectionFn: ValidConnectionFunc = (conn, { sourceNode, targetNode }) => {
+  return sourceNode.id !== targetNode.id;
 };
 
-const { onConnect, onNodesChange, onEdgesChange, addEdges, removeNodes, removeEdges, getSelectedEdges, getSelectedNodes, getIncomers } = useVueFlow({
-  connectionLineOptions: {
-    type: ConnectionLineType.SmoothStep,
-    style: {
-      strokeWidth: 2.5,
+const { onConnect, onNodesChange, onEdgesChange, addEdges, removeNodes, removeEdges, getSelectedEdges, getSelectedNodes } =
+  useVueFlow({
+    connectionLineOptions: {
+      type: ConnectionLineType.SmoothStep,
+      style: {
+        strokeWidth: 2.5,
+      },
     },
-  },
-  defaultEdgeOptions: {
-    type: "smoothstep",
-    style: {
-      strokeWidth: 2.5,
+    defaultEdgeOptions: {
+      type: "smoothstep",
+      style: {
+        strokeWidth: 2.5,
+      },
     },
-  },
-  connectionMode: ConnectionMode.Strict,
-  connectionRadius: 15,
-  elevateNodesOnSelect: true,
-  elevateEdgesOnSelect: true,
-  isValidConnection: isValidConnectionFn
-});
+    connectionMode: ConnectionMode.Strict,
+    connectionRadius: 15,
+    elevateNodesOnSelect: true,
+    elevateEdgesOnSelect: true,
+    isValidConnection: isValidConnectionFn,
+  });
 const { onDragOver, onDrop, onDragLeave, isDragOver } = useDragAndDrop();
 
 const nodeStore = useNodeStore();

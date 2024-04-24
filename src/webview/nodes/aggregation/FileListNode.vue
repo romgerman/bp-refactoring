@@ -10,7 +10,7 @@
       </div>
     </template>
     <div class="target-handles">
-      <Handle id="0:array" type="target" :position="Position.Left" data-name="Array" />
+      <Handle id="0:array" type="target" connectable="single" :position="Position.Left" data-name="Array" />
     </div>
     <Handle id="0:array" type="source" :position="Position.Right" />
   </NodeWrapper>

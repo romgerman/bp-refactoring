@@ -9,8 +9,8 @@
       </VueSelect>
     </template>
     <div class="target-handles">
-      <Handle id="0:string" type="target" :position="Position.Left" data-name="Name?" />
-      <Handle id="1:array" type="target" :position="Position.Left" data-name="Array?" />
+      <Handle id="0:string" type="target" connectable="single" :position="Position.Left" data-name="Name?" />
+      <Handle id="1:array" type="target" connectable="single" :position="Position.Left" data-name="Array?" />
     </div>
     <Handle id="0:predicate" type="source" :position="Position.Right" />
   </NodeWrapper>
