@@ -69,7 +69,7 @@ const nodeStore = useNodeStore();
 onConnect((conn) => {
   const sourceHandle = parseHandleId(conn.sourceHandle);
   const targetHandle = parseHandleId(conn.targetHandle);
-  if (sourceHandle.type === targetHandle.type || targetHandle.type === "any") {
+  if (sourceHandle.type === targetHandle.type || targetHandle.type === "any" || sourceHandle.type === "any") {
     addEdges(conn);
   }
 });

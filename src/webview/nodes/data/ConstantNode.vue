@@ -24,14 +24,20 @@ import { GraphNodeUpdateState } from "@/shared/events";
 import NodeWrapper from "../NodeWrapper.vue";
 
 const { node, id: nodeId } = useNode();
-const { updateNodeInternals } = useVueFlow();
+const { updateNodeInternals, onNodesInitialized } = useVueFlow();
 
 const model = ref<{
-  type: string | null;
+  type: string;
   value: string;
 }>({
-  type: null,
+  type: "any",
   value: "",
+});
+
+onNodesInitialized(() => {
+  if (Object.keys(node.data).length > 0) {
+    model.value = node.data;
+  }
 });
 
 const CONST_TYPES: Array<{ label: string; value: string }> = [{ label: "String", value: "string" }];
