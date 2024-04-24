@@ -9,7 +9,11 @@ export class SaveBlueprintEventHandler implements IExtensionEventHandler<SaveBlu
   constructor() {}
 
   async handle(data: SaveBlueprint["data"], panel: vscode.WebviewPanel): Promise<void> {
-    const saveUri = await vscode.window.showSaveDialog();
+    const saveUri = await vscode.window.showSaveDialog({
+      filters: {
+        "Blueprint Files": ["blueprint.json"],
+      },
+    });
 
     if (saveUri) {
       writeFileSync(saveUri.fsPath, JSON.stringify(data?.data));
