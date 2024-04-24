@@ -34,7 +34,7 @@ const isValidConnectionFn: ValidConnectionFunc = (conn, { sourceNode, targetNode
   return sourceNode.id !== targetNode.id && getIncomers(targetNode).length === 0;
 };
 
-const { onConnect, onNodesChange, onEdgesChange, addEdges, removeNodes, getSelectedNodes, getIncomers } = useVueFlow({
+const { onConnect, onNodesChange, onEdgesChange, addEdges, removeNodes, removeEdges, getSelectedEdges, getSelectedNodes, getIncomers } = useVueFlow({
   connectionLineOptions: {
     type: ConnectionLineType.SmoothStep,
     style: {
@@ -110,6 +110,7 @@ onEdgesChange((changes) => {
 useEventListener("keyup", (e) => {
   if (e.key === "Delete") {
     removeNodes(getSelectedNodes.value);
+    removeEdges(getSelectedEdges.value);
   }
 });
 </script>
