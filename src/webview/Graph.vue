@@ -2,8 +2,6 @@
 import {
   ConnectionLineType,
   ConnectionMode,
-  MarkerType,
-  SelectionMode,
   ValidConnectionFunc,
   VueFlow,
   useVueFlow,

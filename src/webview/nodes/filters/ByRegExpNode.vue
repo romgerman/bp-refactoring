@@ -2,7 +2,7 @@
   <NodeWrapper>
     <template #header>By Regular Expression</template>
     <template #body>
-      <vscode-text-field placeholder="Expression" v-model="model.value"></vscode-text-field>
+      <vscode-text-field class="nodrag" placeholder="Expression" v-model="model.value"></vscode-text-field>
     </template>
     <Handle id="0:predicate" type="source" :position="Position.Right" />
   </NodeWrapper>

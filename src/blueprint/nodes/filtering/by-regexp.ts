@@ -1,26 +1,28 @@
 import ts from "typescript";
 import { NodeTypes } from "../../../shared/node-types";
 import { PredicateNode } from "./filter-by-node";
+import { isArrayOfType } from "../../helpers";
+import { NamedNode } from "../../../extension/types";
 
 export class ByRegExpPredicateNode extends PredicateNode<{ value: string }> {
   readonly type: string = NodeTypes.ByRegExpPredicate;
 
   async evaluate(): Promise<Function> {
-    return async (array: ts.ClassDeclaration[]) => {
+    return async (array: ts.Node[]) => {
       try {
         const regex = new RegExp(this.state?.value || "");
         const predicate = (data: string) => regex.test(data);
 
-        const result = array.filter((entry) => {
-          const name = entry?.name?.getText() || "";
-          if (name) {
+        if (isArrayOfType(array, ts.isSourceFile)) {
+          return array.filter((sf) => predicate(sf.fileName));
+        } else {
+          const result = array.filter((entry) => {
+            const name = (entry as NamedNode).name?.getText() || "";
             return predicate(name);
-          } else {
-            throw new Error("The name is not a string");
-          }
-        });
+          });
 
-        return result;
+          return result;
+        }
       } catch {
         throw new Error("Invalid regular expression");
       }

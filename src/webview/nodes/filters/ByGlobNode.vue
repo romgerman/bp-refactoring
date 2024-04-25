@@ -2,7 +2,7 @@
   <NodeWrapper>
     <template #header>By Glob Pattern</template>
     <template #body>
-      <vscode-text-field placeholder="Pattern" v-model="model.globPattern"></vscode-text-field>
+      <vscode-text-field class="nodrag" placeholder="Pattern" v-model="model.globPattern"></vscode-text-field>
     </template>
     <Handle id="0:predicate" type="source" :position="Position.Right" />
   </NodeWrapper>
