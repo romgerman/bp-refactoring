@@ -153,21 +153,26 @@ export class BlueprintStore {
     }
 
     const result: Array<{ id: string; data: any }> = [];
-    let targetNode: BlueprintNode | undefined = node;
+    const queue: BlueprintNode[] = [node];
+    const visited = new Set<BlueprintNode>();
 
-    do {
-      result.push({
-        id: this.viewMapInverse.get(targetNode)!,
-        data: await targetNode.getViewData(),
-      });
-      targetNode = targetNode.outputs[0];
-    } while (targetNode?.hasOutputs);
+    while (queue.length > 0) {
+      const current = queue.shift();
 
-    if (targetNode) {
-      result.push({
-        id: this.viewMapInverse.get(targetNode)!,
-        data: await targetNode.getViewData(),
-      });
+      if (current) {
+        result.push({
+          id: this.getNodeId(current)!,
+          data: await current.getViewData(),
+        });
+
+        visited.add(current);
+
+        for (const out of current.outputs) {
+          if (!visited.has(out)) {
+            queue.push(out);
+          }
+        }
+      }
     }
 
     return result;
