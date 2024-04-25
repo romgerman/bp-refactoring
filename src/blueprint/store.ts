@@ -154,7 +154,6 @@ export class BlueprintStore {
 
     const result: Array<{ id: string; data: any }> = [];
     const queue: BlueprintNode[] = [node];
-    const visited = new Set<BlueprintNode>();
 
     while (queue.length > 0) {
       const current = queue.shift();
@@ -165,12 +164,8 @@ export class BlueprintStore {
           data: await current.getViewData(),
         });
 
-        visited.add(current);
-
         for (const out of current.outputs) {
-          if (!visited.has(out)) {
-            queue.push(out);
-          }
+          queue.push(out);
         }
       }
     }

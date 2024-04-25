@@ -36,14 +36,14 @@ const model = ref<{
 
 onNodesInitialized(() => {
   if (Object.keys(node.data).length > 0) {
-    model.value = node.data;
+    model.value = toRaw(node.data)
     nextTick(() => updateNodeInternals([nodeId]));
   }
 });
 
 const CONST_TYPES: Array<{ label: string; value: string }> = [{ label: "String", value: "string" }];
 
-watch(model.value, (value) => {
+watch(model, (value) => {
   nextTick(() => updateNodeInternals([nodeId]));
   sendEventCommand<GraphNodeUpdateState>({
     command: "graph:node-update-state",

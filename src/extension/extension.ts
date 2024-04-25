@@ -55,8 +55,8 @@ export function activate(context: vscode.ExtensionContext) {
     .on("node-added", async ({ id }: { id: string }) => {
       await updateGraphViewData(id);
     })
-    .on("node-connected", async ({ targetId }: { targetId: string }) => {
-      await updateGraphViewData(targetId);
+    .on("node-connected", async ({ targetId, sourceId }: { targetId: string; sourceId: string }) => {
+      await updateGraphViewData(sourceId);
     })
     .on("node-disconnected", async ({ targetId }: { targetId: string }) => {
       await updateGraphViewData(targetId);

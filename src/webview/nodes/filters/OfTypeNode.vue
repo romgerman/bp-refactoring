@@ -19,7 +19,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch } from "vue";
+import { ref, toRaw, watch } from "vue";
 import { Position, Handle, useNode, useVueFlow } from "@vue-flow/core";
 import VueSelect from "vue-select";
 import NodeWrapper from "../NodeWrapper.vue";
@@ -38,7 +38,7 @@ const types = [
 
 onNodesInitialized(() => {
   if (typeof node.data === "string") {
-    selection.value = node.data;
+    selection.value = toRaw(node.data);
   }
 });
 

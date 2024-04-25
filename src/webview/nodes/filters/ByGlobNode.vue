@@ -20,17 +20,21 @@ const model = ref<{ globPattern: string }>({ globPattern: "" });
 const { onNodesInitialized } = useVueFlow();
 onNodesInitialized(() => {
   if (Object.keys(node.data).length > 0) {
-    model.value = node.data;
+    model.value = toRaw(node.data);
   }
 });
 
-watch(model.value, (value) => {
-  sendEventCommand<GraphNodeUpdateState>({
-    command: "graph:node-update-state",
-    data: {
-      id: nodeId,
-      state: (node.data = toRaw(value))
-    },
-  });
-});
+watch(
+  model,
+  (value) => {
+    sendEventCommand<GraphNodeUpdateState>({
+      command: "graph:node-update-state",
+      data: {
+        id: nodeId,
+        state: (node.data = toRaw(value)),
+      },
+    });
+  },
+  { deep: true }
+);
 </script>
