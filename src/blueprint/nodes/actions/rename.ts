@@ -8,7 +8,7 @@ export class RenameActionNode extends BlueprintNode {
   readonly type: string = NodeTypes.RenameAction;
 
   async evaluate(): Promise<any> {
-    const tsDeclList = await this.evalInput<ts.ClassDeclaration[]>(0);
+    const tsDeclList = await this.evalInput<(ts.ClassDeclaration | ts.FunctionDeclaration | ts.MethodDeclaration)[]>(0);
     const fullName = await this.evalInput<string>(1);
     const prefix = await this.evalInput<string>(2);
     const postfix = await this.evalInput<string>(3);
@@ -29,7 +29,7 @@ export class RenameActionNode extends BlueprintNode {
       throw new Error("Expected ClassDeclaration[] or FunctionDeclaration[] at input 0");
     }
 
-    const transformer = (sourceFile: ts.SourceFile) => {
+    const transformer = ({ sourceFile, decl }: { sourceFile: ts.SourceFile; decl: ts.Declaration }) => {
       const visitor = (node: ts.Node) => {
         if (renameType === "class" && ts.isClassDeclaration(node) && node.name) {
           const name = this.getNewName(node.name.getText(sourceFile), fullName, prefix, postfix);
@@ -83,10 +83,10 @@ export class RenameActionNode extends BlueprintNode {
         return ts.visitEachChild(node, visitor, undefined);
       };
 
-      return ts.visitNode(sourceFile, visitor);
+      return ts.visitNode(decl, visitor);
     };
 
-    return tsDeclList.map((x) => x.getSourceFile()).map(transformer);
+    return tsDeclList.map((x) => ({ sourceFile: x.getSourceFile(), decl: x })).map(transformer);
   }
 
   private renameSymbol(sourceFile: ts.SourceFile, node: NamedNode, newNode: ts.Identifier): void {
@@ -95,10 +95,7 @@ export class RenameActionNode extends BlueprintNode {
     }
 
     const languageService = this.compiler.languageService?.services;
-    const renameLocations = languageService?.findRenameLocations(sourceFile.fileName, node.name.pos, false, false, {
-      allowIncompleteCompletions: false,
-      providePrefixAndSuffixTextForRename: false,
-    });
+    const renameLocations = languageService?.findRenameLocations(sourceFile.fileName, node.name.pos, false, false, {});
     const changeTracker = this.compiler.changeTracker;
 
     if (renameLocations) {

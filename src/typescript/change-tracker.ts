@@ -27,6 +27,12 @@ export class ChangeTracker {
   private readonly changes: Change[] = [];
 
   replaceNode({ sourceFile, span, node }: { sourceFile: ts.SourceFile; span: ts.TextSpan; node: ts.Node }): void {
+    const containsSpan = this.changes.some((c) => ts.textSpanContainsTextSpan(c.range, span));
+
+    if (containsSpan) {
+      return;
+    }
+
     this.changes.push({
       kind: ChangeKind.ReplaceWithNode,
       sourceFile: sourceFile,
