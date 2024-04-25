@@ -3,19 +3,21 @@ import * as vscode from "vscode";
 import { BlueprintWebPanel } from "./blueprint-web-panel";
 import { ExtensionEventBus } from "./extension-event-bus";
 import { TypescriptCompiler } from "../typescript/compiler";
-import { sendEventCommand } from "./utils";
 import { ApplyChangesComplete, GraphNodeSendViewData, TsCompilerStatusChanged } from "../shared/events";
-import { GraphNodeAddedEventHandler } from "./events/graph-node-added";
-import { GraphNodeRemovedEventHandler } from "./events/graph-node-removed";
+import {
+  GraphNodeAddedEventHandler,
+  GraphNodeRemovedEventHandler,
+  GraphNodeConnectedEventHandler,
+  GraphNodeDisconnectedEventHandler,
+  GraphNodeGetViewDataEventHandler,
+  GraphNodeUpdateStateEventHandler,
+  ApplyChangesEventHandler,
+  SaveBlueprintEventHandler,
+  LoadBlueprintEventHandler,
+  GraphCleanEventHandler,
+} from "./events";
 import { BlueprintStore } from "../blueprint/store";
-import { GraphNodeConnectedEventHandler } from "./events/graph-node-connected";
-import { GraphNodeDisconnectedEventHandler } from "./events/graph-node-disconnected";
-import { GraphNodeGetViewDataEventHandler } from "./events/graph-node-get-view-data";
-import { GraphNodeUpdateStateEventHandler } from "./events/graph-node-update-state";
-import { ApplyChangesEventHandler } from "./events/lifecycle-apply-changes";
-import { SaveBlueprintEventHandler } from "./events/save-blueprint";
-import { LoadBlueprintEventHandler } from "./events/load-blueprint";
-import { GraphCleanEventHandler } from "./events/graph-clean";
+import { EventManager } from "./event-manager";
 
 export function activate(context: vscode.ExtensionContext) {
   console.log('Congratulations, your extension "bp-refactoring" is now active!');
@@ -23,13 +25,13 @@ export function activate(context: vscode.ExtensionContext) {
   const compiler = new TypescriptCompiler();
   compiler.events
     .on("ready", (status: boolean) => {
-      sendEventCommand<TsCompilerStatusChanged>(BlueprintWebPanel.currentPanel?.webview!, {
+      EventManager.sendEventCommand<TsCompilerStatusChanged>(BlueprintWebPanel.currentPanel?.webview!, {
         command: "lifecycle:compiler:status",
         data: status,
       });
     })
     .on("emit-completed", () => {
-      sendEventCommand<ApplyChangesComplete>(BlueprintWebPanel.currentPanel?.webview!, {
+      EventManager.sendEventCommand<ApplyChangesComplete>(BlueprintWebPanel.currentPanel?.webview!, {
         command: "lifecycle:apply-complete",
       });
     });
@@ -38,7 +40,7 @@ export function activate(context: vscode.ExtensionContext) {
     try {
       const data = await store.getViewData(targetId);
       for (let d of data) {
-        sendEventCommand<GraphNodeSendViewData>(BlueprintWebPanel.currentPanel?.webview!, {
+        EventManager.sendEventCommand<GraphNodeSendViewData>(BlueprintWebPanel.currentPanel?.webview!, {
           command: "graph:node-send-view-data",
           data: { id: d.id, data: d.data },
         });
@@ -78,23 +80,23 @@ export function activate(context: vscode.ExtensionContext) {
   // The command has been defined in the package.json file
   // Now provide the implementation of the command with registerCommand
   // The commandId parameter must match the command field in package.json
-  const openViewDisposable = vscode.commands.registerCommand("bp-refactoring.open-view", () => {
+  const openView = vscode.commands.registerCommand("bp-refactoring.open-view", () => {
     BlueprintWebPanel.createOrShow(context.extensionUri, bus);
   });
 
-  const groupNodesDisposable = vscode.commands.registerCommand("bp-refactoring.group-nodes", () => {
+  const groupNodes = vscode.commands.registerCommand("bp-refactoring.group-nodes", () => {
     console.log("ok");
   });
 
-  const copyCommandDisposable = vscode.commands.registerCommand("editor.action.clipboardCopyAction", (e) => {
+  const copyCommand = vscode.commands.registerCommand("editor.action.clipboardCopyAction", (e) => {
     console.log("copy!");
   });
 
-  const pasteCommandDisposable = vscode.commands.registerCommand("editor.action.clipboardPasteAction", (e) => {
+  const pasteCommand = vscode.commands.registerCommand("editor.action.clipboardPasteAction", (e) => {
     console.log("paste!");
   });
 
-  context.subscriptions.push(openViewDisposable, groupNodesDisposable, copyCommandDisposable, pasteCommandDisposable);
+  context.subscriptions.push(openView, groupNodes, copyCommand, pasteCommand);
 }
 
 export function deactivate() {}

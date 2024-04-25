@@ -37,6 +37,7 @@ const model = ref<{
 onNodesInitialized(() => {
   if (Object.keys(node.data).length > 0) {
     model.value = node.data;
+    nextTick(() => updateNodeInternals([nodeId]));
   }
 });
 

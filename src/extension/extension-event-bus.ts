@@ -1,6 +1,6 @@
 import * as vscode from "vscode";
 import { EventCommand } from "../shared/events/event-command";
-import { sendEventCommand } from "./utils";
+import { EventManager } from "./event-manager";
 
 export interface IExtensionEventHandler<T extends EventCommand<any, any>> {
   readonly command: T["command"];
@@ -18,7 +18,7 @@ export class ExtensionEventBus {
       if (!retVal) {
         continue;
       }
-      sendEventCommand(panel.webview, {
+      EventManager.sendEventCommand(panel.webview, {
         command: handler.command,
         data: retVal,
       });

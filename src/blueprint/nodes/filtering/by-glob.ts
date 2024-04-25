@@ -10,14 +10,13 @@ export class ByGlobPredicateNode extends PredicateNode<{ globPattern: string }> 
 
   async evaluate(): Promise<Function> {
     return (array: ts.Node[]) => {
-      if (!this.state?.globPattern) {
+      if (this.state?.globPattern === undefined) {
         throw new Error("Expected glob pattern to be provided");
       }
 
       if (isArrayOfType(array, ts.isSourceFile)) {
         return array.filter((sf) => minimatch((sf as ts.SourceFile).fileName, this.state!.globPattern));
       }
-      console.log(this.state);
 
       return array
         .filter((n) => (n as NamedNode).name !== undefined)

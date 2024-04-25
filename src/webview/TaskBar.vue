@@ -29,7 +29,7 @@ import { ref } from "vue";
 import { updateCounter } from "./node-id";
 import { parseHandleId } from "@/shared/handles";
 
-const { nodes, edges, toObject, fromObject, removeNodes, removeEdges } = useVueFlow();
+const { nodes, edges, toObject, fromObject, removeNodes, removeEdges, onNodesInitialized } = useVueFlow();
 const inProgress = ref<boolean>(false);
 
 function applyChanges(): void {
@@ -44,9 +44,9 @@ function applyChanges(): void {
   }
 }
 
-function loadFileInternal(data: any) {
+async function loadFileInternal(data: any) {
   const json = JSON.parse(data);
-  fromObject(json);
+  await fromObject(json);
   updateCounter(nodes.value.length);
 
   for (const node of nodes.value) {
@@ -58,6 +58,13 @@ function loadFileInternal(data: any) {
       },
     });
   }
+
+  await new Promise(resolve => {
+    const e = onNodesInitialized((n) => {
+      resolve(undefined);
+      e.off();
+    });
+  });
 
   for (const edge of edges.value) {
     sendEventCommand<GraphNodeConnected>({
@@ -86,8 +93,8 @@ function loadFile(): void {
         {
           command: "graph:clean",
         },
-        () => {
-          loadFileInternal(data);
+        async () => {
+          await loadFileInternal(data);
           inProgress.value = false;
         }
       );
