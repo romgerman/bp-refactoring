@@ -8,3 +8,4 @@ export * from "./graph-node-update-state";
 export * from "./lifecycle-apply-changes";
 export * from "./load-blueprint";
 export * from "./save-blueprint";
+export * from "./graph-add-nodes-batch";

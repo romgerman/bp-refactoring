@@ -19,3 +19,4 @@ export interface GraphNodeGetViewData extends EventCommand<"graph:node-get-view-
 export interface GraphNodeSendViewData extends EventCommand<"graph:node-send-view-data", { id: string; data: any }> {}
 export interface GraphNodeUpdateState extends EventCommand<"graph:node-update-state", { id: string; state: any }> {}
 export interface GraphClean extends EventCommand<"graph:clean"> {}
+export interface GraphAddNodesBatch extends EventCommand<"graph:add-nodes-batch", { nodes: { id: string; type: string }[] }> {}

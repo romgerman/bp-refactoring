@@ -15,6 +15,7 @@ import {
   SaveBlueprintEventHandler,
   LoadBlueprintEventHandler,
   GraphCleanEventHandler,
+  GraphNodeAddNodesBatchEventHandler,
 } from "./events";
 import { BlueprintStore } from "../blueprint/store";
 import { EventManager } from "./event-manager";
@@ -74,6 +75,7 @@ export function activate(context: vscode.ExtensionContext) {
     .addHandler(new GraphNodeUpdateStateEventHandler(store))
     .addHandler(new ApplyChangesEventHandler(store, compiler))
     .addHandler(new GraphCleanEventHandler(store))
+    .addHandler(new GraphNodeAddNodesBatchEventHandler(store))
     .addHandler(new SaveBlueprintEventHandler())
     .addHandler(new LoadBlueprintEventHandler());
 

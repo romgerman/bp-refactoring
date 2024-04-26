@@ -16,6 +16,7 @@
 import {
   ApplyChanges,
   ApplyChangesComplete,
+  GraphAddNodesBatch,
   GraphClean,
   GraphNodeAdded,
   GraphNodeConnected,
@@ -49,22 +50,23 @@ async function loadFileInternal(data: any) {
   await fromObject(json);
   updateCounter(nodes.value.length + 1);
 
-  for (const node of nodes.value) {
-    sendEventCommand<GraphNodeAdded>({
-      command: "graph:node-added",
-      data: {
-        id: node.id,
-        type: node.type,
-      },
-    });
-  }
+  // Add nodes
+  sendEventCommand<GraphAddNodesBatch>({
+    command: "graph:add-nodes-batch",
+    data: {
+      nodes: nodes.value.map((n) => ({ id: n.id, type: n.type })),
+    },
+  });
 
-  await new Promise(resolve => {
+  // Wait until nodes initialized
+  await new Promise((resolve) => {
     const e = onNodesInitialized((n) => {
       resolve(undefined);
       e.off();
     });
   });
+
+  // Add edges
 
   for (const edge of edges.value) {
     sendEventCommand<GraphNodeConnected>({
