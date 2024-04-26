@@ -22,11 +22,11 @@ import {
   LoadBlueprint,
   SaveBlueprint,
 } from "@/shared/events";
-import { sendEventCommand, sendEventCommandAndWaitResult, useEventCommandResultOnce } from "./event-utils";
+import { sendEventCommand, sendEventCommandAndWaitResult, useEventCommandResultOnce } from "../event-utils";
 import { useVueFlow } from "@vue-flow/core";
 import { NodeTypes } from "@/shared/node-types";
 import { ref } from "vue";
-import { updateCounter } from "./node-id";
+import { updateCounter } from "../node-id";
 import { parseHandleId } from "@/shared/handles";
 
 const { nodes, edges, toObject, fromObject, removeNodes, removeEdges, onNodesInitialized } = useVueFlow();

@@ -14,8 +14,8 @@ import { GraphNodeAdded, GraphNodeConnected, GraphNodeDisconnected, GraphNodeRem
 import { sendEventCommand } from "./event-utils";
 import { parseHandleId } from "@/shared/handles";
 
-import DropzoneBackground from "./DropzoneBackground.vue";
-import ConnectionPopup from "./ConnectionPopup.vue";
+import DropzoneBackground from "./components/DropzoneBackground.vue";
+import ConnectionPopup from "./components/ConnectionPopup.vue";
 
 import ProjectNode from "./nodes/ProjectNode.vue";
 import ConstantNode from "./nodes/data/ConstantNode.vue";

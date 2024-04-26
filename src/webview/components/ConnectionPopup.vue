@@ -38,14 +38,14 @@ import { computed, ref } from "vue";
 import { flip, useFloating } from "@floating-ui/vue";
 import { useVueFlow } from "@vue-flow/core";
 import { onClickOutside } from "@vueuse/core";
-import { useConnectionPopup } from "./useConnectionPopup";
-import { NODES } from "./nodes";
-import { getId } from "./node-id";
-import { useNodeStore } from "./store";
+import { useConnectionPopup } from "../useConnectionPopup";
+import { NODES } from "../nodes";
+import { getId } from "../node-id";
+import { useNodeStore } from "../store";
 import { NodeTypes } from "@/shared/node-types";
-import useDragAndDrop from "./useDnD";
+import useDragAndDrop from "../useDnD";
 
-import NodeWrapper from "./nodes/NodeWrapper.vue";
+import NodeWrapper from "../nodes/NodeWrapper.vue";
 
 const { onDragStart } = useDragAndDrop();
 const { addNodes, screenToFlowCoordinate } = useVueFlow();

@@ -23,7 +23,7 @@
 <script setup lang="ts">
 import { useVueFlow } from "@vue-flow/core";
 import Graph from "./Graph.vue";
-import TaskBar from "./TaskBar.vue";
+import TaskBar from "./components/TaskBar.vue";
 
 useVueFlow();
 </script>
