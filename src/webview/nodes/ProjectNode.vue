@@ -2,7 +2,7 @@
   <NodeWrapper>
     <template #header>
       Project
-      <div class="status" :class="tsCompilerStatus ? 'status--active' : 'status--inactive'"></div>
+      <div class="status" :class="tsCompilerStatus ? 'bg-green-500' : 'bg-red-500'"></div>
     </template>
     <template #body>
       <vscode-button class="scan-btn" @click="updateNodeData">Scan</vscode-button>
@@ -93,13 +93,5 @@ watch(chosenConfig, (selectedConfig) => {
   width: 8px;
   height: 8px;
   border-radius: 50%;
-
-  &--inactive {
-    background-color: red;
-  }
-
-  &--active {
-    background-color: greenyellow;
-  }
 }
 </style>
