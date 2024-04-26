@@ -18,6 +18,7 @@ import {
   ApplyChangesComplete,
   GraphAddNodesBatch,
   GraphClean,
+  GraphConnectNodesBatch,
   GraphNodeAdded,
   GraphNodeConnected,
   LoadBlueprint,
@@ -67,18 +68,17 @@ async function loadFileInternal(data: any) {
   });
 
   // Add edges
-
-  for (const edge of edges.value) {
-    sendEventCommand<GraphNodeConnected>({
-      command: "graph:node-connected",
-      data: {
+  sendEventCommand<GraphConnectNodesBatch>({
+    command: "graph:connect-nodes-batch",
+    data: {
+      nodes: edges.value.map((edge) => ({
         sourceId: edge.source,
         sourceIndex: parseHandleId(edge.sourceHandle).index,
         targetId: edge.target,
         targetIndex: parseHandleId(edge.targetHandle).index,
-      },
-    });
-  }
+      })),
+    },
+  });
 }
 
 function loadFile(): void {

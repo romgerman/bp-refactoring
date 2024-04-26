@@ -9,3 +9,4 @@ export * from "./lifecycle-apply-changes";
 export * from "./load-blueprint";
 export * from "./save-blueprint";
 export * from "./graph-add-nodes-batch";
+export * from "./graph-connect-nodes-batch";
