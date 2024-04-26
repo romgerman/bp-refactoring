@@ -49,7 +49,7 @@ function applyChanges(): void {
 async function loadFileInternal(data: any) {
   const json = JSON.parse(data);
   await fromObject(json);
-  updateCounter(nodes.value.length + 1);
+  updateCounter(nodes.value.length + 10); // Magic
 
   // Add nodes
   sendEventCommand<GraphAddNodesBatch>({
