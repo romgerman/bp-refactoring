@@ -56,7 +56,9 @@ export function useGroupNode() {
     const isInGroup = node.parentNode === group.id;
     const intersectsWithGroup = intersections.some((node) => node.id === group.id);
 
-    if (isInGroup && !intersectsWithGroup) {
+    if (isInGroup && intersectsWithGroup) {
+      resizeGroupByNode(node);
+    } else if (isInGroup && !intersectsWithGroup) {
       excludeNode(node);
     } else if (!isInGroup && intersectsWithGroup) {
       includeNode(node);
@@ -78,7 +80,10 @@ export function useGroupNode() {
     node.position.x -= group.position.x;
     node.position.y -= group.position.y;
 
-    // resize group to fit new node
+    resizeGroupByNode(node);
+  }
+
+  function resizeGroupByNode(node: GraphNode) {
     node.expandParent = true;
     updateNodeInternals();
     node.expandParent = false;
