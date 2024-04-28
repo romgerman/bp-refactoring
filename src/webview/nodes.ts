@@ -19,4 +19,6 @@ export const NODES = [
   { type: NodeTypes.RenameAction, name: "Rename" },
   { type: NodeTypes.DebugAction, name: "Debug" },
   { type: NodeTypes.ApplyAction, name: "Apply Changes" },
+  { group: true, name: "Helpers" },
+  { type: NodeTypes.Group, name: "Group" },
 ];
