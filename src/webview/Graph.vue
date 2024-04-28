@@ -36,6 +36,8 @@ import RenameClassActionNode from "./nodes/actions/RenameClassActionNode.vue";
 import DebugActionNode from "./nodes/actions/DebugActionNode.vue";
 import ApplyActionNode from "./nodes/actions/ApplyActionNode.vue";
 
+import GroupNode from "./nodes/helpers/GroupNode.vue";
+
 const isValidConnectionFn: ValidConnectionFunc = (conn, { sourceNode, targetNode }) => {
   return sourceNode.id !== targetNode.id;
 };
@@ -173,6 +175,10 @@ useEventListener("keyup", (e) => {
       </template>
       <template #node-apply-action="nodeProps">
         <ApplyActionNode v-bind="nodeProps" />
+      </template>
+
+      <template #node-group="groupNodeProps">
+        <GroupNode v-bind="groupNodeProps" />
       </template>
 
       <DropzoneBackground
