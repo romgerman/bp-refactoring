@@ -22,7 +22,4 @@ export enum NodeTypes {
   RenameAction = "rename-action",
   DebugAction = "debug-action",
   ApplyAction = "apply-action",
-
-  // Helpers
-  Group = "group",
 }

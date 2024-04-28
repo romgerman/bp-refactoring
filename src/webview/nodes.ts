@@ -1,5 +1,9 @@
 import { NodeTypes } from "../shared/node-types";
 
+export enum FrontendNodeTypes {
+  Group = "group",
+}
+
 export const NODES = [
   { group: true, name: "Data" },
   { type: NodeTypes.Constant, name: "Constant" },
@@ -20,5 +24,5 @@ export const NODES = [
   { type: NodeTypes.DebugAction, name: "Debug" },
   { type: NodeTypes.ApplyAction, name: "Apply Changes" },
   { group: true, name: "Helpers" },
-  { type: NodeTypes.Group, name: "Group" },
+  { type: FrontendNodeTypes.Group, name: "Group" },
 ];
