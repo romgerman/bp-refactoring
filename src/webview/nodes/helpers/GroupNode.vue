@@ -1,3 +1,8 @@
+<template>
+  <NodeResizer :minWidth="100" :minHeight="30" @resizeEnd="onGroupResize" />
+  <div class="group">{{ props.label }}</div>
+</template>
+
 <script setup lang="ts">
 import { type NodeProps } from '@vue-flow/core';
 import { NodeResizer } from '@vue-flow/node-resizer'
@@ -10,11 +15,6 @@ const emit = defineEmits<{
 
 const { onGroupResize } = useGroupNode();
 </script>
-
-<template>
-  <NodeResizer :minWidth="100" :minHeight="30" @resizeEnd="onGroupResize" />
-  <div class="group">{{ props.label }}</div>
-</template>
 
 <style scoped>
 .group {
