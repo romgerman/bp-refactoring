@@ -14,7 +14,6 @@ export function useGroupNode() {
     onGroupResize();
   });
 
-  // this is executed in each group!
   onNodeDragStop(({ node, intersections }) => {
     if (!intersections) {
       return;
