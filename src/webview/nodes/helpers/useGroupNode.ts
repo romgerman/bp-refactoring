@@ -41,9 +41,7 @@ export function useGroupNode() {
 
   function splitNodes(intersections: GraphNode[]) {
     const outer: GraphNode[] = childNodes.value.filter((node) => !intersections.includes(node));
-
     const inner: GraphNode[] = intersections.filter((node) => node.type !== "group");
-
     return { inner, outer } as const;
   }
 
