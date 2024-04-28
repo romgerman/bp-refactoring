@@ -1,7 +1,7 @@
 import { useNode, useVueFlow, type GraphNode } from "@vue-flow/core";
 import { computed, onMounted } from "vue";
 
-export function useGroupNode() {
+export function useGroupNode(groupType = "group") {
   const { node: group } = useNode();
   const { getIntersectingNodes, updateNodeInternals, onNodeDragStop, nodes } = useVueFlow();
 
@@ -21,7 +21,7 @@ export function useGroupNode() {
 
     if (node.id === group.id) {
       onGroupDrag(intersections);
-    } else if (node.type !== "group") {
+    } else if (node.type !== groupType) {
       onNodeDrag(node, intersections);
     }
   });
@@ -29,14 +29,14 @@ export function useGroupNode() {
   function onGroupResize() {
     const intersections = getIntersectingNodes(group);
     const outer = childNodes.value.filter((node) => !intersections.includes(node));
-    const inner = intersections.filter((node) => node.type !== "group");
+    const inner = intersections.filter((node) => node.type !== groupType);
     outer.forEach(excludeNode);
     inner.forEach(includeNode);
   }
 
   function onGroupDrag(intersections: GraphNode[]) {
     intersections
-      .filter((node) => node.type !== "group")
+      .filter((node) => node.type !== groupType)
       .filter((node) => node.parentNode !== group.id)
       .forEach(includeNode);
   }
