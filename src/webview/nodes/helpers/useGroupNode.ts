@@ -28,20 +28,10 @@ export function useGroupNode() {
 
   function onGroupResize() {
     const intersections = getIntersectingNodes(group);
-    const { outer, inner } = splitNodes(intersections);
-
-    for (const node of outer) {
-      excludeNode(node);
-    }
-    for (const node of inner) {
-      includeNode(node);
-    }
-  }
-
-  function splitNodes(intersections: GraphNode[]) {
-    const outer: GraphNode[] = childNodes.value.filter((node) => !intersections.includes(node));
-    const inner: GraphNode[] = intersections.filter((node) => node.type !== "group");
-    return { inner, outer } as const;
+    const outer = childNodes.value.filter((node) => !intersections.includes(node));
+    const inner = intersections.filter((node) => node.type !== "group");
+    outer.forEach(excludeNode);
+    inner.forEach(includeNode);
   }
 
   function onGroupDrag(intersections: GraphNode[]) {
