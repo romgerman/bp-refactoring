@@ -104,6 +104,7 @@ function handleClick({ clientX, clientY }) {
 
 useConnectionPopup(
   (e) => {
+    query.value = "";
     handleClick({ clientX: e.clientX, clientY: e.clientY });
   },
   () => closePopup()

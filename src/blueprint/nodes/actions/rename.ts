@@ -132,11 +132,21 @@ export class RenameActionNode extends BlueprintNode {
   }
 
   async getViewData(): Promise<any> {
-    const tsDeclList = await this.evalInput<ts.ClassDeclaration[]>(0);
+    const tsDeclList = await this.evalInput<ts.Node[]>(0);
     const fullName = await this.evalInput<string>(1);
     const prefix = await this.evalInput<string>(2);
     const postfix = await this.evalInput<string>(3);
 
-    return tsDeclList?.filter((x) => !!x.name).map((x) => this.getNewName(x.name!.getText(), fullName, prefix, postfix)) ?? [];
+    if (!tsDeclList) {
+      return [];
+    }
+
+    if (isArrayOfType(tsDeclList, ts.isSourceFile)) {
+      return tsDeclList.map((x) => this.getNewName(x.fileName, fullName, prefix, postfix));
+    }
+
+    return tsDeclList
+      .filter((x) => !!(x as NamedNode).name)
+      .map((x) => this.getNewName((x as NamedNode).name!.getText(), fullName, prefix, postfix));
   }
 }
