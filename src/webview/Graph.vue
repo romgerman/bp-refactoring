@@ -32,7 +32,7 @@ import OfTypeNode from "./nodes/filters/OfTypeNode.vue";
 import ByRegExpNode from "./nodes/filters/ByRegExpNode.vue";
 import ByGlobNode from "./nodes/filters/ByGlobNode.vue";
 
-import RenameClassActionNode from "./nodes/actions/RenameClassActionNode.vue";
+import RenameSymbolActionNode from "./nodes/actions/RenameSymbolActionNode.vue";
 import DebugActionNode from "./nodes/actions/DebugActionNode.vue";
 import ApplyActionNode from "./nodes/actions/ApplyActionNode.vue";
 
@@ -166,7 +166,7 @@ useEventListener("keyup", (e) => {
       </template>
 
       <template #node-rename-action="nodeProps">
-        <RenameClassActionNode v-bind="nodeProps" />
+        <RenameSymbolActionNode v-bind="nodeProps" />
       </template>
       <template #node-debug-action="nodeProps">
         <DebugActionNode v-bind="nodeProps" />

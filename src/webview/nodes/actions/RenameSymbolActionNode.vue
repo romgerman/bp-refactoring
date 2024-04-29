@@ -1,6 +1,6 @@
 <template>
   <NodeWrapper>
-    <template #header>Rename</template>
+    <template #header>Rename Symbol</template>
     <template #body>
       <div class="nowheel" style="max-height: 200px; overflow: auto">
         <div v-for="item in names">{{ item }}</div>

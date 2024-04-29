@@ -4,7 +4,7 @@ import { BlueprintNode } from "../../blueprint-node";
 import { isArrayOfType } from "../../helpers";
 import { NamedNode } from "../../../extension/types";
 
-export class RenameActionNode extends BlueprintNode {
+export class RenameSymbolActionNode extends BlueprintNode {
   readonly type: string = NodeTypes.RenameAction;
 
   async evaluate(): Promise<any> {

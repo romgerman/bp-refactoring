@@ -7,7 +7,7 @@ import { BlueprintNode } from "./blueprint-node";
 import { ProjectNode } from "./nodes/project";
 import { ApplyActionNode } from "./nodes/actions/apply";
 import { DebugActionNode } from "./nodes/actions/debug";
-import { RenameActionNode } from "./nodes/actions/rename";
+import { RenameSymbolActionNode } from "./nodes/actions/rename-symbol";
 import { ClassListNode } from "./nodes/aggregation/class-list";
 import { FileListNode } from "./nodes/aggregation/file-list";
 import { ConstantNode } from "./nodes/data/constant";
@@ -192,7 +192,7 @@ export class BlueprintStore {
       .with(NodeTypes.DecoratorPredicate, () => new DecoratorPredicateNode(this.compiler))
       .with(NodeTypes.OfTypePredicate, () => new OfTypePredicateNode(this.compiler))
       .with(NodeTypes.ByRegExpPredicate, () => new ByRegExpPredicateNode(this.compiler))
-      .with(NodeTypes.RenameAction, () => new RenameActionNode(this.compiler))
+      .with(NodeTypes.RenameAction, () => new RenameSymbolActionNode(this.compiler))
       .with(NodeTypes.DebugAction, () => new DebugActionNode(this.compiler))
       .with(NodeTypes.ApplyAction, () => new ApplyActionNode(this.compiler))
       .with(NodeTypes.Constant, () => new ConstantNode(this.compiler))
