@@ -4,9 +4,10 @@ enum ChangeKind {
   RemoveNode,
   ReplaceWithNode,
   ReplaceTextWithNode,
+  ReplaceText,
 }
 
-type Change = RemoveNodeChange | ReplaceWithNodeChange;
+type Change = RemoveNodeChange | ReplaceWithNodeChange | ReplaceTextChange;
 
 interface BaseChange {
   readonly sourceFile: ts.SourceFile;
@@ -21,6 +22,11 @@ interface RemoveNodeChange extends BaseChange {
 interface ReplaceWithNodeChange extends BaseChange {
   readonly kind: ChangeKind.ReplaceWithNode;
   node: ts.Node;
+}
+
+interface ReplaceTextChange extends BaseChange {
+  readonly kind: ChangeKind.ReplaceText;
+  newText: string;
 }
 
 export class ChangeTracker {
@@ -46,6 +52,15 @@ export class ChangeTracker {
       kind: ChangeKind.RemoveNode,
       sourceFile: sourceFile,
       range: ts.createTextSpanFromBounds(node.getStart(), node.getEnd()),
+    });
+  }
+
+  replaceText({ sourceFile, span, newText }: { sourceFile: ts.SourceFile; span: ts.TextSpan; newText: string }): void {
+    this.changes.push({
+      kind: ChangeKind.ReplaceText,
+      sourceFile: sourceFile,
+      newText,
+      range: span,
     });
   }
 
@@ -83,6 +98,9 @@ export class ChangeTracker {
           const newText = printer.printNode(ts.EmitHint.Unspecified, change.node, sourceFile);
           text = replaceText(text, change.range.start + diff, change.range.length, newText);
           diff += newText.length - change.range.length;
+        } else if (change.kind === ChangeKind.ReplaceText) {
+          text = replaceText(text, change.range.start + diff, change.range.length, change.newText);
+          diff += change.newText.length - change.range.length;
         } else if (change.kind === ChangeKind.RemoveNode) {
           throw new Error("Not implemented");
         }

@@ -19,6 +19,7 @@ import { OfTypePredicateNode } from "./nodes/filtering/of-type-predicate";
 import { ByRegExpPredicateNode } from "./nodes/filtering/by-regexp";
 import { PreviewNode } from "./nodes/aggregation/preview";
 import { ByGlobPredicateNode } from "./nodes/filtering/by-glob";
+import { RenameFileActionNode } from "./nodes/actions/rename-file";
 
 export class BlueprintStore {
   readonly events = new EventEmitter<
@@ -193,6 +194,7 @@ export class BlueprintStore {
       .with(NodeTypes.OfTypePredicate, () => new OfTypePredicateNode(this.compiler))
       .with(NodeTypes.ByRegExpPredicate, () => new ByRegExpPredicateNode(this.compiler))
       .with(NodeTypes.RenameAction, () => new RenameSymbolActionNode(this.compiler))
+      .with(NodeTypes.RenameFileAction, () => new RenameFileActionNode(this.compiler))
       .with(NodeTypes.DebugAction, () => new DebugActionNode(this.compiler))
       .with(NodeTypes.ApplyAction, () => new ApplyActionNode(this.compiler))
       .with(NodeTypes.Constant, () => new ConstantNode(this.compiler))

@@ -20,6 +20,7 @@ export enum NodeTypes {
 
   // Actions
   RenameAction = "rename-action",
+  RenameFileAction = "rename-file-action",
   DebugAction = "debug-action",
   ApplyAction = "apply-action",
 }

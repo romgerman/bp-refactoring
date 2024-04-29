@@ -33,6 +33,7 @@ import ByRegExpNode from "./nodes/filters/ByRegExpNode.vue";
 import ByGlobNode from "./nodes/filters/ByGlobNode.vue";
 
 import RenameSymbolActionNode from "./nodes/actions/RenameSymbolActionNode.vue";
+import RenameFileActionNode from "./nodes/actions/RenameFileActionNode.vue";
 import DebugActionNode from "./nodes/actions/DebugActionNode.vue";
 import ApplyActionNode from "./nodes/actions/ApplyActionNode.vue";
 
@@ -167,6 +168,9 @@ useEventListener("keyup", (e) => {
 
       <template #node-rename-action="nodeProps">
         <RenameSymbolActionNode v-bind="nodeProps" />
+      </template>
+      <template #node-rename-file-action="nodeProps">
+        <RenameFileActionNode v-bind="nodeProps" />
       </template>
       <template #node-debug-action="nodeProps">
         <DebugActionNode v-bind="nodeProps" />

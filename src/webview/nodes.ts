@@ -17,6 +17,7 @@ export const NODES = [
   { type: NodeTypes.ByGlobPredicate, name: "Glob Pattern" },
   { group: true, name: "Actions" },
   { type: NodeTypes.RenameAction, name: "Rename Symbol" },
+  { type: NodeTypes.RenameFileAction, name: "Rename File" },
   { type: NodeTypes.DebugAction, name: "Debug" },
   { type: NodeTypes.ApplyAction, name: "Apply Changes" },
 ];

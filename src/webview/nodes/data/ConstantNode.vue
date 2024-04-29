@@ -52,7 +52,7 @@ watch(model, (value) => {
       state: (node.data = toRaw(value)),
     },
   });
-});
+}, { deep: true });
 </script>
 
 <style lang="scss">

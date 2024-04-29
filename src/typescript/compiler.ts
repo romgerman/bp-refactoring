@@ -3,6 +3,7 @@ import ts from "typescript";
 import EventEmitter from "eventemitter3";
 import { LanguageService } from "./language-service";
 import { ChangeTracker } from "./change-tracker";
+import { RenameFileTracker } from "./rename-file-tracker";
 
 const formatHost: ts.FormatDiagnosticsHost = {
   getCanonicalFileName: (path) => path,
@@ -39,9 +40,14 @@ export class TypescriptCompiler extends vscode.Disposable {
     return this._changeTracker;
   }
 
+  public get renameFileTracker(): RenameFileTracker {
+    return this._renameFileTracker;
+  }
+
   public readonly events = new EventEmitter<"ready" | "file-changed" | "emit-completed">();
 
   private _changeTracker = new ChangeTracker();
+  private _renameFileTracker = new RenameFileTracker();
 
   private _watchProgramConfig: ts.WatchOfConfigFile<ts.BuilderProgram> | null = null;
   private _builderProgram: ts.BuilderProgram | null = null;
@@ -56,6 +62,7 @@ export class TypescriptCompiler extends vscode.Disposable {
   start(configPath: string): void {
     this.stop();
     this._changeTracker = new ChangeTracker();
+    this._renameFileTracker = new RenameFileTracker();
 
     const createProgram = ts.createAbstractBuilder;
 
@@ -93,8 +100,9 @@ export class TypescriptCompiler extends vscode.Disposable {
     this.events.emit("ready", false);
   }
 
-  emit(): void {
+  async emit(): Promise<void> {
     this.changeTracker.appyChanges();
+    await this._renameFileTracker.applyChanges();
     this.events.emit("emit-completed");
   }
 

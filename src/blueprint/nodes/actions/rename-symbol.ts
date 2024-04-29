@@ -17,7 +17,7 @@ export class RenameSymbolActionNode extends BlueprintNode {
       throw new Error("Expected Array at input 0");
     }
 
-    let renameType: "class" | "function" | "method" | "file" | null = null;
+    let renameType: "class" | "function" | "method" | null = null;
 
     if (isArrayOfType(tsDeclList, ts.isClassDeclaration)) {
       renameType = "class";
@@ -108,11 +108,6 @@ export class RenameSymbolActionNode extends BlueprintNode {
         });
       }
     }
-  }
-
-  private renameFiles(): void {
-    const languageService = this.compiler.languageService?.services;
-    //languageService?.getEditsForFileRename()
   }
 
   private getNewName(name: string, fullName?: string, prefix?: string, postfix?: string): string {
