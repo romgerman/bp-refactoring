@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { markRaw } from "vue";
 import {
   ConnectionLineType,
   ConnectionMode,
@@ -13,9 +14,12 @@ import { useNodeStore } from "./store";
 import { GraphNodeAdded, GraphNodeConnected, GraphNodeDisconnected, GraphNodeRemoved } from "@/shared/events";
 import { sendEventCommand } from "./event-utils";
 import { parseHandleId } from "@/shared/handles";
+import { NodeTypes } from "@/shared/node-types";
 
 import DropzoneBackground from "./components/DropzoneBackground.vue";
 import ConnectionPopup from "./components/ConnectionPopup.vue";
+
+// Node imports
 
 import ProjectNode from "./nodes/ProjectNode.vue";
 import ConstantNode from "./nodes/data/ConstantNode.vue";
@@ -36,6 +40,25 @@ import RenameSymbolActionNode from "./nodes/actions/RenameSymbolActionNode.vue";
 import RenameFileActionNode from "./nodes/actions/RenameFileActionNode.vue";
 import DebugActionNode from "./nodes/actions/DebugActionNode.vue";
 import ApplyActionNode from "./nodes/actions/ApplyActionNode.vue";
+
+const nodeTypes = {
+  [NodeTypes.Project]: markRaw(ProjectNode),
+  [NodeTypes.Constant]: markRaw(ConstantNode),
+  [NodeTypes.ClassList]: markRaw(ClassListNode),
+  [NodeTypes.FileList]: markRaw(FileListNode),
+  [NodeTypes.FunctionList]: markRaw(FunctionListNode),
+  [NodeTypes.MemberList]: markRaw(MemberListNode),
+  [NodeTypes.Preview]: markRaw(PreviewNode),
+  [NodeTypes.DecoratorPredicate]: markRaw(HasDecoratorNode),
+  [NodeTypes.FilterBy]: markRaw(FilterByNode),
+  [NodeTypes.OfTypePredicate]: markRaw(OfTypeNode),
+  [NodeTypes.ByRegExpPredicate]: markRaw(ByRegExpNode),
+  [NodeTypes.ByGlobPredicate]: markRaw(ByGlobNode),
+  [NodeTypes.RenameAction]: markRaw(RenameSymbolActionNode),
+  [NodeTypes.RenameFileAction]: markRaw(RenameFileActionNode),
+  [NodeTypes.DebugAction]: markRaw(DebugActionNode),
+  [NodeTypes.ApplyAction]: markRaw(ApplyActionNode),
+}
 
 const isValidConnectionFn: ValidConnectionFunc = (conn, { sourceNode, targetNode }) => {
   return sourceNode.id !== targetNode.id;
@@ -125,60 +148,7 @@ useEventListener("keyup", (e) => {
 
 <template>
   <div class="dndflow" @drop="onDrop">
-    <VueFlow v-model="nodeStore.nodes" @dragover="onDragOver" @dragleave="onDragLeave">
-      <template #node-project="nodeProps">
-        <ProjectNode v-bind="nodeProps" />
-      </template>
-
-      <template #node-constant="nodeProps">
-        <ConstantNode v-bind="nodeProps" />
-      </template>
-
-      <template #node-class-list="nodeProps">
-        <ClassListNode v-bind="nodeProps" />
-      </template>
-      <template #node-file-list="nodeProps">
-        <FileListNode v-bind="nodeProps" />
-      </template>
-      <template #node-function-list="nodeProps">
-        <FunctionListNode v-bind="nodeProps" />
-      </template>
-      <template #node-member-list="nodeProps">
-        <MemberListNode v-bind="nodeProps" />
-      </template>
-      <template #node-preview="nodeProps">
-        <PreviewNode v-bind="nodeProps" />
-      </template>
-
-      <template #node-filter-by="nodeProps">
-        <FilterByNode v-bind="nodeProps" />
-      </template>
-      <template #node-has-decorator-predicate="nodeProps">
-        <HasDecoratorNode v-bind="nodeProps" />
-      </template>
-      <template #node-of-type-predicate="nodeProps">
-        <OfTypeNode v-bind="nodeProps" />
-      </template>
-      <template #node-by-regexp-predicate="nodeProps">
-        <ByRegExpNode v-bind="nodeProps" />
-      </template>
-      <template #node-by-glob-predicate="nodeProps">
-        <ByGlobNode v-bind="nodeProps" />
-      </template>
-
-      <template #node-rename-action="nodeProps">
-        <RenameSymbolActionNode v-bind="nodeProps" />
-      </template>
-      <template #node-rename-file-action="nodeProps">
-        <RenameFileActionNode v-bind="nodeProps" />
-      </template>
-      <template #node-debug-action="nodeProps">
-        <DebugActionNode v-bind="nodeProps" />
-      </template>
-      <template #node-apply-action="nodeProps">
-        <ApplyActionNode v-bind="nodeProps" />
-      </template>
-
+    <VueFlow v-model="nodeStore.nodes" :node-types="nodeTypes" @dragover="onDragOver" @dragleave="onDragLeave">
       <DropzoneBackground
         :style="{
           backgroundColor: isDragOver ? '#424a49' : 'transparent',
