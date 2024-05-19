@@ -1,7 +1,11 @@
 import { NodeTypes } from "../../../shared/node-types";
 import { BlueprintNode } from "../../blueprint-node";
 
-export class ConstantNode extends BlueprintNode<{ type: string; value: string }> {
+enum ConstantType {
+  String = "string",
+}
+
+export class ConstantNode extends BlueprintNode<{ type: ConstantType; value: string }> {
   readonly type: string = NodeTypes.Constant;
 
   async evaluate(): Promise<any> {
@@ -13,10 +17,11 @@ export class ConstantNode extends BlueprintNode<{ type: string; value: string }>
   }
 
   private convertValue(value?: string, type?: string): any {
-    if (type === "string") {
-      return value ?? "";
-    } else {
-      return null;
+    switch (type) {
+      case ConstantType.String:
+        return value ?? "";
+      default:
+        return null;
     }
   }
 }
