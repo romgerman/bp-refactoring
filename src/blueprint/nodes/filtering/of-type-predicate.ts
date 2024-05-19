@@ -2,6 +2,7 @@ import * as ts from "typescript";
 import { NodeTypes } from "../../../shared/node-types";
 import { PredicateNode } from "./filter-by-node";
 import { isArrayOfType } from "../../helpers";
+import { BlueprintNodeError } from "../../node-error";
 
 export enum TsNodeType {
   ClassDeclaration = "class-decl",
@@ -19,7 +20,7 @@ export class OfTypePredicateNode extends PredicateNode<{ type: TsNodeType }> {
       }
 
       if (array === undefined) {
-        throw new Error("Expected Node[] at input 0");
+        throw new BlueprintNodeError("Expected Node[] at input 0", this);
       }
 
       if (this.state.type === TsNodeType.ClassDeclaration) {

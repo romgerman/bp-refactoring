@@ -3,6 +3,7 @@ import { NodeTypes } from "../../../shared/node-types";
 import { BlueprintNode } from "../../blueprint-node";
 import { isArrayOfType } from "../../helpers";
 import { NamedNode } from "../../../extension/types";
+import { BlueprintNodeError } from "../../node-error";
 
 export class RenameSymbolActionNode extends BlueprintNode {
   readonly type: string = NodeTypes.RenameAction;
@@ -14,7 +15,7 @@ export class RenameSymbolActionNode extends BlueprintNode {
     const postfix = await this.evalInput<string>(3);
 
     if (!tsDeclList) {
-      throw new Error("Expected Array at input 0");
+      throw new BlueprintNodeError("Expected Array at input 0", this);
     }
 
     let renameType: "class" | "function" | "method" | null = null;
@@ -26,7 +27,7 @@ export class RenameSymbolActionNode extends BlueprintNode {
     } else if (isArrayOfType(tsDeclList, ts.isMethodDeclaration)) {
       renameType = "method";
     } else {
-      throw new Error("Expected ClassDeclaration[] or FunctionDeclaration[] at input 0");
+      throw new BlueprintNodeError("Expected ClassDeclaration[] or FunctionDeclaration[] at input 0", this);
     }
 
     const transformer = ({ sourceFile, decl }: { sourceFile: ts.SourceFile; decl: ts.Declaration }) => {

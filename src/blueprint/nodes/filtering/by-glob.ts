@@ -4,6 +4,7 @@ import { NamedNode } from "../../../extension/types";
 import { NodeTypes } from "../../../shared/node-types";
 import { isArrayOfType } from "../../helpers";
 import { PredicateNode } from "./filter-by-node";
+import { BlueprintNodeError } from "../../node-error";
 
 export class ByGlobPredicateNode extends PredicateNode<{ globPattern: string }> {
   readonly type: string = NodeTypes.ByGlobPredicate;
@@ -11,7 +12,7 @@ export class ByGlobPredicateNode extends PredicateNode<{ globPattern: string }> 
   async evaluate(): Promise<Function> {
     return (array: ts.Node[]) => {
       if (this.state?.globPattern === undefined) {
-        throw new Error("Expected glob pattern to be provided");
+        throw new BlueprintNodeError("Expected glob pattern to be provided", this);
       }
 
       if (isArrayOfType(array, ts.isSourceFile)) {

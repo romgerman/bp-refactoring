@@ -3,6 +3,7 @@ import ts from "typescript";
 import { NodeTypes } from "../../../shared/node-types";
 import { BlueprintNode } from "../../blueprint-node";
 import { isArrayOfType } from "../../helpers";
+import { BlueprintNodeError } from "../../node-error";
 
 export class RenameFileActionNode extends BlueprintNode {
   readonly type: string = NodeTypes.RenameFileAction;
@@ -14,7 +15,7 @@ export class RenameFileActionNode extends BlueprintNode {
     const postfix = await this.evalInput<string>(3);
 
     if (!files || !isArrayOfType(files, ts.isSourceFile)) {
-      throw new Error("Expected input 0 to be SourceFile[]");
+      throw new BlueprintNodeError("Expected input 0 to be SourceFile[]", this);
     }
 
     /*
@@ -45,8 +46,6 @@ export class RenameFileActionNode extends BlueprintNode {
 
       renameTracker.renameFile(rename.oldName, rename.newName);
     }
-
-    console.log(changeTracker);
 
     return files;
   }

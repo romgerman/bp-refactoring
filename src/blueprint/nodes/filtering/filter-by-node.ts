@@ -1,5 +1,6 @@
 import { NodeTypes } from "../../../shared/node-types";
 import { BlueprintNode } from "../../blueprint-node";
+import { BlueprintNodeError } from "../../node-error";
 
 export abstract class PredicateNode<T = any> extends BlueprintNode<T> {
   readonly type: string = "predicate";
@@ -16,7 +17,7 @@ export class FilterByNode extends BlueprintNode {
     const predicate = this.getInput(1);
 
     if (!array) {
-      throw new Error("Input array not specified for Filter By node");
+      throw new BlueprintNodeError("Input array not specified for Filter By node", this);
     }
 
     if (!predicate) {
@@ -24,13 +25,13 @@ export class FilterByNode extends BlueprintNode {
     }
 
     if (!(predicate instanceof PredicateNode)) {
-      throw new Error("Predicate is not of type PredicateNode");
+      throw new BlueprintNodeError("Predicate is not of type PredicateNode", this);
     }
 
     const predicateFn: Function = await predicate.evaluate();
 
     if (!(typeof predicateFn === "function")) {
-      throw new Error("Predicate is not a function");
+      throw new BlueprintNodeError("Predicate is not a function", this);
     }
 
     return await predicateFn(await array.evaluate());

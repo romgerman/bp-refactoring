@@ -3,6 +3,7 @@ import { NodeTypes } from "../../../shared/node-types";
 import { PredicateNode } from "./filter-by-node";
 import { isArrayOfType } from "../../helpers";
 import { NamedNode } from "../../../extension/types";
+import { BlueprintNodeError } from "../../node-error";
 
 export class ByRegExpPredicateNode extends PredicateNode<{ value: string }> {
   readonly type: string = NodeTypes.ByRegExpPredicate;
@@ -24,7 +25,7 @@ export class ByRegExpPredicateNode extends PredicateNode<{ value: string }> {
           return result;
         }
       } catch {
-        throw new Error("Invalid regular expression");
+        throw new BlueprintNodeError("Invalid regular expression", this);
       }
     };
   }

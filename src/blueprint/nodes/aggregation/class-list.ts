@@ -2,6 +2,7 @@ import * as ts from "typescript";
 import { NodeTypes } from "../../../shared/node-types";
 import { BlueprintNode } from "../../blueprint-node";
 import { isArrayOfType } from "../../helpers";
+import { BlueprintNodeError } from "../../node-error";
 
 export class ClassListNode extends BlueprintNode {
   readonly type: string = NodeTypes.ClassList;
@@ -10,7 +11,7 @@ export class ClassListNode extends BlueprintNode {
     const array = await this.evalInput<(ts.SourceFile | ts.ClassDeclaration)[]>(0);
 
     if (!array || (!isArrayOfType(array, ts.isSourceFile) && !isArrayOfType(array, ts.isClassDeclaration))) {
-      throw new Error("Expected SourceFile[] or ClassDeclaration[] at input 0");
+      throw new BlueprintNodeError("Expected SourceFile[] or ClassDeclaration[] at input 0", this);
     }
 
     return this.getClassList(array);

@@ -3,6 +3,7 @@ import * as vscode from "vscode";
 import { NodeTypes } from "../../../shared/node-types";
 import { BlueprintNode } from "../../blueprint-node";
 import { isArrayOfType } from "../../helpers";
+import { BlueprintNodeError } from "../../node-error";
 
 export class FileListNode extends BlueprintNode {
   readonly type: string = NodeTypes.FileList;
@@ -11,7 +12,7 @@ export class FileListNode extends BlueprintNode {
     const array = await this.evalInput<ts.Node[]>(0);
 
     if (!array) {
-      throw new Error("Expected Node[] at input 0.");
+      throw new BlueprintNodeError("Expected Node[] at input 0.", this);
     }
 
     if (isArrayOfType(array, ts.isSourceFile)) {

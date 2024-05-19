@@ -2,6 +2,7 @@ import * as vscode from "vscode";
 import * as ts from "typescript";
 import { NodeTypes } from "../../shared/node-types";
 import { BlueprintNode } from "../blueprint-node";
+import { BlueprintNodeError } from "../node-error";
 
 function until(conditionFunction: Function): Promise<void> {
   const poll = (resolve: Function) => {
@@ -19,7 +20,7 @@ export class ProjectNode extends BlueprintNode<string> {
 
   override async evaluate(): Promise<readonly ts.SourceFile[]> {
     if (!this.state) {
-      throw new Error("No tsconfig selected");
+      throw new BlueprintNodeError("No tsconfig selected", this);
     }
     if (!this.compiler.isReady) {
       this.compiler.start(this.state!);
