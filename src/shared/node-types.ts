@@ -17,6 +17,7 @@ export enum NodeTypes {
   OfTypePredicate = "of-type-predicate",
   ByRegExpPredicate = "by-regexp-predicate",
   ByGlobPredicate = "by-glob-predicate",
+  ByModifierPredicate = "by-modifier-predicate",
 
   // Actions
   RenameAction = "rename-action",

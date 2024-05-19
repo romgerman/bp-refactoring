@@ -35,6 +35,7 @@ import FilterByNode from "./nodes/filters/FilterByNode.vue";
 import OfTypeNode from "./nodes/filters/OfTypeNode.vue";
 import ByRegExpNode from "./nodes/filters/ByRegExpNode.vue";
 import ByGlobNode from "./nodes/filters/ByGlobNode.vue";
+import ByModifierNode from "./nodes/filters/ByModifierNode.vue";
 
 import RenameSymbolActionNode from "./nodes/actions/RenameSymbolActionNode.vue";
 import RenameFileActionNode from "./nodes/actions/RenameFileActionNode.vue";
@@ -54,6 +55,7 @@ const nodeTypes = {
   [NodeTypes.OfTypePredicate]: markRaw(OfTypeNode),
   [NodeTypes.ByRegExpPredicate]: markRaw(ByRegExpNode),
   [NodeTypes.ByGlobPredicate]: markRaw(ByGlobNode),
+  [NodeTypes.ByModifierPredicate]: markRaw(ByModifierNode),
   [NodeTypes.RenameAction]: markRaw(RenameSymbolActionNode),
   [NodeTypes.RenameFileAction]: markRaw(RenameFileActionNode),
   [NodeTypes.DebugAction]: markRaw(DebugActionNode),

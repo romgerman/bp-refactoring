@@ -14,6 +14,7 @@ import { MemberListNode } from "./nodes/aggregation/members-list";
 import { PreviewNode } from "./nodes/aggregation/preview";
 import { ConstantNode } from "./nodes/data/constant";
 import { ByGlobPredicateNode } from "./nodes/filtering/by-glob";
+import { ByModifierPredicateNode } from "./nodes/filtering/by-modifier";
 import { ByRegExpPredicateNode } from "./nodes/filtering/by-regexp";
 import { DecoratorPredicateNode } from "./nodes/filtering/decorator-predicate";
 import { FilterByNode } from "./nodes/filtering/filter-by-node";
@@ -189,6 +190,7 @@ export class BlueprintStore {
       .with(NodeTypes.ApplyAction, () => new ApplyActionNode(this.compiler))
       .with(NodeTypes.Constant, () => new ConstantNode(this.compiler))
       .with(NodeTypes.ByGlobPredicate, () => new ByGlobPredicateNode(this.compiler))
+      .with(NodeTypes.ByModifierPredicate, () => new ByModifierPredicateNode(this.compiler))
       .exhaustive();
   }
 }

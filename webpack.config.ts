@@ -62,6 +62,7 @@ const webviewConfig: webpack.Configuration = {
     alias: {
       "@/webview": path.resolve(__dirname, "./src/webview"),
       "@/shared": path.resolve(__dirname, "./src/shared"),
+      "@/blueprint": path.resolve(__dirname, "./src/blueprint"),
     },
   },
   module: {

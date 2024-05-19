@@ -15,6 +15,7 @@ export const NODES = [
   { type: NodeTypes.OfTypePredicate, name: "Of Type" },
   { type: NodeTypes.ByRegExpPredicate, name: "Regular Expression" },
   { type: NodeTypes.ByGlobPredicate, name: "Glob Pattern" },
+  { type: NodeTypes.ByModifierPredicate, name: "Modifier" },
   { group: true, name: "Actions" },
   { type: NodeTypes.RenameAction, name: "Rename Symbol" },
   { type: NodeTypes.RenameFileAction, name: "Rename File" },

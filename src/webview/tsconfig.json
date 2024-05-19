@@ -17,6 +17,8 @@
       "@/webview/*": ["./*"],
       "@/shared": ["../shared"],
       "@/shared/*": ["../shared/*"],
+      "@/blueprint": ["../blueprint"],
+      "@/blueprint/*": ["../blueprint/*"]
     },
   },
   "exclude": ["node_modules"]
