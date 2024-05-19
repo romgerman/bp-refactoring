@@ -1,8 +1,8 @@
+import * as path from "path";
 import ts from "typescript";
 import { NodeTypes } from "../../../shared/node-types";
 import { BlueprintNode } from "../../blueprint-node";
 import { isArrayOfType } from "../../helpers";
-import * as path from "path";
 
 export class RenameFileActionNode extends BlueprintNode {
   readonly type: string = NodeTypes.RenameFileAction;

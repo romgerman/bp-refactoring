@@ -1,25 +1,25 @@
-import { match } from "ts-pattern";
-import { TypescriptCompiler } from "../typescript/compiler";
-import { NodeTypes } from "../shared/node-types";
 import { EventEmitter } from "eventemitter3";
-import { ROOT_NODES } from "./rules";
+import { match } from "ts-pattern";
+import { NodeTypes } from "../shared/node-types";
+import { TypescriptCompiler } from "../typescript/compiler";
 import { BlueprintNode } from "./blueprint-node";
-import { ProjectNode } from "./nodes/project";
 import { ApplyActionNode } from "./nodes/actions/apply";
 import { DebugActionNode } from "./nodes/actions/debug";
+import { RenameFileActionNode } from "./nodes/actions/rename-file";
 import { RenameSymbolActionNode } from "./nodes/actions/rename-symbol";
 import { ClassListNode } from "./nodes/aggregation/class-list";
 import { FileListNode } from "./nodes/aggregation/file-list";
-import { ConstantNode } from "./nodes/data/constant";
-import { DecoratorPredicateNode } from "./nodes/filtering/decorator-predicate";
-import { FilterByNode } from "./nodes/filtering/filter-by-node";
 import { FunctionListNode } from "./nodes/aggregation/function-list";
 import { MemberListNode } from "./nodes/aggregation/members-list";
-import { OfTypePredicateNode } from "./nodes/filtering/of-type-predicate";
-import { ByRegExpPredicateNode } from "./nodes/filtering/by-regexp";
 import { PreviewNode } from "./nodes/aggregation/preview";
+import { ConstantNode } from "./nodes/data/constant";
 import { ByGlobPredicateNode } from "./nodes/filtering/by-glob";
-import { RenameFileActionNode } from "./nodes/actions/rename-file";
+import { ByRegExpPredicateNode } from "./nodes/filtering/by-regexp";
+import { DecoratorPredicateNode } from "./nodes/filtering/decorator-predicate";
+import { FilterByNode } from "./nodes/filtering/filter-by-node";
+import { OfTypePredicateNode } from "./nodes/filtering/of-type-predicate";
+import { ProjectNode } from "./nodes/project";
+import { ROOT_NODES } from "./rules";
 
 export class BlueprintStore {
   readonly events = new EventEmitter<
@@ -118,16 +118,6 @@ export class BlueprintStore {
     node.state = state;
     node.onStateChanged();
     this.events.emit("node-state-changed", { id: viewId, state: state, targetNode: node });
-  }
-
-  async evaluateNode(viewId: string): Promise<any> {
-    const node = this.viewMap.get(viewId);
-
-    if (!node) {
-      throw new Error("Node not found. Id " + viewId);
-    }
-
-    return await node.evaluate();
   }
 
   async evaluateGraph(viewId: string): Promise<any> {

@@ -9,7 +9,7 @@ export enum TsNodeType {
   FunctionDeclaration = "function-decl",
 }
 
-export class OfTypePredicateNode extends PredicateNode<{ type: string }> {
+export class OfTypePredicateNode extends PredicateNode<{ type: TsNodeType }> {
   readonly type: string = NodeTypes.OfTypePredicate;
 
   async evaluate(): Promise<any> {
@@ -22,38 +22,32 @@ export class OfTypePredicateNode extends PredicateNode<{ type: string }> {
         throw new Error("Expected Node[] at input 0");
       }
 
-      if (isArrayOfType(array, ts.isSourceFile)) {
-        if (this.state.type === TsNodeType.ClassDeclaration) {
-          return this.getNodesOfTypeFromSourceFiles(array, ts.isClassDeclaration);
-        } else if (this.state.type === TsNodeType.FunctionDeclaration) {
-          return this.getNodesOfTypeFromSourceFiles(array, ts.isFunctionDeclaration);
-        } else if (this.state.type === TsNodeType.MethodDeclaration) {
-          return this.getNodesOfTypeFromSourceFiles(array, ts.isMethodDeclaration);
-        }
-      } else {
-        if (this.state.type === TsNodeType.ClassDeclaration) {
-          return array.filter((n) => ts.isClassDeclaration(n));
-        } else if (this.state.type === TsNodeType.FunctionDeclaration) {
-          return array.filter((n) => ts.isFunctionDeclaration(n));
-        } else if (this.state.type === TsNodeType.MethodDeclaration) {
-          return array.filter((n) => ts.isMethodDeclaration(n));
-        }
+      if (this.state.type === TsNodeType.ClassDeclaration) {
+        return this.getNodesOfType(array, ts.isClassDeclaration);
+      } else if (this.state.type === TsNodeType.FunctionDeclaration) {
+        return this.getNodesOfType(array, ts.isFunctionDeclaration);
+      } else if (this.state.type === TsNodeType.MethodDeclaration) {
+        return this.getNodesOfType(array, ts.isMethodDeclaration);
       }
 
       return [];
     };
   }
 
-  private getNodesOfTypeFromSourceFiles(sourceFiles: ts.Node[], predicate: Function) {
-    const result: ts.Node[] = [];
-    for (let sourceFile of sourceFiles) {
-      ts.forEachChild(sourceFile, (node) => {
-        if (predicate(node)) {
-          result.push(node);
-        }
-      });
+  private getNodesOfType(array: ts.Node[], predicate: Function) {
+    if (isArrayOfType(array, ts.isSourceFile)) {
+      const result: ts.Node[] = [];
+      for (let sourceFile of array) {
+        ts.forEachChild(sourceFile, (node) => {
+          if (predicate(node)) {
+            result.push(node);
+          }
+        });
+      }
+      return result;
+    } else {
+      return array.filter((n) => predicate(n));
     }
-    return result;
   }
 
   async getViewData(): Promise<any> {

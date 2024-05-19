@@ -1,9 +1,9 @@
-import ts from "typescript";
-import { NodeTypes } from "../../../shared/node-types";
-import { PredicateNode } from "./filter-by-node";
 import { minimatch } from "minimatch";
+import ts from "typescript";
 import { NamedNode } from "../../../extension/types";
+import { NodeTypes } from "../../../shared/node-types";
 import { isArrayOfType } from "../../helpers";
+import { PredicateNode } from "./filter-by-node";
 
 export class ByGlobPredicateNode extends PredicateNode<{ globPattern: string }> {
   readonly type: string = NodeTypes.ByGlobPredicate;
