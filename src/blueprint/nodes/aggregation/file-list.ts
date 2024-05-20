@@ -16,10 +16,14 @@ export class FileListNode extends BlueprintNode<{ ignoreNodeModules: boolean }> 
     }
 
     if (isArrayOfType(array, ts.isSourceFile)) {
-      return array;
+      return this.filterNodeModules(array);
     }
 
-    return array.map((n) => n.getSourceFile());
+    return this.filterNodeModules(array.map((n) => n.getSourceFile()));
+  }
+
+  private filterNodeModules(array: ts.SourceFile[]): ts.SourceFile[] {
+    return array.filter((sf) => (this.state?.ignoreNodeModules ? !sf.fileName.includes("/node_modules") : true));
   }
 
   private getFileNames(array: ts.SourceFile[]): string[] {

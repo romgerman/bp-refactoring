@@ -7,7 +7,7 @@
           {{ file }}
         </div>
         <div class="font-bold" v-if="greaterThanMaxItems">and {{ otherItemsCount }} more</div>
-        <vscode-checkbox :checked="model.ignoreNodeModules" @change="model.ignoreNodeModules = !model.ignoreNodeModules">
+        <vscode-checkbox :checked="model.ignoreNodeModules" @change="event => model.ignoreNodeModules = event.target.checked">
           Ignore
           <pre style="display: inline;">node_modules</pre>
         </vscode-checkbox>
