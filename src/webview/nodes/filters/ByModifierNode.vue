@@ -17,7 +17,6 @@
 import { Handle, Position } from "@vue-flow/core";
 import VueSelect from "vue-select";
 import NodeWrapper from "../NodeWrapper.vue";
-import { type ByModifierPredicateNode } from "@/blueprint/nodes/filtering/by-modifier";
 import { ByModifierType } from "@/blueprint/nodes/filtering/types";
 import { useNodeState } from "@/webview/composables/use-node-state";
 
@@ -30,5 +29,5 @@ const MODIFIER_TYPES: Array<{ value: ByModifierType, label: string }> = [
   { value: ByModifierType.Export, label: "export" }
 ];
 
-const model = useNodeState<ByModifierPredicateNode>({ type: null as ByModifierType });
+const model = useNodeState<{ type: ByModifierType }>({ type: null as ByModifierType });
 </script>

@@ -25,7 +25,6 @@ import { computed, ref } from "vue";
 import { Handle, Position } from "@vue-flow/core";
 import NodeWrapper from "../NodeWrapper.vue";
 import { useNodeState } from "@/webview/composables/use-node-state";
-import { FileListNode } from "@/blueprint/nodes/aggregation/file-list";
 import { useViewData } from "@/webview/composables/use-view-data";
 
 const MAX_ITEMS = 3;
@@ -33,7 +32,7 @@ const MAX_ITEMS = 3;
 const fileList = ref<string[]>([]);
 const otherItemsCount = ref<number>(0);
 const greaterThanMaxItems = computed(() => otherItemsCount.value > MAX_ITEMS);
-const model = useNodeState<FileListNode>({ ignoreNodeModules: false });
+const model = useNodeState<{ ignoreNodeModules: boolean }>({ ignoreNodeModules: false });
 
 useViewData<string[]>((data) => {
   otherItemsCount.value = data.length - MAX_ITEMS;
