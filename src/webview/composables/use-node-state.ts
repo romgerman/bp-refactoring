@@ -3,6 +3,7 @@ import { useNode, useVueFlow } from "@vue-flow/core";
 import { sendEventCommand } from "../../webview/event-utils";
 import { GraphNodeUpdateState } from "../../shared/events";
 
+/** Helper for updating node state */
 export function useNodeState<T>(initialState: T) {
   const { node, id: nodeId } = useNode();
   const model = ref<T>(initialState);
