@@ -31,6 +31,8 @@ export class MemberListNode extends BlueprintNode {
     switch (kind) {
       case ts.SyntaxKind.MethodDeclaration:
         return "method";
+      case ts.SyntaxKind.PropertyDeclaration:
+        return "property";
       default:
         return "unknown";
     }
