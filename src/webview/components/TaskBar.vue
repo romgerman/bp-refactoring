@@ -19,17 +19,15 @@ import {
   GraphAddNodesBatch,
   GraphClean,
   GraphConnectNodesBatch,
-  GraphNodeAdded,
-  GraphNodeConnected,
   LoadBlueprint,
   SaveBlueprint,
 } from "@/shared/events";
-import { sendEventCommand, sendEventCommandAndWaitResult, useEventCommandResultOnce } from "../event-utils";
-import { useVueFlow } from "@vue-flow/core";
-import { NodeTypes } from "@/shared/node-types";
-import { ref } from "vue";
-import { updateCounter } from "../node-id";
 import { parseHandleId } from "@/shared/handles";
+import { NodeTypes } from "@/shared/node-types";
+import { useVueFlow } from "@vue-flow/core";
+import { ref } from "vue";
+import { sendEventCommand, sendEventCommandAndWaitResult, useEventCommandResultOnce } from "../event-utils";
+import { updateCounter } from "../node-id";
 
 const { nodes, edges, toObject, fromObject, removeNodes, removeEdges, onNodesInitialized } = useVueFlow();
 const inProgress = ref<boolean>(false);

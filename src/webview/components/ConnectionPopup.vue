@@ -34,16 +34,16 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from "vue";
+import { NodeTypes } from "@/shared/node-types";
 import { flip, useFloating } from "@floating-ui/vue";
 import { useVueFlow } from "@vue-flow/core";
 import { onClickOutside } from "@vueuse/core";
-import { useConnectionPopup } from "../useConnectionPopup";
-import { NODES } from "../nodes";
+import { computed, ref } from "vue";
+import { useConnectionPopup } from "../composables/useConnectionPopup";
+import useDragAndDrop from "../composables/useDnD";
 import { getId } from "../node-id";
+import { NODES } from "../nodes";
 import { useNodeStore } from "../store";
-import { NodeTypes } from "@/shared/node-types";
-import useDragAndDrop from "../useDnD";
 
 import NodeWrapper from "../nodes/NodeWrapper.vue";
 

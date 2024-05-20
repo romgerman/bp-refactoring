@@ -9,7 +9,7 @@ import {
 } from "@vue-flow/core";
 import { MiniMap } from "@vue-flow/minimap";
 import { useEventListener } from "@vueuse/core";
-import useDragAndDrop from "./useDnD";
+import useDragAndDrop from "./composables/useDnD";
 import { useNodeStore } from "./store";
 import { GraphNodeAdded, GraphNodeConnected, GraphNodeDisconnected, GraphNodeRemoved } from "@/shared/events";
 import { sendEventCommand } from "./event-utils";

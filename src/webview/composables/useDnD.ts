@@ -1,6 +1,6 @@
-import { Element, useVueFlow } from "@vue-flow/core";
 import { ref, watch } from "vue";
-import { getId } from "./node-id";
+import { Element, useVueFlow } from "@vue-flow/core";
+import { getId } from "../node-id";
 
 /**
  * In a real world scenario you'd want to avoid creating refs in a global scope like this as they might not be cleaned up properly.
