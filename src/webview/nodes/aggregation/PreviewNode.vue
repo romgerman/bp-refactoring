@@ -18,22 +18,18 @@
 
 <script setup lang="ts">
 import { computed, ref } from "vue";
-import { GraphNodeSendViewData } from "@/shared/events";
-import { useEventCommandResult } from "@/webview/event-utils";
-import { Handle, Position, useNode } from "@vue-flow/core";
+import { Handle, Position } from "@vue-flow/core";
 import NodeWrapper from "../NodeWrapper.vue";
+import { useViewData } from "@/webview/composables/use-view-data";
 
 const MAX_ITEMS = 3;
 
 const list = ref<string[]>([]);
 const otherItemsCount = ref<number>(0);
 const greaterThanMaxItems = computed(() => otherItemsCount.value > MAX_ITEMS);
-const { id: nodeId } = useNode();
 
-useEventCommandResult<GraphNodeSendViewData, { id: string; data: string[] }>("graph:node-send-view-data", (data) => {
-  if (nodeId === data.id) {
-    otherItemsCount.value = data.data.length - MAX_ITEMS;
-    list.value = data.data.slice(0, MAX_ITEMS);
-  }
-});
+useViewData<string[]>((data) => {
+  otherItemsCount.value = data.length - MAX_ITEMS;
+  list.value = data.slice(0, MAX_ITEMS);
+})
 </script>
