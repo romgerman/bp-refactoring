@@ -5,7 +5,7 @@ import { BlueprintNode } from "../../blueprint-node";
 import { isArrayOfType } from "../../helpers";
 import { BlueprintNodeError } from "../../node-error";
 
-export class FileListNode extends BlueprintNode {
+export class FileListNode extends BlueprintNode<{ ignoreNodeModules: boolean }> {
   readonly type: string = NodeTypes.FileList;
 
   async evaluate(): Promise<ts.SourceFile[]> {
@@ -23,14 +23,16 @@ export class FileListNode extends BlueprintNode {
   }
 
   private getFileNames(array: ts.SourceFile[]): string[] {
-    return array.map((sourceFile) => {
-      const folder = vscode.workspace.getWorkspaceFolder(vscode.Uri.parse("file:///" + sourceFile.fileName));
-      if (folder) {
-        return sourceFile.fileName.replace(folder.uri.path.slice(1), "");
-      } else {
-        return sourceFile.fileName;
-      }
-    });
+    return array
+      .map((sourceFile) => {
+        const folder = vscode.workspace.getWorkspaceFolder(vscode.Uri.parse("file:///" + sourceFile.fileName));
+        if (folder) {
+          return sourceFile.fileName.replace(folder.uri.path.slice(1), "");
+        } else {
+          return sourceFile.fileName;
+        }
+      })
+      .filter((fileName) => (this.state?.ignoreNodeModules ? !fileName.startsWith("/node_modules") : true));
   }
 
   async getViewData(): Promise<string[]> {

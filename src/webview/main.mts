@@ -2,7 +2,13 @@
 
 import { createApp } from "vue";
 import { createPinia } from "pinia";
-import { provideVSCodeDesignSystem, vsCodeButton, vsCodeProgressRing, vsCodeTextField } from "@vscode/webview-ui-toolkit";
+import {
+  provideVSCodeDesignSystem,
+  vsCodeButton,
+  vsCodeProgressRing,
+  vsCodeTextField,
+  vsCodeCheckbox,
+} from "@vscode/webview-ui-toolkit";
 import App from "./App.vue";
 import "vue-select/dist/vue-select.css";
 import "@vue-flow/core/dist/style.css";
@@ -11,7 +17,7 @@ import "@vue-flow/minimap/dist/style.css";
 import "./styles.scss";
 
 window.vscode = acquireVsCodeApi();
-provideVSCodeDesignSystem().register(vsCodeButton(), vsCodeTextField(), vsCodeProgressRing());
+provideVSCodeDesignSystem().register(vsCodeButton(), vsCodeTextField(), vsCodeProgressRing(), vsCodeCheckbox());
 
 const pinia = createPinia();
 const app = createApp(App);

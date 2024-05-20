@@ -43,7 +43,7 @@ const extensionConfig: webpack.Configuration = {
     // enables logging required for problem matchers
     level: "log",
   },
-  plugins: [new webpack.ContextReplacementPlugin(/typescript/)],
+  plugins: [new WebpackBar(), new webpack.ContextReplacementPlugin(/typescript/)],
 };
 
 const webviewConfig: webpack.Configuration = {

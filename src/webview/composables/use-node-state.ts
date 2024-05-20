@@ -9,6 +9,7 @@ export function useNodeState<T extends BlueprintNode>(initialState: GetNodeState
   const { node, id: nodeId } = useNode();
   const model = ref<GetNodeStateType<T>>(initialState);
   const { onNodesInitialized } = useVueFlow();
+
   onNodesInitialized(() => {
     if (Object.keys(node.data).length > 0) {
       model.value = toRaw(node.data);
