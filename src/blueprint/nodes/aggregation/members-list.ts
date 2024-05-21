@@ -3,6 +3,7 @@ import { NodeTypes } from "../../../shared/node-types";
 import { BlueprintNode } from "../../blueprint-node";
 import { isArrayOfType } from "../../helpers";
 import { BlueprintNodeError } from "../../node-error";
+import { MemberType } from "./types";
 
 export class MemberListNode extends BlueprintNode {
   readonly type: string = NodeTypes.MemberList;
@@ -17,24 +18,30 @@ export class MemberListNode extends BlueprintNode {
     return array.flatMap((n) => n.members);
   }
 
-  async getViewData(): Promise<any> {
+  async getViewData(): Promise<{ name: string; type: string }[]> {
     const array = (await this.evalInput<ts.ClassDeclaration[]>(0)) ?? [];
 
     if (!array || !isArrayOfType(array, ts.isClassDeclaration)) {
       return [];
     }
 
-    return array.flatMap((n) => n.members).map((n) => n.name?.getText() + ` (${this.kindToString(n.kind)})`);
+    return array.flatMap((n) => n.members).map((n) => ({ name: n.name?.getText()!, type: this.kindToString(n.kind) }));
   }
 
-  private kindToString(kind: ts.SyntaxKind): string {
+  private kindToString(kind: ts.SyntaxKind): MemberType {
     switch (kind) {
       case ts.SyntaxKind.MethodDeclaration:
-        return "method";
+        return MemberType.Method;
       case ts.SyntaxKind.PropertyDeclaration:
-        return "property";
+        return MemberType.Property;
+      case ts.SyntaxKind.Constructor:
+        return MemberType.Constructor;
+      case ts.SyntaxKind.GetAccessor:
+        return MemberType.GetAccessor;
+      case ts.SyntaxKind.SetAccessor:
+        return MemberType.SetAccessor;
       default:
-        return "unknown";
+        return `unknown (${kind})` as any;
     }
   }
 }

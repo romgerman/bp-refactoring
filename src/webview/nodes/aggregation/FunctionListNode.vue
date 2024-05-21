@@ -2,11 +2,16 @@
   <NodeWrapper>
     <template #header>Function List</template>
     <template #body>
-      <div class="nowheel" style="max-height: 200px; overflow: auto">
-        <div v-for="item in fnList">
-          {{ item }}
+      <div class="nowheel">
+        <div style="max-height: 200px; overflow: auto">
+          <div v-for="item in items">
+            {{ item }}
+          </div>
         </div>
-        <div class="font-bold" v-if="greaterThanMaxItems">and {{ otherItemsCount }} more</div>
+        <div class="font-bold cursor-pointer" v-if="greaterThanMaxItems" @click="toggleAll()">
+          <span v-if="!model.opened">and {{ otherItemsCount }} more</span>
+          <span v-else>show less</span>
+        </div>
       </div>
     </template>
     <div class="target-handles">
@@ -17,19 +22,14 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from "vue";
 import { Handle, Position } from "@vue-flow/core";
 import NodeWrapper from "../NodeWrapper.vue";
 import { useViewData } from "@/webview/composables/use-view-data";
+import { useCollapsableList } from "@/webview/composables/use-collapsable-list";
 
-const MAX_ITEMS = 3;
+const { model, items, greaterThanMaxItems, otherItemsCount, toggleAll } = useCollapsableList();
 
-const fnList = ref<string[]>([]);
-const otherItemsCount = ref<number>(0);
-const greaterThanMaxItems = computed(() => otherItemsCount.value > MAX_ITEMS);
-
-useViewData<string[]>(data => {
-  otherItemsCount.value = data.length - MAX_ITEMS;
-  fnList.value = data.slice(0, MAX_ITEMS);
-})
+useViewData<string[]>((data) => {
+  model.value.allItems = data;
+});
 </script>

@@ -2,11 +2,16 @@
   <NodeWrapper>
     <template #header>Preview</template>
     <template #body>
-      <div class="nowheel" style="max-height: 200px; overflow: auto">
-        <div v-for="item in list">
-          {{ item }}
+      <div class="nowheel">
+        <div style="max-height: 200px; overflow: auto">
+          <div v-for="item in items">
+            {{ item }}
+          </div>
         </div>
-        <div class="font-bold" v-if="greaterThanMaxItems">and {{ otherItemsCount }} more</div>
+        <div class="font-bold cursor-pointer" v-if="greaterThanMaxItems" @click="toggleAll()">
+          <span v-if="!model.opened">and {{ otherItemsCount }} more</span>
+          <span v-else>show less</span>
+        </div>
       </div>
     </template>
     <div class="target-handles">
@@ -17,19 +22,14 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from "vue";
 import { Handle, Position } from "@vue-flow/core";
 import NodeWrapper from "../NodeWrapper.vue";
 import { useViewData } from "@/webview/composables/use-view-data";
+import { useCollapsableList } from "@/webview/composables/use-collapsable-list";
 
-const MAX_ITEMS = 3;
-
-const list = ref<string[]>([]);
-const otherItemsCount = ref<number>(0);
-const greaterThanMaxItems = computed(() => otherItemsCount.value > MAX_ITEMS);
+const { model, items, greaterThanMaxItems, otherItemsCount, toggleAll } = useCollapsableList();
 
 useViewData<string[]>((data) => {
-  otherItemsCount.value = data.length - MAX_ITEMS;
-  list.value = data.slice(0, MAX_ITEMS);
-})
+  model.value.allItems = data;
+});
 </script>
