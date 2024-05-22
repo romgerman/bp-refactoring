@@ -27,31 +27,18 @@
     <Handle id="0:array" type="source" :position="Position.Right" />
 
     <Teleport to="body">
-      <dialog class="modal" ref="editorModal">
-        <div class="modal-box max-w-full flex flex-col">
-          <div class="flex flex-col flex-1 min-h-0">
-            <h3 class="font-bold text-lg">
-              <vscode-text-field placeholder="Search..." v-model="editorState.query"></vscode-text-field>
-            </h3>
-
-            <div class="overflow-auto">
-              <table class="table">
-                <tbody>
-                  <tr class="hover" v-for="file in filteredItems" @dblclick="openFile(file.path)">
-                    <td>{{ file.name }}</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-
-          <div class="modal-action">
-            <form method="dialog">
-              <vscode-button type="submit">Close</vscode-button>
-            </form>
-          </div>
-        </div>
-      </dialog>
+      <Dialog ref="editorModal">
+        <template #header>
+          <vscode-text-field placeholder="Search..." v-model="editorState.query"></vscode-text-field>
+        </template>
+        <table class="table">
+          <tbody>
+            <tr class="hover" v-for="file in filteredItems" @dblclick="openFile(file.path)">
+              <td>{{ file.name }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </Dialog>
     </Teleport>
   </NodeWrapper>
 </template>
@@ -59,6 +46,7 @@
 <script setup lang="ts">
 import { Handle, Position } from "@vue-flow/core";
 import NodeWrapper from "../NodeWrapper.vue";
+import Dialog from "@/webview/components/Dialog.vue";
 import { useNodeState } from "@/webview/composables/use-node-state";
 import { useViewData } from "@/webview/composables/use-view-data";
 import { useCollapsableList } from "@/webview/composables/use-collapsable-list";
@@ -72,14 +60,14 @@ const editorState = ref<{ query: string }>({
   query: "",
 });
 const filteredItems = computed(() => model.value.allItems.filter((x) => x.name.includes(editorState.value.query.toLocaleLowerCase())));
-const editorModal = ref<HTMLDialogElement>(null);
+const editorModal = ref<InstanceType<typeof Dialog>>();
 
 useViewData<{ name: string; path: string; }[]>((data) => {
   model.value.allItems = data;
 });
 
 function openModal(): void {
-  editorModal.value.showModal();
+  editorModal.value.showDialog();
 }
 
 function openFile(path: string): void {

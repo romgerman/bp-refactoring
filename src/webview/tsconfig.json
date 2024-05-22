@@ -11,6 +11,7 @@
     "sourceMap": true,
     "strict": false,
     "allowSyntheticDefaultImports": true,
+    "skipDefaultLibCheck": true,
     "types": ["vscode-webview"],
     "paths": {
       "@/webview": ["."],
