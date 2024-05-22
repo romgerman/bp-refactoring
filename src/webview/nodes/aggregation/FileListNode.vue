@@ -31,7 +31,7 @@
         <template #header>
           <vscode-text-field placeholder="Search..." v-model="editorState.query"></vscode-text-field>
         </template>
-        <table class="table">
+        <table class="table table-sm">
           <tbody>
             <tr class="hover" v-for="file in filteredItems" @dblclick="openFile(file.path)">
               <td>{{ file.name }}</td>
@@ -59,7 +59,7 @@ const nodeState = useNodeState<{ ignoreNodeModules: boolean }>({ ignoreNodeModul
 const editorState = ref<{ query: string }>({
   query: "",
 });
-const filteredItems = computed(() => model.value.allItems.filter((x) => x.name.includes(editorState.value.query.toLocaleLowerCase())));
+const filteredItems = computed(() => model.value.allItems.filter((x) => x.name.includes(editorState.value.query)));
 const editorModal = ref<InstanceType<typeof Dialog>>();
 
 useViewData<{ name: string; path: string; }[]>((data) => {

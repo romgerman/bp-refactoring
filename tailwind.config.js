@@ -25,6 +25,11 @@ module.exports = {
   ],
   daisyui: {
     base: false,
-    themes: ['dark']
+    themes: [{
+      'dark': {
+        ...require('daisyui/src/theming/themes')["dark"],
+        "--rounded-box": "calc(var(--corner-radius-round) * 1px)",
+      }
+    }]
   },
 };
