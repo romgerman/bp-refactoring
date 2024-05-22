@@ -1,6 +1,6 @@
 <template>
   <NodeWrapper>
-    <template #header>Function List</template>
+    <template #header>Functions</template>
     <template #body>
       <div class="nowheel">
         <div style="max-height: 200px; overflow: auto">

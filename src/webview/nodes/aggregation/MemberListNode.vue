@@ -1,6 +1,6 @@
 <template>
   <NodeWrapper>
-    <template #header>Member List</template>
+    <template #header>Members</template>
     <template #body>
       <div class="nowheel">
         <div style="max-height: 200px; overflow: auto">

@@ -1,6 +1,6 @@
 <template>
   <NodeWrapper @dblclick="openModal()">
-    <template #header>File List</template>
+    <template #header>Files</template>
     <template #body>
       <div class="nowheel">
         <div style="max-height: 200px; overflow: auto">
