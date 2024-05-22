@@ -26,20 +26,26 @@ export class FileListNode extends BlueprintNode<{ ignoreNodeModules: boolean }> 
     return array.filter((sf) => (this.state?.ignoreNodeModules ? !sf.fileName.includes("/node_modules") : true));
   }
 
-  private getFileNames(array: ts.SourceFile[]): string[] {
+  private getFileNames(array: ts.SourceFile[]): Array<{ path: string; name: string }> {
     return array
       .map((sourceFile) => {
         const folder = vscode.workspace.getWorkspaceFolder(vscode.Uri.parse("file:///" + sourceFile.fileName));
         if (folder) {
-          return sourceFile.fileName.replace(folder.uri.path.slice(1), "");
+          return {
+            path: sourceFile.fileName,
+            name: sourceFile.fileName.replace(folder.uri.path.slice(1), ""),
+          };
         } else {
-          return sourceFile.fileName;
+          return {
+            path: sourceFile.fileName,
+            name: sourceFile.fileName,
+          };
         }
       })
-      .filter((fileName) => (this.state?.ignoreNodeModules ? !fileName.startsWith("/node_modules") : true));
+      .filter((file) => (this.state?.ignoreNodeModules ? !file.name.startsWith("/node_modules") : true));
   }
 
-  async getViewData(): Promise<string[]> {
+  async getViewData(): Promise<Array<{ path: string; name: string }>> {
     const array = (await this.evalInput<ts.Node[]>(0)) || [];
 
     if (isArrayOfType(array, ts.isSourceFile)) {

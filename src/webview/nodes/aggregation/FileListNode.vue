@@ -1,11 +1,11 @@
 <template>
   <NodeWrapper @dblclick="openModal()">
-    <template #header>Files</template>
+    <template #header> Files ({{ model.allItems.length }}) </template>
     <template #body>
       <div class="nowheel">
         <div style="max-height: 200px; overflow: auto">
           <div v-for="file in items">
-            {{ file }}
+            {{ file.name }}
           </div>
         </div>
         <div class="font-bold cursor-pointer" v-if="greaterThanMaxItems" @click="toggleAll()">
@@ -37,13 +37,12 @@
             <div class="overflow-auto">
               <table class="table">
                 <tbody>
-                  <tr class="hover" v-for="file in filteredItems">
-                    <th>{{ file }}</th>
+                  <tr class="hover" v-for="file in filteredItems" @dblclick="openFile(file.path)">
+                    <td>{{ file.name }}</td>
                   </tr>
                 </tbody>
               </table>
             </div>
-
           </div>
 
           <div class="modal-action">
@@ -64,20 +63,31 @@ import { useNodeState } from "@/webview/composables/use-node-state";
 import { useViewData } from "@/webview/composables/use-view-data";
 import { useCollapsableList } from "@/webview/composables/use-collapsable-list";
 import { computed, ref } from "vue";
+import { sendEventCommand } from "@/webview/event-utils";
+import { EditorOpenFile } from "@/shared/events";
 
-const { model, items, greaterThanMaxItems, otherItemsCount, toggleAll } = useCollapsableList<string>();
+const { model, items, greaterThanMaxItems, otherItemsCount, toggleAll } = useCollapsableList<{ name: string; path: string; }>();
 const nodeState = useNodeState<{ ignoreNodeModules: boolean }>({ ignoreNodeModules: false });
-const editorState = ref<{ query: string; }>({
-  query: ''
-})
-const filteredItems = computed(() => model.value.allItems.filter(x => x.includes(editorState.value.query.toLocaleLowerCase())))
+const editorState = ref<{ query: string }>({
+  query: "",
+});
+const filteredItems = computed(() => model.value.allItems.filter((x) => x.name.includes(editorState.value.query.toLocaleLowerCase())));
 const editorModal = ref<HTMLDialogElement>(null);
 
-useViewData<string[]>((data) => {
+useViewData<{ name: string; path: string; }[]>((data) => {
   model.value.allItems = data;
 });
 
 function openModal(): void {
   editorModal.value.showModal();
+}
+
+function openFile(path: string): void {
+  sendEventCommand<EditorOpenFile>({
+    command: "editor:open-file",
+    data: {
+      path,
+    },
+  });
 }
 </script>

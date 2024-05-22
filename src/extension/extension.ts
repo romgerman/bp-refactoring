@@ -17,6 +17,7 @@ import {
   GraphCleanEventHandler,
   GraphNodeAddNodesBatchEventHandler,
   GraphConnectNodesBatchEventHandler,
+  EditorOpenFileEventHandler,
 } from "./events";
 import { BlueprintStore } from "../blueprint/store";
 import { EventManager } from "./event-manager";
@@ -79,7 +80,8 @@ export function activate(context: vscode.ExtensionContext) {
     .addHandler(new GraphNodeAddNodesBatchEventHandler(store))
     .addHandler(new GraphConnectNodesBatchEventHandler(store))
     .addHandler(new SaveBlueprintEventHandler())
-    .addHandler(new LoadBlueprintEventHandler());
+    .addHandler(new LoadBlueprintEventHandler())
+    .addHandler(new EditorOpenFileEventHandler());
 
   // The command has been defined in the package.json file
   // Now provide the implementation of the command with registerCommand

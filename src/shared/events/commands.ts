@@ -25,3 +25,5 @@ export interface GraphConnectNodesBatch
     "graph:connect-nodes-batch",
     { nodes: { sourceId: string; targetId: string; sourceIndex: number; targetIndex: number }[] }
   > {}
+
+export interface EditorOpenFile extends EventCommand<"editor:open-file", { path: string }> {}
