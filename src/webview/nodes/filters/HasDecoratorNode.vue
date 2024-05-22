@@ -23,7 +23,7 @@ import { sendEventCommand, useEventCommandResult } from "@/webview/event-utils";
 import { GraphNodeSendViewData, GraphNodeUpdateState } from "@/shared/events";
 
 import VueSelect from "vue-select";
-import NodeWrapper from "../NodeWrapper.vue";
+import NodeWrapper from "../../components/NodeWrapper.vue";
 
 const decoratorList = ref<string[]>([]);
 const model = ref({

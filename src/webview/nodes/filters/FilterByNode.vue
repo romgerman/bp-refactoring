@@ -11,5 +11,5 @@
 
 <script setup lang="ts">
 import { Handle, Position } from "@vue-flow/core";
-import NodeWrapper from "../NodeWrapper.vue";
+import NodeWrapper from "../../components/NodeWrapper.vue";
 </script>

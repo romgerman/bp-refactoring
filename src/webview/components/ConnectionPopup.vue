@@ -45,7 +45,7 @@ import { getId } from "../node-id";
 import { NODES } from "../nodes";
 import { useNodeStore } from "../store";
 
-import NodeWrapper from "../nodes/NodeWrapper.vue";
+import NodeWrapper from "./NodeWrapper.vue";
 
 const { onDragStart } = useDragAndDrop();
 const { addNodes, screenToFlowCoordinate } = useVueFlow();

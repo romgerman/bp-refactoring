@@ -23,7 +23,7 @@
 
 <script setup lang="ts">
 import { Handle, Position } from "@vue-flow/core";
-import NodeWrapper from "../NodeWrapper.vue";
+import NodeWrapper from "../../components/NodeWrapper.vue";
 import { useViewData } from "@/webview/composables/use-view-data";
 import { useCollapsableList } from "@/webview/composables/use-collapsable-list";
 

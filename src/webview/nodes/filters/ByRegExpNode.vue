@@ -10,7 +10,7 @@
 
 <script setup lang="ts">
 import { Handle, Position, useNode, useVueFlow } from "@vue-flow/core";
-import NodeWrapper from "../NodeWrapper.vue";
+import NodeWrapper from "../../components/NodeWrapper.vue";
 import { ref, toRaw, watch } from "vue";
 import { sendEventCommand } from "@/webview/event-utils";
 import { GraphNodeUpdateState } from "@/shared/events";

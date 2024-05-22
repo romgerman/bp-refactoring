@@ -24,7 +24,7 @@
 <script setup lang="ts">
 import { Handle, Position } from "@vue-flow/core";
 import { useViewData } from "@/webview/composables/use-view-data";
-import NodeWrapper from "../NodeWrapper.vue";
+import NodeWrapper from "../../components/NodeWrapper.vue";
 import { useCollapsableList } from "@/webview/composables/use-collapsable-list";
 
 const { model, items, greaterThanMaxItems, otherItemsCount, toggleAll } = useCollapsableList();

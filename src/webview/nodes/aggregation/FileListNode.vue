@@ -44,15 +44,15 @@
 </template>
 
 <script setup lang="ts">
-import { Handle, Position } from "@vue-flow/core";
-import NodeWrapper from "../NodeWrapper.vue";
+import { EditorOpenFile } from "@/shared/events";
 import Dialog from "@/webview/components/Dialog.vue";
+import NodeWrapper from "@/webview/components/NodeWrapper.vue";
+import { useCollapsableList } from "@/webview/composables/use-collapsable-list";
 import { useNodeState } from "@/webview/composables/use-node-state";
 import { useViewData } from "@/webview/composables/use-view-data";
-import { useCollapsableList } from "@/webview/composables/use-collapsable-list";
-import { computed, ref } from "vue";
 import { sendEventCommand } from "@/webview/event-utils";
-import { EditorOpenFile } from "@/shared/events";
+import { Handle, Position } from "@vue-flow/core";
+import { computed, ref } from "vue";
 
 const { model, items, greaterThanMaxItems, otherItemsCount, toggleAll } = useCollapsableList<{ name: string; path: string; }>();
 const nodeState = useNodeState<{ ignoreNodeModules: boolean }>({ ignoreNodeModules: false });

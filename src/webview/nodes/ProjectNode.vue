@@ -29,7 +29,7 @@ import { Position, Handle, useNode, useVueFlow } from "@vue-flow/core";
 import { sendEventCommand, useEventCommandResult } from "@/webview/event-utils";
 import { GraphNodeGetViewData, GraphNodeUpdateState, TsCompilerStatusChanged } from "@/shared/events";
 import VueSelect from "vue-select";
-import NodeWrapper from "./NodeWrapper.vue";
+import NodeWrapper from "../components/NodeWrapper.vue";
 import { useViewData } from "../composables/use-view-data";
 
 const configList = ref<{ value: string; label: string }[]>([]);

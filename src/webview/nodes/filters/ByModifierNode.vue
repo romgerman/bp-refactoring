@@ -16,7 +16,7 @@
 <script setup lang="ts">
 import { Handle, Position } from "@vue-flow/core";
 import VueSelect from "vue-select";
-import NodeWrapper from "../NodeWrapper.vue";
+import NodeWrapper from "../../components/NodeWrapper.vue";
 import { ByModifierType } from "@/blueprint/nodes/filtering/types";
 import { useNodeState } from "@/webview/composables/use-node-state";
 

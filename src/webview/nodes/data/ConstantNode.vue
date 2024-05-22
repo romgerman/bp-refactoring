@@ -21,7 +21,7 @@ import { Handle, Position, useNode, useVueFlow } from "@vue-flow/core";
 import VueSelect from "vue-select";
 import { sendEventCommand } from "@/webview/event-utils";
 import { GraphNodeUpdateState } from "@/shared/events";
-import NodeWrapper from "../NodeWrapper.vue";
+import NodeWrapper from "../../components/NodeWrapper.vue";
 
 const { node, id: nodeId } = useNode();
 const { updateNodeInternals, onNodesInitialized } = useVueFlow();

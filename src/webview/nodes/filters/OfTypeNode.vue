@@ -22,7 +22,7 @@
 import { ref, toRaw, watch } from "vue";
 import { Position, Handle, useNode, useVueFlow } from "@vue-flow/core";
 import VueSelect from "vue-select";
-import NodeWrapper from "../NodeWrapper.vue";
+import NodeWrapper from "../../components/NodeWrapper.vue";
 import { sendEventCommand } from "@/webview/event-utils";
 import { GraphNodeUpdateState } from "@/shared/events";
 
