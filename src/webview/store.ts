@@ -3,9 +3,7 @@ import { defineStore } from "pinia";
 import { computed, ref } from "vue";
 
 export const useNodeStore = defineStore("nodes", () => {
-  const nodes = ref<Elements>([
-    //{ id: "1", type: "project", connectable: true, position: { x: 10, y: 5 } },
-  ]);
+  const nodes = ref<Elements>([]);
 
   const hasProjectNode = computed(() => nodes.value.findIndex((x) => x.type === "project") !== -1);
 
