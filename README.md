@@ -2,6 +2,8 @@
 
 Refactor using blueprints
 
+![Preview](docs/images/Code_E6ORNNzgvf.png)
+
 ## Features
 
 ...
