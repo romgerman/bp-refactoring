@@ -2,6 +2,9 @@
   "name": "bp-refactoring",
   "displayName": "bp-refactoring",
   "description": "Refactor your code using blueprints",
+  "repository": {
+    "url": "https://github.com/romgerman/bp-refactoring"
+  },
   "version": "0.0.1",
   "engines": {
     "vscode": "^1.89.0"
